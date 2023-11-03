@@ -63,7 +63,6 @@ function Slider() {
                                 <img className={style.sliderImg} src={pathImg} alt="" />
                             </div>
                         );
-                        
                     })
                 }
                 
@@ -83,6 +82,7 @@ function Slider() {
                     }
                 </div>
             </div>
+            
         </Fragment>
         
     );
