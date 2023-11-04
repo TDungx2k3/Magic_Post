@@ -6,6 +6,7 @@ import Footer from './components/Footer';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import AOS from 'aos';
 import 'aos/dist/aos.css'; 
+import Home from './pages/Home';
 
 function App() {
   AOS.init();
@@ -19,7 +20,9 @@ window.addEventListener('scroll', () => {
     <div className="App">
       <Router>
         <Routes>
+          <Route path='/' element={<Home />} />
           <Route path="/footer" element={<Footer />} />
+
         </Routes>
       </Router>
     </div>

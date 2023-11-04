@@ -81,6 +81,7 @@ function Slider() {
                         })
                     }
                 </div>
+                <div className= {clsx(style.space)}></div>
             </div>
             
         </Fragment>
