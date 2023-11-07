@@ -8,6 +8,7 @@ import AOS from 'aos';
 import 'aos/dist/aos.css'; 
 import Home from './pages/Home';
 import Login from './pages/Login';
+import AboutUs from "./pages/AboutUs"
 
 function App() {
   AOS.init();
@@ -24,6 +25,7 @@ window.addEventListener('scroll', () => {
           <Route path='/' element={<Home />} />
           <Route path="/footer" element={<Footer />} />
           <Route path="/login" element={<Login />} />
+          <Route path="/about-us" element={<AboutUs />} />
         </Routes>
       </Router>
     </div>
