@@ -2,7 +2,6 @@
     background-color: green;
     width: 100%;
     padding: 20px;
-    margin-top: 60px;
 }
 
 .colsContainer {
@@ -39,3 +38,96 @@
 .info p {
     font-size: 16px;
 }
+
+.servicesContainer {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    --tw-bg-opacity: 1;
+    background-color: rgb(235 243 255/var(--tw-bg-opacity));
+    justify-content: center;
+    align-items: center;
+}
+
+.servicesContainer h1 {
+    padding: 12px 0px 0px 20px;
+}
+
+.services {
+    display: grid;
+    grid-template-columns: repeat(2);
+    grid-template-rows: repeat(2);
+    width: 90%;
+    grid-gap: 20px 50px;
+    padding-bottom: 24px;
+}
+
+
+
+.services > div {
+    background-color: white;
+    padding: 12px 24px;
+    border-radius: 50px;
+    width: 90%;
+    text-align: left;
+    transition: transform 0.3s;
+}
+
+.services > div h2 {
+    margin: 0px;
+}
+
+.serviceImg {
+    width: 56px;
+}
+
+.shipping {
+    grid-row: 1/2;
+    grid-column: 1/2;
+    position: relative;
+    
+}
+
+.fulfillment {
+    grid-row: 2/3;
+    grid-column: 1/2;
+    position: relative;
+}
+
+.ecom {
+    grid-row: 1/2;
+    grid-column: 2/3;
+    position: relative;
+}
+
+.digital {
+    grid-row: 2/3;
+    grid-column: 2/3;
+    position: relative;
+}
+
+.services > div:hover {
+    animation: scaleUp 0.5s ease forwards;
+}
+
+.services > div:hover .knowMoreBtn {
+    color: red;
+}
+
+.knowMoreBtn {
+    font-size: 18px;
+    color: #fff;
+    color: #1b6eaa;
+    position: relative;
+    float: right;
+    padding: 20px;
+}
+
+@keyframes scaleUp {
+    0% {
+      transform: scale(1);
+    }
+    100% {
+      transform: scale(1.1);
+    }
+  }
