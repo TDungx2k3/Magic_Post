@@ -36,7 +36,7 @@ function NavBar() {
                 </div>
         
                 <div className={clsx(style.forEmployees)}>
-                    <a href="#">For Delivery Partners</a>
+                    <a href="/login">For Delivery Partners</a>
                 </div>
             </div>
             
