@@ -17,8 +17,10 @@ function Home() {
         <Fragment>
             <Header />
             {/* Infomation about system */}
-            <div className={clsx(style.infoContainer)} data-aos="zoom-in-up">
-                <h1>Enablers for your business growth</h1>
+            <div className={clsx(style.infoContainer)} data-aos="zoom-in-up"
+            data-aos-duration="1500" >
+                <div className={clsx(style.blueLayer)}></div>
+                <h1 data-aos="fade-up" data-aos-duration="2000">Enablers for your business growth</h1>
                 <div className={clsx(style.colsContainer)} >
                     <div className={clsx(style.col1)}>
                         <div className={clsx(style.subCol)}>
@@ -66,6 +68,7 @@ function Home() {
                         </div>
                     </div>
                 </div>
+                
             </div>
 
             <div className={clsx(style.servicesContainer) } data-aos="zoom-in-up">
@@ -113,6 +116,8 @@ function Home() {
                 </div>
                 
             </div>
+
+
             <Footer />
         </Fragment>
     );

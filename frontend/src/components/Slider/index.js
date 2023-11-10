@@ -1,10 +1,12 @@
 import style from "./Slider.module.scss"
 import clsx from 'clsx';
-import img1 from '../../assets/images/slideB1.png'
+import img1 from '../../assets/images/slide1.png';
+import img2 from '../../assets/images/slide2.png';
+import img3 from '../../assets/images/slide3.png';
 import { Fragment, useEffect, useRef, useState } from "react";
 
-const MAX_INDEX = 2; // số lượng slide tối đa
-let imageSrcs = [img1,img1]
+const MAX_INDEX = 3; // số lượng slide tối đa
+let imageSrcs = [img1, img2, img3]
 
 function Slider() {
     const [index, setIndex] = useState(0); // số thứ tự cua slide

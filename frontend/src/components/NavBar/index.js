@@ -1,13 +1,16 @@
 import clsx from "clsx";
 import AOS from 'aos';
 import style from "./NavBar.module.scss"
+import logo from '../../assets/icons/logo.png'
 import { useEffect } from "react";
 
 
 function NavBar() {
     return (
         <nav id={clsx(style.navBarContainer)}>
-            <div className={clsx(style.logo)}>Logo</div>
+            <a href="#" className={clsx(style.logo)}>
+                <img src={logo} alt="Logo"/>
+            </a>
 
             <div className={clsx(style.subNavContainer)}>
                 <div>
