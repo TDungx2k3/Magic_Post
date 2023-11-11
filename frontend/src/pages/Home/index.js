@@ -1,3 +1,4 @@
+import axios from "axios";
 import { Fragment } from "react";
 import Header from "../../components/Header";
 import Footer from "../../components/Footer";
@@ -13,6 +14,21 @@ import fulfillmentService from "../../assets/icons/fulfillment_services_53d479b7
 import ecomService from "../../assets/icons/magnum_48dfaa6c33.svg";
 import digitalService from "../../assets/icons/digital_services_b4b4505fa3.svg"
 function Home() {
+    const getMatchesInfo = async (e) => {
+        try {
+            await axios.get("http://localhost:8080/account/showAllAccounts")
+            .then((response) => {
+                console.log(response.data);
+            })
+            .catch((err) => {
+                console.log(err);
+            });
+        }
+        catch(err) {
+            console.log(err.respone.data);
+        }
+    }
+
     return (
         <Fragment>
             <Header />
@@ -25,7 +41,7 @@ function Home() {
                     <div className={clsx(style.col1)}>
                         <div className={clsx(style.subCol)}>
                             <img src= {parcelsIcon} alt="" className={clsx(style.imgIcon)} />
-                            <div className={clsx(style.info)}>
+                            <div className={clsx(style.info)} onClick={getMatchesInfo}>
                                 <h2>1.6+ million</h2>
                                 <p>parcel since inception</p>
                             </div>
