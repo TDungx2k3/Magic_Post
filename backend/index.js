@@ -6,6 +6,7 @@ const app = express();
 // Import routes
 const route = require("./routes/indexRoute"); 
 
+const leaderCon = require('./controllers/leaderController')
 
 app.use(express.json());
 

@@ -2,7 +2,7 @@ const { sequelize } = require('../configdb/db');
 const { Account } = require('../models/accountsModel');
 
 class AccountController {
-    showAllAccounts = async (req, res) =>{
+    showAllAccounts = async (req, res) => {
         try {
           // Wait for the synchronization process to finish
           await sequelize.authenticate();

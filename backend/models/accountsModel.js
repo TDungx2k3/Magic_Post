@@ -32,7 +32,7 @@ const Account = sequelize.define(
     },
     unit: {
       type: DataTypes.STRING(5),
-      allowNull: false,
+      allowNull: true,
     },
   },
   {

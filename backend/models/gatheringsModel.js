@@ -24,4 +24,10 @@ const Gathering = sequelize.define(
     {
         timestamps: false, // Unable timestamps
     }
-)
+);
+
+Gathering.sync({ force: false }).then(() => {
+    console.log("Gathering đã được đồng bộ hóa với cơ sở dữ liệu.");
+    });
+    
+    module.exports = { Gathering };
