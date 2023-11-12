@@ -7,6 +7,7 @@
     width: 100%;
     height: fit-content;
     margin-top: 80px;
+    overflow-x: hidden;
   }
 
   .sliderPage {
@@ -76,8 +77,7 @@
   }
 
   .fadeAnimation {
-    animation-name: fade;
-    animation-duration: 1s;
+    animation: fade 0.5s ease-in-out;
   }
 
   .space {
