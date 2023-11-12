@@ -5,7 +5,7 @@ const Account = sequelize.define(
   "accounts",
   {
     account_id: {
-      type: DataTypes.INTEGER,
+      type: DataTypes.INTEGER(11),
       allowNull: false,
       autoIncrement: true,
       primaryKey: true,
@@ -23,8 +23,12 @@ const Account = sequelize.define(
       allowNull: false,
     },
     role_id: {
-      type: DataTypes.INTEGER,
+      type: DataTypes.INTEGER(11),
       allowNull: false,
+      references: {
+        model: 'roles',
+        key: 'role_id'
+      }
     },
     unit: {
       type: DataTypes.STRING(5),
@@ -32,12 +36,12 @@ const Account = sequelize.define(
     },
   },
   {
-    timestamps: false, // Enable timestamps
+    timestamps: false, // Unable timestamps
   }
 );
 
 Account.sync({ force: false }).then(() => {
-  console.log("Mô hình đã được đồng bộ hóa với cơ sở dữ liệu.");
+console.log("Account đã được đồng bộ hóa với cơ sở dữ liệu.");
 });
 
 module.exports = { Account };
