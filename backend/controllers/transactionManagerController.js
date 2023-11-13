@@ -4,6 +4,7 @@ const { Account } = require("../models/accountsModel");
 const { Order } = require("../models/ordersModel");
 const { Delivery } = require("../models/deliveriesModel");
 
+// <<<<<<< HEAD:backend/controllers/transactionManager.js
 Order.hasMany(Delivery, {
     foreignKey: 'order_id'
 })
@@ -17,7 +18,8 @@ Transaction.hasMany(Delivery, {
 Delivery.belongsTo(Transaction, {
     foreignKey: "to_id"
 })
-class TransactionManager {
+class transactionManagerController {
+// >>>>>>> 1e71e6db024d323dd38c9275fdde8baca7999a5d:backend/controllers/transactionManagerController.js
     getMaxTransId = async () => {
         try {
             await sequelize.authenticate();
@@ -105,4 +107,4 @@ class TransactionManager {
     };
 };
 
-module.exports = new TransactionManager();
+module.exports = new transactionManagerController();
