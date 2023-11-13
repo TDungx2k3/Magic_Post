@@ -1,4 +1,4 @@
-const { DataTypes} = require("sequelize");
+const { DataTypes } = require("sequelize");
 const { sequelize } = require("../configdb/db");
 
 const Transaction = sequelize.define(
@@ -16,7 +16,7 @@ const Transaction = sequelize.define(
         account_id: {
             type: DataTypes.INTEGER(11),
             references: { model: 'accounts', key: 'account_id' },
-        }, 
+        },
         gather_id: {
             type: DataTypes.STRING(5),
             references: { model: 'gatherings', key: 'gather_id' },
@@ -30,5 +30,5 @@ const Transaction = sequelize.define(
 Transaction.sync({ force: false }).then(() => {
     console.log("Transaction đã được đồng bộ hóa với cơ sở dữ liệu.");
 });
-    
-    module.exports = { Transaction };
+
+module.exports = { Transaction };
