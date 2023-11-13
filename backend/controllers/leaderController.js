@@ -38,7 +38,8 @@ class LeaderController {
                 attributes: ['gather_id'],
                 raw: true, // Trả về kết quả dưới dạng mảng JSON đơn giản thay vì mô hình Sequelize
             });
-            return Math.max(...allGatherIds.map((obj) => obj.gather_id.substring(1)));
+            // console.log(Math.max(...allGatherIds.map((obj) => parseInt(obj.gather_id.substring(1)))));
+            return Math.max(...allGatherIds.map((obj) => parseInt(obj.gather_id.substring(1))));
         } catch (error) {
             console.error("Lỗi khi lấy gather_id lớn nhất:", error);
             throw error; // Hoặc xử lý lỗi theo cách bạn muốn ở đây.
@@ -98,7 +99,7 @@ class LeaderController {
                 attributes: ['trans_id'],
                 raw: true, // Trả về kết quả dưới dạng mảng JSON đơn giản thay vì mô hình Sequelize
             });
-            return Math.max(...allTranIds.map((obj) => obj.trans_id.substring(1)));
+            return Math.max(...allTranIds.map((obj) => parseInt(obj.trans_id.substring(1))));
         } catch (error) {
             console.error("Lỗi khi lấy trans_id lớn nhất:", error);
             throw error; // Hoặc xử lý lỗi theo cách bạn muốn ở đây.
@@ -107,8 +108,10 @@ class LeaderController {
 
     createTran = async (req, res) => {
         const data = req.body;
+        let temp;
+        temp = await this.getMaxTranId();
         Transaction.create({
-            trans_id: "t" + (this.getMaxTranId() + 1),
+            trans_id: "t" + (temp + 1),
             trans_name: data.tranName,
             account_id: data.accountId,
             gather_id: data.gatherId,
