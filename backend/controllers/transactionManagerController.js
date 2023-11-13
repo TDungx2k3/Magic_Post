@@ -2,7 +2,7 @@ const { sequelize } = require("../configdb/db");
 const { Transaction } = require('../models/transactionsModel');
 const { Account } = require("../models/accountsModel")
 
-class TransactionManager {
+class transactionManagerController {
     getMaxTransId = async () => {
         try {
             await sequelize.authenticate();
@@ -31,4 +31,4 @@ class TransactionManager {
     };
 };
 
-module.exports = new TransactionManager();
+module.exports = new transactionManagerController();

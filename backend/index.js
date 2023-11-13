@@ -7,7 +7,7 @@ const app = express();
 const route = require("./routes/indexRoute"); 
 
 const leaderCon = require('./controllers/leaderController')
-const transactionManager = require("./controllers/transactionManager")
+const transactionManager = require("./controllers/transactionManagerController")
 
 app.use(express.json());
 
