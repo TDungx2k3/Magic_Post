@@ -7,6 +7,7 @@ const app = express();
 const route = require("./routes/indexRoute"); 
 
 const leaderCon = require('./controllers/leaderController')
+const transactionManager = require("./controllers/transactionManager")
 
 app.use(express.json());
 
@@ -15,9 +16,8 @@ app.use(cors());
 
 route(app);
 
-app.listen(8080, () => {
+app.listen(8080, async () => {
     console.log("Server is running on port 8080");
-    console.log(leaderCon.getMaxTranId());
 });
 
 

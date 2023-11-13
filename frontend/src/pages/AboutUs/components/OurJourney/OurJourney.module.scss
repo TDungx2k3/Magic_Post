@@ -1,5 +1,5 @@
 .container {
-    height: 900px;
+    height: 40%;
 }
 
 h1 {
@@ -18,8 +18,9 @@ h1 {
     height: 18%;
 }
 
-.our-journey > * {
-    flex: 0 0 10%; /* Đặt chiều rộng cố định là 150px */
+.our-journey>* {
+    flex: 0 0 10%;
+    /* Đặt chiều rộng cố định là 150px */
 }
 
 .concept {
@@ -45,17 +46,29 @@ h1 {
 
 .note {
     max-width: 150px;
+    animation: fadeIn 1s ease;
 }
 
 .note-hidden {
     display: none;
 }
 
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 1;
+    }
+}
+
 @keyframes scaleUp {
     0% {
-      transform: scale(1);
+        transform: scale(1);
     }
+
     100% {
-      transform: scale(1.1);
+        transform: scale(1.1);
     }
 }

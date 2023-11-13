@@ -29,6 +29,17 @@ function Home() {
         }
     }
 
+    const handleCreateTransactionAccount = async () => {
+        try {
+          const response = await axios.get('http://localhost:8080/transaction-manager/testGetMaxTransactionId');
+          console.log('Transaction Account created successfully!');
+          console.log('Response data:', response.data);
+        } catch (error) {
+          console.error('Error creating Transaction Account:', error);
+          console.log('Error response data:', error.response.data);
+        }
+      };
+
     return (
         <Fragment>
             <Header />
@@ -41,7 +52,7 @@ function Home() {
                     <div className={clsx(style.col1)}>
                         <div className={clsx(style.subCol)}>
                             <img src= {parcelsIcon} alt="" className={clsx(style.imgIcon)} />
-                            <div className={clsx(style.info)} onClick={getMatchesInfo}>
+                            <div className={clsx(style.info)} onClick={handleCreateTransactionAccount}>
                                 <h2>1.6+ million</h2>
                                 <p>parcel since inception</p>
                             </div>
