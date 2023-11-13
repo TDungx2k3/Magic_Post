@@ -6,8 +6,9 @@ const app = express();
 // Import routes
 const route = require("./routes/indexRoute"); 
 
-const leaderCon = require('./controllers/leaderController')
-const transactionManager = require("./controllers/transactionManager")
+const leaderCon = require('./controllers/leaderController');
+const transactionManager = require("./controllers/transactionManager");
+const gatheringMangager = require('./controllers/gatheringManagerController');
 
 app.use(express.json());
 
@@ -45,6 +46,7 @@ app.listen(8080, async () => {
     // } catch (err) {
     //     console.error("ERRORRRRRRRRRRRRRRRR" + err);
     // }
+    gatheringMangager.test();
 });
 
 
