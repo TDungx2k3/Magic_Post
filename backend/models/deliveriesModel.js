@@ -21,10 +21,18 @@ const Delivery = sequelize.define(
         from_id: {
             type: DataTypes.STRING(5),
             allowNull: false,
+            references: {
+                model: "transactions", // name of Target model
+                key: 'trans_id' // key in Target model
+            }
         },
         to_id: {
             type: DataTypes.STRING(5),
             allowNull: false,
+            references: {
+                model: "transactions", // name of Target model
+                key: 'trans_id' // key in Target model
+            }
         },
         date: {
             type: DataTypes.DATEONLY,

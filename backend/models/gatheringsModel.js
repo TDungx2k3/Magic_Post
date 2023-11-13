@@ -15,7 +15,7 @@ const Gathering = sequelize.define(
         },
         account_id: {
             type: DataTypes.INTEGER,
-            references: { 
+            references: {
                 model: 'accounts', 
                 key: 'account_id' 
             },

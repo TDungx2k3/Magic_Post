@@ -6,9 +6,8 @@ const app = express();
 // Import routes
 const route = require("./routes/indexRoute"); 
 
-const leaderCon = require('./controllers/leaderController');
-const transactionManager = require("./controllers/transactionManager");
-const gatheringMangager = require('./controllers/gatheringManagerController');
+const leaderCon = require('./controllers/leaderController')
+const transactionManager = require("./controllers/transactionManagerController")
 
 app.use(express.json());
 
@@ -19,36 +18,13 @@ route(app);
 
 app.listen(8080, async () => {
     console.log("Server is running on port 8080");
-    
-    // try {
-    //     const maxGatherId = await leaderCon.getMaxGatherId();
-    //     console.log("Max Gather ID:", maxGatherId);
-    // } catch (error) {
-    //     console.error("Error getting Max Gather ID:", error);
-    // }
-
-    // try {
-    //     const maxTransactionId = await leaderCon.createTran();
-    //     console.log("Max Transaction ID:", maxTransactionId);
-    // } catch (error) {
-    //     console.error("Error getting Max Transaction ID:", error);
-    // }
-
-    // try {
-    //     const maxTransId = await transactionManager.getMaxTransId();
-    //     console.log("Max Transaction ID:", maxTransId);
-    // } catch (error) {
-    //     console.error("Error getting Max Transation ID:", error);
-    // }
-
-    // try {
-    //     await transactionManager.createAccountEmployee();
-    // } catch (err) {
-    //     console.error("ERRORRRRRRRRRRRRRRRR" + err);
-    // }
-    gatheringMangager.test();
+    try {
+        const orderReceiveResult = await transactionManager.showAllOrderReceive();
+        console.log(orderReceiveResult);
+    } catch (err) {
+        console.error(err);
+    }
 });
-
 
 
 // Nghien cuu sau

@@ -48,8 +48,10 @@ class LeaderController {
 
     createGather = async (req, res) => {
         const data = req.body;
+
+        let temp = await this.getMaxTranId();
         Gathering.create({
-            gather_id: "g" + (this.getMaxGatherId() + 1),
+            gather_id: "g" + (temp + 1),
             gather_name: data.gatherName,
             account_id: data.accountId,
         })
@@ -99,7 +101,7 @@ class LeaderController {
                 attributes: ['trans_id'],
                 raw: true, // Trả về kết quả dưới dạng mảng JSON đơn giản thay vì mô hình Sequelize
             });
-            return Math.max(...allTranIds.map((obj) => parseInt(obj.trans_id.substring(1))));
+            return Math.max(...allTranIds.map((obj) => parseInt(obj.trans_id.substring(1)) ));
         } catch (error) {
             console.error("Lỗi khi lấy trans_id lớn nhất:", error);
             throw error; // Hoặc xử lý lỗi theo cách bạn muốn ở đây.
