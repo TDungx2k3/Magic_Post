@@ -8,6 +8,7 @@
     justify-content: space-between;
     margin: 20px;
     text-decoration: none;
+    
 }
 
 .gatherContainer:hover {
@@ -82,6 +83,84 @@
 
 .modifyBtn:hover {
     background-color: #3c94ff;
+}
+
+.confirmDeleteGatherContainer {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    height: 100vh;
+    z-index: 100;
+    position: fixed;
+    background-color: rgba(56, 145, 255, 0.3);
+    top: 0;
+    left: 0;
+    overflow-y: hidden;
+}
+
+.contentCF {
+    background-color: #fff;
+    width: 50%;
+    padding: 60px;
+    border-radius: 60px;
+}
+
+.contentCF p {
+    color:  red;
+    margin-bottom: 60px;
+}
+
+.confirmBtns {
+    display: flex;
+    justify-content: space-around;
+}
+
+.yesBtn {
+    background-color: #57a4ff;
+    padding: 12px 24px;
+    font-size: 18px;
+    border-radius: 24px;
+    min-width: 100px;
+    color: #000;
+}
+
+.yesBtn:hover {
+    background-color: #0073ff;
+    cursor: pointer;
+    color: #fff;
+}
+
+.noBtn {
+    background-color: rgb(255, 81, 37);
+    padding: 12px 24px;
+    font-size: 18px;
+    border-radius: 24px;
+    min-width: 100px;
+    color: #000;
+}
+
+.noBtn:hover {
+    background-color: rgb(255, 51, 0);
+    cursor: pointer;
+    color: #fff;
+}
+
+.hidden {
+    animation: outHidden 0.5s ease forwards;
+}
+
+@keyframes outHidden {
+    0% {
+        opacity: 1;
+    }
+    99% {
+        opacity: 0;
+    }
+    100% {
+        display: none;
+    }
 }
 
 @keyframes scaleUp {

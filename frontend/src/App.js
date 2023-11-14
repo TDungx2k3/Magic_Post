@@ -18,6 +18,10 @@ window.addEventListener('scroll', () => {
   AOS.refresh();
 });
 
+window.addEventListener('click', () => {
+  AOS.refresh();
+});
+
   document.title = 'Magic Post';
   return (
     <div className="App">

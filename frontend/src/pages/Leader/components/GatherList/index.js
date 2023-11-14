@@ -6,11 +6,13 @@ import { Link } from "react-router-dom";
 
 let gatherList = [
     {
+        gatherId: "",
         gatherName: "Bac",
         gatherManagerName: "Dung",
         gatherManagerPhone: "0329579903"
     },
     {
+        gatherId: "",
         gatherName: "Bac",
         gatherManagerName: "Dung",
         gatherManagerPhone: "0329579903"
@@ -40,10 +42,7 @@ function GatherList() {
                             gatherManagerPhone: gather.gatherManagerPhone
                         }
                         return(
-                            <Link to = "/" key = {index}>
-                                <Gather data={gatherData}/>
-                            </Link>
-                            
+                            <Gather key = {index} data={gatherData}/>
                         );
                     })
                 }
