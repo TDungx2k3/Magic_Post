@@ -6,8 +6,9 @@ const app = express();
 // Import routes
 const route = require("./routes/indexRoute"); 
 
-const leaderCon = require('./controllers/leaderController')
-const transactionManager = require("./controllers/transactionManagerController")
+const leaderCon = require('./controllers/leaderController');
+const transactionManagerController = require('./controllers/transactionManagerController');
+const AccountController = require('./controllers/accountsController');
 
 app.use(express.json());
 
@@ -19,8 +20,8 @@ route(app);
 app.listen(8080, async () => {
     console.log("Server is running on port 8080");
     try {
-        const orderReceiveResult = await transactionManager.showAllOrderReceive();
-        console.log(orderReceiveResult);
+        const orderReceiveResult = await AccountController.showAccountByPhoneAndPassword();
+        console.log('aaaaaaaaaaa ' + orderReceiveResult);
     } catch (err) {
         console.error(err);
     }

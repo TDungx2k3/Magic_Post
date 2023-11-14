@@ -14,6 +14,25 @@ class AccountController {
           res.send(error);
         }
     }
+
+    showAccountByPhoneAndPassword = async (req, res) => {
+      try {
+        const data = req.body;
+        await sequelize.authenticate();
+        await sequelize.sync();
+        data.phone = '0000000000';
+        data.password = '$2b$10$3AEdMMUzqghpbv6XHUVwFOHPsauqSnCp3/yTFc0SEbAZOSpmiIkyW';
+        const accounts = await Account.findOne({
+          where: { 
+            account_phone : '0000000000',
+            // account_password : '$2b$10$3AEdMMUzqghpbv6XHUVwFOHPsauqSnCp3/yTFc0SEbAZOSpmiIkyW',
+          },
+        });
+        return accounts;
+      } catch (error) {
+        console.error(error);
+      }
+    }
 }
 
 module.exports = new AccountController();
