@@ -133,6 +133,10 @@
     animation: scaleUp 0.5s ease forwards;
 }
 
+.services > div:not(:hover) {
+    animation: scaleDown 0.5s ease forwards;
+}
+
 .services > div:hover .knowMoreBtn {
     color: red;
 }
@@ -153,4 +157,13 @@
     100% {
       transform: scale(1.1);
     }
-  }
+}
+
+@keyframes scaleDown {
+    0% {
+      transform: scale(1.1);
+    }
+    100% {
+      transform: scale(1.0);
+    }
+}

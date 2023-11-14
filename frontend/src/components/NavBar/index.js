@@ -3,43 +3,44 @@ import AOS from 'aos';
 import style from "./NavBar.module.scss"
 import logo from '../../assets/icons/logo.png'
 import { useEffect } from "react";
+import { Link } from "react-router-dom";
 
 
 function NavBar() {
     return (
         <nav id={clsx(style.navBarContainer)}>
-            <a href="#" className={clsx(style.logo)}>
+            <Link to ="#" className={clsx(style.logo)}>
                 <img src={logo} alt="Logo"/>
-            </a>
+            </Link>
 
             <div className={clsx(style.subNavContainer)}>
                 <div>
-                    <a href="#">Service</a>
+                    <Link to ="#">Service</Link>
                 </div>
                 <div onMouseOver={() => {
                     AOS.refresh();
                 }} >
-                    <a  href="#">Company <i style={{marginTop: "4px"}} className="ti-angle-down"></i></a>
+                    <Link to ="#">Company <i style={{marginTop: "4px"}} className="ti-angle-down"></i></Link>
                     <ul data-aos="fade-up">
-                        <li><a href="">About Us</a></li>
-                        <li><a href="">Investors</a></li>
+                        <li><Link to ="">About Us</Link></li>
+                        <li><Link to ="">Investors</Link></li>
                     </ul>
                 </div>
                 <div>
-                    <a href="#">Career</a>
+                    <Link to ="#">Career</Link>
                 </div>
                 <div>
-                    <a href="#">Contact Us</a>
+                    <Link to ="#">Contact Us</Link>
                 </div>
             </div>
 
             <div className={clsx(style.rolesBtns)}>
                 <div className={clsx(style.forCustomers)}>
-                    <a href="#">For Customers</a>
+                    <Link to ="#">For Customers</Link>
                 </div>
         
                 <div className={clsx(style.forEmployees)}>
-                    <a href="/login">For Delivery Partners</a>
+                    <Link to ="/login">For Delivery Partners</Link>
                 </div>
             </div>
             
