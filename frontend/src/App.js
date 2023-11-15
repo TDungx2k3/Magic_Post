@@ -10,6 +10,7 @@ import Home from './pages/Home';
 import Login from './pages/Login';
 import AboutUs from "./pages/AboutUs"
 import Leader from './pages/Leader';
+import TransactionManager from './pages/TransactionManager';
 
 function App() {
   AOS.init();
@@ -32,6 +33,7 @@ window.addEventListener('click', () => {
           <Route path="/login" element={<Login />} />
           <Route path="/about-us" element={<AboutUs />} />
           <Route path='/leader' element={<Leader />}/>
+          <Route path='/transaction-manager' element={<TransactionManager />}/>
         </Routes>
       </Router>
     </div>

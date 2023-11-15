@@ -1,0 +1,131 @@
+.container {
+    --tw-bg-opacity: 1;
+    background-color: rgb(235 243 255/var(--tw-bg-opacity));
+    font-size: 24px;
+    font-family: Roboto, sans-serif;
+    font-weight: bold;
+    margin-top: 2%;
+    margin-bottom: 2%;
+}
+
+.form-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.form-container-hidden {
+    visibility: hidden;
+}
+
+form {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    margin-right: -25%;
+}
+
+form div {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    margin-top: 5%;
+    /* position: relative; */
+}
+
+form div:last-child {
+    margin-bottom: 1%;
+}
+
+form div .labelName {
+    width: 10%;
+    margin-right: 2%;
+}
+
+form div input {
+    margin-top: 1.5%;
+    font-size: 18px;
+    padding: 8px;
+    width: 40%;
+    box-sizing: border-box;
+    border: 1px solid #ccc;
+    border-radius: 16px;
+    position: relative;
+}
+
+.button-container {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    margin: 0px 20px;
+}
+
+.btns {
+    flex: 1;
+    height: 100px;
+    margin: 0 2%;
+    border: 3px solid #000;
+    border-radius: 16px;
+    cursor: pointer;
+    background-color: #00BFFF;
+    padding: 10px 20px;
+    font-size: 24px;
+    font-family: Roboto, sans-serif;
+    font-weight: bold;
+}
+
+.btns:hover {
+    animation: scaleUp 0.5s ease forwards;
+}
+
+.error {
+    font-size: 18px;
+    color: #FF0000;
+    position: absolute;
+    left: 65%;
+    margin-top: 1.2%;
+}
+
+.error-hidden {
+    font-size: 18px;
+    color: #FF0000;
+    position: absolute;
+    visibility: hidden;
+    left: 65%;
+    margin-top: 1.2%;
+}
+
+.accept {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    margin-top: 5%;
+}
+
+.add-account {
+    width: 20%;
+    height: 30%;
+    border: 3px solid #000;
+    border-radius: 16px;
+    cursor: pointer;
+    background-color: #00BFFF;
+    padding: 10px 20px;
+    height: 10%;
+    font-size: 24px;
+    font-family: Roboto, sans-serif;
+    font-weight: bold;
+}
+
+.add-account:hover {
+    animation: scaleUp 0.5s ease forwards;
+}
+
+@keyframes scaleUp {
+    0% {
+        transform: scale(1);
+    }
+    100% {
+        transform: scale(1.1);
+    }
+}
