@@ -1,6 +1,6 @@
 import clsx from "clsx";
 import style from "./TransactionManagerFormCreateAccount.module.scss";
-import { useState } from "react"
+import { useState, useRef, useEffect } from "react"
 
 function TransactionManagerFormCreateAccount() {
 
@@ -49,6 +49,11 @@ function TransactionManagerFormCreateAccount() {
     //     }
     // };
 
+    const nameInputRef = useRef(null);
+    useEffect(() => {
+        nameInputRef.current.focus();
+    }, []);
+
     const [errorForName, setErrorForName] = useState(false);
     const [errorForPhone, setErrorForPhone] = useState(false);
     const [errorForPassword, setErrorForPassword] = useState(false);
@@ -85,7 +90,13 @@ function TransactionManagerFormCreateAccount() {
                 <form action="">
                     <div>
                         <label htmlFor="name" className={clsx(style.labelName)}>Name: </label>
-                        <input type="text" className={clsx(style["input-zone"])} id={clsx(style.name)} onBlur={handleErrorForName} />
+                        <input 
+                            type="text" 
+                            className={clsx(style["input-zone"])} 
+                            id={clsx(style.name)} 
+                            onBlur={handleErrorForName}
+                            ref={nameInputRef}
+                        />
                         <span 
                             className={errorForName ? clsx(style.error) : clsx(style["error-hidden"])} 
                             id={clsx(style["error-for-name"])}
