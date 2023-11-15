@@ -1,0 +1,182 @@
+.gatherContainer {
+    background-color: #3D4FD2;
+    display: flex;
+    flex-direction: row;
+    padding: 20px;
+    padding-left: 40px;
+    border-radius: 50px;
+    justify-content: space-between;
+    margin: 20px;
+    text-decoration: none;
+    
+}
+
+.gatherContainer:hover {
+    background-color: #4b5de8;
+    cursor: pointer;
+    animation: scaleUp 0.5s ease forwards;
+}
+
+.gatherContainer:not(:hover) {
+    animation: scaleDown 0.5s ease forwards;
+}
+
+.gatherInfo {
+    flex: 8;
+    color: white;
+    font-size: 24px;
+    text-align: left;
+}
+
+.gatherInfo > div {
+    margin-bottom: 15px;
+}
+
+.gatherManager > div {
+    margin-bottom: 15px;
+}
+
+.gatherInfo label {
+    font-weight: bold;
+}
+
+
+.gatherBtns {
+    flex: 2;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+    align-items: center;
+}
+
+.gatherBtns i {
+    font-size: 30px;
+    
+}
+
+.deleteBtn {
+    background-color: red;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 24px;
+    border-radius: 24px;
+    color: white;
+    height: fit-content;
+
+    
+}
+
+.deleteBtn:hover {
+    background-color: rgb(226, 0, 0);
+}
+
+.modifyBtn {
+    background-color: #57A4FF;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 24px;
+    border-radius: 24px;
+    height: fit-content;
+}
+
+.modifyBtn:hover {
+    background-color: #3c94ff;
+}
+
+.confirmDeleteGatherContainer {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    height: 100vh;
+    z-index: 100;
+    position: fixed;
+    background-color: rgba(56, 145, 255, 0.3);
+    top: 0;
+    left: 0;
+    overflow-y: hidden;
+}
+
+.contentCF {
+    background-color: #fff;
+    width: 50%;
+    padding: 60px;
+    border-radius: 60px;
+}
+
+.contentCF p {
+    color:  red;
+    margin-bottom: 60px;
+}
+
+.confirmBtns {
+    display: flex;
+    justify-content: space-around;
+}
+
+.yesBtn {
+    background-color: #57a4ff;
+    padding: 12px 24px;
+    font-size: 18px;
+    border-radius: 24px;
+    min-width: 100px;
+    color: #000;
+}
+
+.yesBtn:hover {
+    background-color: #0073ff;
+    cursor: pointer;
+    color: #fff;
+}
+
+.noBtn {
+    background-color: rgb(255, 81, 37);
+    padding: 12px 24px;
+    font-size: 18px;
+    border-radius: 24px;
+    min-width: 100px;
+    color: #000;
+}
+
+.noBtn:hover {
+    background-color: rgb(255, 51, 0);
+    cursor: pointer;
+    color: #fff;
+}
+
+.hidden {
+    animation: outHidden 0.5s ease forwards;
+}
+
+@keyframes outHidden {
+    0% {
+        opacity: 1;
+    }
+    99% {
+        opacity: 0;
+    }
+    100% {
+        display: none;
+    }
+}
+
+@keyframes scaleUp {
+    0% {
+      transform: scale(1);
+    }
+    100% {
+      transform: scale(1.1);
+    }
+}
+
+@keyframes scaleDown {
+    0% {
+      transform: scale(1.1);
+    }
+    100% {
+      transform: scale(1.0);
+    }
+}

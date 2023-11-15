@@ -9,6 +9,7 @@ import 'aos/dist/aos.css';
 import Home from './pages/Home';
 import Login from './pages/Login';
 import AboutUs from "./pages/AboutUs"
+import Leader from './pages/Leader';
 import { createContext, useState } from 'react';
 
 export const LoginContext = createContext();
@@ -30,24 +31,22 @@ function App() {
   
   AOS.init();
 
-  window.addEventListener('scroll', () => {
-    AOS.refresh();
-  });
+window.addEventListener('scroll', () => {
+  AOS.refresh();
+});
 
   document.title = 'Magic Post';
   return (
-    <LoginContext.Provider value={{isLogin , setIsLogin, userInfo}}>
-      <div className="App">
-        <Router>
-          <Routes>
-            <Route path='/' element={<Home />} />
-            <Route path="/footer" element={<Footer />} />
-            <Route path="/login" element={<Login />} />
-            <Route path="/about-us" element={<AboutUs />} />
-          </Routes>
-        </Router>
-      </div>
-    </LoginContext.Provider>
+    <div className="App">
+      <Router>
+        <Routes>
+          <Route path='/' element={<Home />} />
+          <Route path="/footer" element={<Footer />} />
+          <Route path="/login" element={<Login />} />
+          <Route path="/about-us" element={<AboutUs />} />
+        </Routes>
+      </Router>
+    </div>
   );
 }
 
