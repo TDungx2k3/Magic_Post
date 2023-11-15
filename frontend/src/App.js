@@ -31,9 +31,14 @@ function App() {
   
   AOS.init();
 
-window.addEventListener('scroll', () => {
-  AOS.refresh();
-});
+
+  window.addEventListener('scroll', () => {
+    AOS.refresh();
+  });
+
+  window.addEventListener('click', () => {
+    AOS.refresh();
+  });
 
   document.title = 'Magic Post';
   return (
@@ -41,6 +46,7 @@ window.addEventListener('scroll', () => {
       <Router>
         <Routes>
           <Route path='/' element={<Home />} />
+          <Route path="/leader" element={<Leader />} />
           <Route path="/footer" element={<Footer />} />
           <Route path="/login" element={<Login />} />
           <Route path="/about-us" element={<AboutUs />} />
