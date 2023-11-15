@@ -18,13 +18,14 @@ app.use(cors());
 route(app);
 
 app.listen(8080, async () => {
-    console.log("Server is running on port 8080");
-    try {
-        const orderReceiveResult = await AccountController.showAccountByPhoneAndPassword();
-        console.log('aaaaaaaaaaa ' + orderReceiveResult);
-    } catch (err) {
-        console.error(err);
-    }
+    // console.log("Server is running on port 8080");
+    // try {
+    //     //const orderReceiveResult = await AccountController.showAccountByPhoneAndPassword();
+    //     const accounts = await AccountController.showAccountByPhoneAndPassword();
+    //     console.log('aaaaaaaaaaa ' + accounts);
+    // } catch (err) {
+    //     console.error(err);
+    // }
 });
 
 

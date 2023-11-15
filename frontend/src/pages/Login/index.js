@@ -39,7 +39,7 @@ function Login() {
   // Khi đó thay đổi trạng thái đăng nhập isLogin = true
   // Ngược lại hiển thị ra lỗi
   useEffect(() => {
-    if (message === "Login successful") {
+    if (message === "Login successfully") {
       setIsLogin((prev) => {
         prev = true;
         return true;
@@ -62,7 +62,6 @@ function Login() {
   // Ngược lại thì đây không phải số điện thoại
   // Đúng ròi
   function handlePhoneBlur() {
-    console.log(phoneIn);
     if (phoneIn) {
       var phoneno = /^\d{10}$/;
       if (phoneIn.value.match(phoneno)) {
@@ -70,7 +69,6 @@ function Login() {
       } else {
         setIsPhone(false);
       }
-      console.log(isPhone);
     } else {
       phoneIn = document.querySelector("." + style.phoneNumberInput);
       handlePhoneBlur();
@@ -123,13 +121,17 @@ function Login() {
   const handleSubmit = async (e) => {
     try {
       await axios
-        .post("http://localhost:8080/customer/showByPhoneAndPassword", inputs)
+        .post("http://localhost:8080/account/login", inputs)
         .then((response) => {
-          userInfo.uId = response.data.id;
-          userInfo.uName = response.data.name;
-          userInfo.uPhone = inputs.phone;
-          userInfo.uPassword = inputs.password;
           setMessage(response.data.message);
+          if(message === 'Login successfully') {
+            console.log(response.data.accounts.account_id);
+            console.log(response.data.accounts.account_name);
+            userInfo.uId = response.data.accounts.account_id;
+            userInfo.uName = response.data.accounts.account_name;
+            userInfo.uPhone = inputs.phone;
+            userInfo.uPassword = inputs.password;
+          }
           //alert(message);
         })
         .catch((err) => {
@@ -218,10 +220,11 @@ function Login() {
 
           <section>
             <Link to="/">
-              <button className={style.submitSignInBtn} 
+              <button className={style.submitSignInBtn} ref={loginBtnRef}
               onClick={(e) => {
                 handlePassReplication();
-                if(message !== "Login successful") {
+                console.log(message);
+                if(message !== "Login successfully") {
                   e.preventDefault();
                 }
               }}

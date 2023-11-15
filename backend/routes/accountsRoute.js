@@ -6,4 +6,6 @@ const accountController = require('../controllers/accountsController');
 
 router.get("/showAllAccounts", accountController.showAllAccounts);
 
+router.post('/login', accountController.showAccountByPhoneAndPassword);
+
 module.exports = router;
