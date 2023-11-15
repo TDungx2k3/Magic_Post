@@ -10,15 +10,28 @@ import Home from './pages/Home';
 import Login from './pages/Login';
 import AboutUs from "./pages/AboutUs"
 import Leader from './pages/Leader';
+import { createContext, useState } from 'react';
+
+export const LoginContext = createContext();
 
 function App() {
+  // Khai báo các thông tin chung cần dùng của cả trang web
+  const [isLogin, setIsLogin] = useState(false) //Trạng thái đăng nhập
+
+  // Lưu trữ thông tin người đăng nhập
+  let userInfo = {
+      uId : "",
+      uName : "",
+      uPhone : "",
+      uPassword : "",
+      uRole: "",
+      uUnit: ""
+  }
+  
+  
   AOS.init();
 
 window.addEventListener('scroll', () => {
-  AOS.refresh();
-});
-
-window.addEventListener('click', () => {
   AOS.refresh();
 });
 
@@ -31,7 +44,6 @@ window.addEventListener('click', () => {
           <Route path="/footer" element={<Footer />} />
           <Route path="/login" element={<Login />} />
           <Route path="/about-us" element={<AboutUs />} />
-          <Route path='/leader' element={<Leader />}/>
         </Routes>
       </Router>
     </div>
