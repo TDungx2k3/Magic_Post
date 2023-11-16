@@ -4,23 +4,24 @@ import style from "./NavBar.module.scss"
 import logo from '../../assets/icons/logo.png'
 import { useEffect } from "react";
 import { Link } from "react-router-dom";
+import { Link as ScrollLink, animateScroll as scroll, scroller } from 'react-scroll';
 
 
 function NavBar() {
     return (
         <nav id={clsx(style.navBarContainer)}>
-            <Link to ="#" className={clsx(style.logo)}>
+            <ScrollLink to ="top" className={clsx(style.logo)} spy={true} smooth={true} duration={500}>
                 <img src={logo} alt="Logo"/>
-            </Link>
+            </ScrollLink>
 
             <div className={clsx(style.subNavContainer)}>
                 <div>
-                    <Link to ="#">Service</Link>
+                    <ScrollLink className={clsx(style.linkToService)} to ="topService" spy={true} smooth={true} duration={500}>Service</ScrollLink>
                 </div>
                 <div onMouseOver={() => {
                     AOS.refresh();
                 }} >
-                    <Link to ="#">Company <i style={{marginTop: "4px"}} className="ti-angle-down"></i></Link>
+                    <Link to ="">Company <i style={{marginTop: "4px"}} className="ti-angle-down"></i></Link>
                     <ul data-aos="fade-up">
                         <li><Link to ="">About Us</Link></li>
                         <li><Link to ="">Investors</Link></li>

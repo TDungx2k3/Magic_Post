@@ -31,8 +31,10 @@ function Home() {
 
     return (
         <Fragment>
+            <div id="top"></div>
             <Header />
             {/* Infomation about system */}
+            
             <div className={clsx(style.infoContainer)} data-aos="zoom-in-up"
             data-aos-duration="1500" >
                 <div className={clsx(style.blueLayer)}></div>
@@ -87,6 +89,7 @@ function Home() {
                 
             </div>
 
+            <div id="topService"></div>
             <div className={clsx(style.servicesContainer) } data-aos="zoom-in-up">
                 <h1>How our services help your business?</h1>
                 <div className={clsx(style.services) }>

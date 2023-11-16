@@ -6,13 +6,13 @@ import { Link } from "react-router-dom";
 
 let gatherList = [
     {
-        gatherId: "",
+        gatherId: "g1",
         gatherName: "Bac",
         gatherManagerName: "Dung",
         gatherManagerPhone: "0329579903"
     },
     {
-        gatherId: "",
+        gatherId: "g2",
         gatherName: "Bac",
         gatherManagerName: "Dung",
         gatherManagerPhone: "0329579903"
@@ -37,6 +37,7 @@ function GatherList() {
                 {
                     gatherList.map((gather, index) => {
                         let gatherData = {
+                            gatherId: gather.gatherId,
                             gatherName: gather.gatherName,
                             gatherManagerName: gather.gatherManagerName,
                             gatherManagerPhone: gather.gatherManagerPhone
