@@ -1,6 +1,6 @@
 import clsx from "clsx";
 import style from "./TransactionManagerFormCreateAccount.module.scss";
-import { useState, useEffect } from "react"
+import { useState } from "react";
 
 function TransactionManagerFormCreateAccount(props) {
     const [inputs, setInputs] = useState({
@@ -22,37 +22,31 @@ function TransactionManagerFormCreateAccount(props) {
         handleErrorForPassword();
     };
 
-    const handleClickCreateAccount = () => {
-
-    }
-
-    const handleClickStatistic = () => {
-
-    }
-
-    const handleErrorForName = (e) => {
+    const handleErrorForName = () => {
         if (inputs.accountName === "") {
             setErrorForName(true);
         } else {
             setErrorForName(false);
         }
-    }
+    };
 
     const handleErrorForPhone = () => {
-        if (inputs.accountPhone === "") {
+        const phonePattern = /^\d{10}$/;
+
+        if (inputs.accountPhone === "" || !phonePattern.test(inputs.accountPhone)) {
             setErrorForPhone(true);
         } else {
             setErrorForPhone(false);
         }
-    }
+    };
 
     const handleErrorForPassword = () => {
-        if (inputs.accountPassword === "") {
+        if (inputs.accountPassword === "" || inputs.accountPassword.length < 6) {
             setErrorForPassword(true);
         } else {
             setErrorForPassword(false);
         }
-    }
+    };
 
     const handleChange = (e) => {
         setInputs((prev) => {
@@ -63,14 +57,14 @@ function TransactionManagerFormCreateAccount(props) {
         });
     };
 
-    console.log(inputs);
-
     return (
         <div className={clsx(style.container, props.className)}>
             <div className={clsx(style["form-container"])}>
                 <form action="">
                     <div>
-                        <label htmlFor="name" className={clsx(style.labelName)}>Name: </label>
+                        <label htmlFor="name" className={clsx(style.labelName)}>
+                            Name:
+                        </label>
                         <input
                             type="text"
                             className={clsx(style["input-zone"])}
@@ -78,55 +72,64 @@ function TransactionManagerFormCreateAccount(props) {
                             onBlur={handleErrorForName}
                             name="accountName"
                             onChange={handleChange}
-                            onClick={() => {setErrorForName(false)}}
+                            onClick={() => setErrorForName(false)}
                         />
                         <span
                             className={errorForName ? clsx(style.error) : clsx(style["error-hidden"])}
                             id={clsx(style["error-for-name"])}
-                        >Please enter your name.
+                        >
+                            Please enter your name.
                         </span>
                     </div>
 
                     <div>
-                        <label htmlFor="phone" className={clsx(style.labelName)}>Phone: </label>
-                        <input 
-                            type="text" 
-                            className={clsx(style["input-zone"])} 
-                            id={clsx(style.phone)} 
-                            onBlur={handleErrorForPhone} 
+                        <label htmlFor="phone" className={clsx(style.labelName)}>
+                            Phone:
+                        </label>
+                        <input
+                            type="text"
+                            className={clsx(style["input-zone"])}
+                            id={clsx(style.phone)}
+                            onBlur={handleErrorForPhone}
                             name="accountPhone"
                             onChange={handleChange}
-                            onClick={() => {setErrorForPhone(false)}}
+                            onClick={() => setErrorForPhone(false)}
                         />
                         <span
                             className={errorForPhone ? clsx(style.error) : clsx(style["error-hidden"])}
                             id={clsx(style["error-for-phone"])}
-                        >Please enter your phone.
+                        >
+                            Please enter a valid phone number.
                         </span>
                     </div>
 
                     <div>
-                        <label htmlFor="password" className={clsx(style.labelName)}>Password: </label>
-                        <input 
-                            type="password" 
-                            className={clsx(style["input-zone"])} 
-                            id={clsx(style.password)} 
-                            onBlur={handleErrorForPassword} 
+                        <label htmlFor="password" className={clsx(style.labelName)}>
+                            Password:
+                        </label>
+                        <input
+                            type="password"
+                            className={clsx(style["input-zone"])}
+                            id={clsx(style.password)}
+                            onBlur={handleErrorForPassword}
                             name="accountPassword"
                             onChange={handleChange}
-                            onClick={() => {setErrorForPassword(false)}}
+                            onClick={() => setErrorForPassword(false)}
                         />
                         <span
                             className={errorForPassword ? clsx(style.error) : clsx(style["error-hidden"])}
                             id={clsx(style["error-for-password"])}
-                        >Please enter your password
+                        >
+                            Please enter a valid password.
                         </span>
                     </div>
                 </form>
             </div>
 
             <div className={clsx(style.accept)}>
-                <button className={clsx(style["add-account"])} onClick={handleIsClickAddAccount}>Add Account</button>
+                <button className={clsx(style["add-account"])} onClick={handleIsClickAddAccount}>
+                    Add Account
+                </button>
             </div>
         </div>
     );
