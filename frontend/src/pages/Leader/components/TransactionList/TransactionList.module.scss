@@ -1,0 +1,78 @@
+.transactionListContainer {
+    background-color: #D9D9D9;
+    padding: 60px;
+    border-radius: 60px;
+    width: 80%;
+    text-decoration: none;
+}
+
+.functionContainer {
+    display: flex;
+    flex-direction: row;
+    margin-bottom: 20px;
+    justify-content: space-around;
+}
+
+.addBtn {
+    background-color: #03FB2B;
+    font-size: 36px;
+    font-weight: bold;
+    padding: 12px;
+    color: white;
+    border-radius: 20px;
+}
+
+.addBtn:hover {
+    background-color: #00d423;
+    cursor: pointer;
+}
+
+.searchBar {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #fff;
+    border-radius: 40px;
+    padding: 0 20px;
+}
+
+.searchBar i {
+    font-size: 36px;
+    font-weight: bold;
+    padding: 12px;
+    border-right: solid 1px #333;
+    
+}
+
+.searchBar i:hover {
+    cursor: pointer;
+    color: #4b4b4b;
+}
+
+.searchBar input {
+    font-size: 24px;
+    border: none;
+    outline: none;
+    box-shadow: none;
+    margin-left: 24px;
+    font-weight: normal;
+    min-width: 500px;
+    :focus {
+        outline: none;
+        box-shadow: none;
+    }
+}
+
+.pageBtn {
+    width: 24px;
+    height: 24px;
+    padding: 12px;
+    margin: 0px 8px;
+    box-sizing: content-box;
+    border-radius: 24px;
+}
+
+.pageBtnActive {
+    background-color: rgb(84, 84, 84);
+    color: #fff;
+}

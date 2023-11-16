@@ -1,37 +1,37 @@
 import clsx from "clsx"
-import style from "./Gather.module.scss"
+import style from "./Transaction.module.scss"
 import { Fragment, useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 
-function Gather(props) {
+function Transaction(props) {
 
     
     const [confirmHidden, setConfirmHidden] = useState(true);
     const [isHide, setIsHide] = useState(true);
     return (
         <Fragment>
-            <div className= {clsx(style.gatherContainer)}
+            <div className= {clsx(style.transactionContainer)}
             data-aos="zoom-in-up" data-aos-duration="1000">
-                <Link to = '/' className= {clsx(style.gatherInfo)}>
+                <Link to = '/' className= {clsx(style.transactionInfo)}>
                     <div>
-                        <label htmlFor="gatherName">Gather Name: </label>
-                        <span id="gatherName">{props.data.gatherName}</span>
+                        <label htmlFor="transactionName">Transaction Name: </label>
+                        <span id="transactionName">{props.data.transactionName}</span>
                     </div>
                     
-                    <div className= {clsx(style.gatherManager)}>
+                    <div className= {clsx(style.transactionManager)}>
                         <div>
-                            <label>Gather Manager Name: </label>
-                            <span className= {clsx(style.gatherManagerName)}>{props.data.gatherManagerName}</span>
+                            <label>Transaction Manager Name: </label>
+                            <span className= {clsx(style.transactionManagerName)}>{props.data.transactionManagerName}</span>
                         </div>
                         <div>
-                            <label>Gather Manager Phone: </label>
-                            <span className= {clsx(style.gatherManagerPhone)}>{props.data.gatherManagerPhone}</span>
+                            <label>Transaction Manager Phone: </label>
+                            <span className= {clsx(style.transactionManagerPhone)}>{props.data.transactionManagerPhone}</span>
                         </div>
                         
                     </div>
                 </Link>
 
-                <div className= {clsx(style.gatherBtns)}>
+                <div className= {clsx(style.transactionBtns)}>
                     <div className= {clsx(style.deleteBtn)} onClick={
                         () => {
                             setConfirmHidden(false);
@@ -47,7 +47,7 @@ function Gather(props) {
                 </div>
             </div>
 
-            <div className={clsx(style.confirmDeleteGatherContainer, {[style.hidden] : confirmHidden , [style.hideAll] : isHide})} 
+            <div className={clsx(style.confirmDeleteTransactionContainer, {[style.hidden] : confirmHidden})} 
             onClick={() => {
                 setConfirmHidden(true);
             }}
@@ -57,7 +57,7 @@ function Gather(props) {
                     setConfirmHidden(false);
                     e.stopPropagation();
                 }}>
-                    <h2>Are you sure to delete this gathering?</h2>
+                    <h2>Are you sure to delete this transactioning?</h2>
                     <p>This action is irreversible.</p>
                     <div className={clsx(style.confirmBtns)}>
                         <div className={clsx(style.yesBtn)}
@@ -80,4 +80,4 @@ function Gather(props) {
     );
 }
 
-export default Gather;
+export default Transaction;

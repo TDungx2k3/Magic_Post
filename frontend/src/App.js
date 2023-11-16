@@ -11,7 +11,9 @@ import Login from './pages/Login';
 import AboutUs from "./pages/AboutUs"
 import Leader from './pages/Leader';
 import TransactionManager from './pages/TransactionManager';
+import PointsInfo from './pages/Leader/components/PointsInfo';
 import { createContext, useState } from 'react';
+import ManageGather from './pages/Leader/subPages/ManageGather';
 
 export const LoginContext = createContext();
 
@@ -51,8 +53,8 @@ function App() {
           <Route path="/footer" element={<Footer />} />
           <Route path="/login" element={<Login />} />
           <Route path="/about-us" element={<AboutUs />} />
-          <Route path='/leader' element={<Leader />}/>
           <Route path='/transaction-manager' element={<TransactionManager />}/>
+          <Route path = '/leaderManageGather' element={<ManageGather/>} />
         </Routes>
       </Router>
     </div>

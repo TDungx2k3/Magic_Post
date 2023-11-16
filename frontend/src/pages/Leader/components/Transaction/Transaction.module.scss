@@ -1,4 +1,4 @@
-.gatherContainer {
+.transactionContainer {
     background-color: #3D4FD2;
     display: flex;
     flex-direction: row;
@@ -11,37 +11,37 @@
     
 }
 
-.gatherContainer:hover {
+.transactionContainer:hover {
     background-color: #4b5de8;
     cursor: pointer;
     animation: scaleUp 0.5s ease forwards;
 }
 
-.gatherContainer:not(:hover) {
+.transactionContainer:not(:hover) {
     animation: scaleDown 0.5s ease forwards;
 }
 
-.gatherInfo {
+.transactionInfo {
     flex: 8;
     color: white;
     font-size: 24px;
     text-align: left;
 }
 
-.gatherInfo > div {
+.transactionInfo > div {
     margin-bottom: 15px;
 }
 
-.gatherManager > div {
+.transactionManager > div {
     margin-bottom: 15px;
 }
 
-.gatherInfo label {
+.transactionInfo label {
     font-weight: bold;
 }
 
 
-.gatherBtns {
+.transactionBtns {
     flex: 2;
     display: flex;
     flex-direction: row;
@@ -49,7 +49,7 @@
     align-items: center;
 }
 
-.gatherBtns i {
+.transactionBtns i {
     font-size: 30px;
     
 }
@@ -85,7 +85,7 @@
     background-color: #3c94ff;
 }
 
-.confirmDeleteGatherContainer {
+.confirmDeleteTransactionContainer {
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -147,12 +147,8 @@
     color: #fff;
 }
 
-.hideAll {
-    display: none;
-}
-
 .hidden {
-    
+    display: none;
     animation: outHidden 0.5s ease forwards;
 }
 

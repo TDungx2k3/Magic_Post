@@ -1,0 +1,54 @@
+.content {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+
+.manageGatherNav {
+    width: 90%;
+    background-color: #4b5de8;
+    margin-bottom: 40px;
+    font-size: 24px;
+    display: flex;
+    flex-direction: row;
+    border-radius: 40px;
+    color: #fff;
+}
+
+.transManage {
+    flex: 1;
+    padding: 12px;
+}
+
+.transManage:hover {
+    cursor: pointer;
+    background-color: #99a5ff;
+    color: #333;
+    border-top-left-radius: 40px;
+    border-bottom-left-radius: 40px;
+}
+
+.ordersManage {
+    flex: 1;
+    padding: 12px;
+}
+
+.ordersManage:hover {
+    cursor: pointer;
+    background-color: #99a5ff;
+    color: #333;
+}
+
+.employeesManage {
+    flex: 1;
+    padding: 12px;
+}
+
+.employeesManage:hover {
+    cursor: pointer;
+    background-color: #99a5ff;
+    color: #333;
+    border-top-right-radius: 40px;
+    border-bottom-right-radius: 40px;
+}
