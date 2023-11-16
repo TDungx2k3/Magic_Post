@@ -45,19 +45,22 @@ function App() {
 
   document.title = 'Magic Post';
   return (
-    <div className="App">
-      <Router>
-        <Routes>
-          <Route path='/' element={<Home />} />
-          <Route path="/leader" element={<Leader />} />
-          <Route path="/footer" element={<Footer />} />
-          <Route path="/login" element={<Login />} />
-          <Route path="/about-us" element={<AboutUs />} />
-          <Route path='/transaction-manager' element={<TransactionManager />}/>
-          <Route path = '/leaderManageGather' element={<ManageGather/>} />
-        </Routes>
-      </Router>
-    </div>
+    <LoginContext.Provider value={{isLogin, setIsLogin, userInfo}}>
+      <div className="App">
+        <Router>
+          <Routes>
+            <Route path='/' element={<Home />} />
+            <Route path="/leader" element={<Leader />} />
+            <Route path="/footer" element={<Footer />} />
+            <Route path="/login" element={<Login />} />
+            <Route path="/about-us" element={<AboutUs />} />
+            <Route path='/transaction-manager' element={<TransactionManager />}/>
+            <Route path = '/leaderManageGather' element={<ManageGather/>} />
+          </Routes>
+        </Router>
+      </div>
+    </LoginContext.Provider>
+    
   );
 }
 
