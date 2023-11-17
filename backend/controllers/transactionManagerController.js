@@ -19,7 +19,6 @@ Delivery.belongsTo(Transaction, {
     foreignKey: "to_id"
 })
 class transactionManagerController {
-// >>>>>>> 1e71e6db024d323dd38c9275fdde8baca7999a5d:backend/controllers/transactionManagerController.js
     getMaxTransId = async () => {
         try {
             await sequelize.authenticate();
@@ -38,12 +37,12 @@ class transactionManagerController {
     createAccountEmployee = async (req, res) => {
         const data = req.body;
         Account.create({
-            account_id_: data.accountId,
+            // account_id_: data.accountId,
             account_name: data.accountName,
             account_phone: data.accountPhone,
             account_password: data.accountPassword,
-            role_id: 4,
-            unit: data.unit,
+            role_id: 3,
+            unit: "test",
         });
     };
 

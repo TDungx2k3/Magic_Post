@@ -6,6 +6,6 @@ const transactionManagerController = require('../controllers/transactionManagerC
 
 router.get("/testGetMaxTransactionId", transactionManagerController.getMaxTransId);
 router.get("/testGetOrderReceive", transactionManagerController.showAllOrderReceive)
-// router.post("/createccount", transactionManagerController.createTransactionEmployeeAccount);
+router.post("/createccount", transactionManagerController.createAccountEmployee);
 
 module.exports = router;

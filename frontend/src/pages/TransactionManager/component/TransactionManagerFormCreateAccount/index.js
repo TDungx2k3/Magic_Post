@@ -1,6 +1,9 @@
 import clsx from "clsx";
 import style from "./TransactionManagerFormCreateAccount.module.scss";
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import axios from "axios";
+
+// Call API được rồi, nma gần như mới là test, vì chưa lấy unit nên đang để unit defalt là "test, còn lại gần như ok"
 
 function TransactionManagerFormCreateAccount(props) {
     const [inputs, setInputs] = useState({
@@ -20,6 +23,8 @@ function TransactionManagerFormCreateAccount(props) {
         handleErrorForName();
         handleErrorForPhone();
         handleErrorForPassword();
+        handleGetData();
+        handleCheckIsCreateSuccess();
     };
 
     const handleErrorForName = () => {
@@ -32,8 +37,8 @@ function TransactionManagerFormCreateAccount(props) {
 
     const handleErrorForPhone = () => {
         const phonePattern = /^\d{10}$/;
-
-        if (inputs.accountPhone === "" || !phonePattern.test(inputs.accountPhone)) {
+    
+        if (inputs.accountPhone === "" || !phonePattern.test(inputs.accountPhone) || inputs.accountPhone.charAt(0) !== '0') {
             setErrorForPhone(true);
         } else {
             setErrorForPhone(false);
@@ -57,9 +62,80 @@ function TransactionManagerFormCreateAccount(props) {
         });
     };
 
+    const [messageCheckDuplicate, setMessageCheckDuplicate] = useState("");
+
+    const [checkIsCreateSuccess, setCheckIsCreateSuccess] = useState(false);
+
+    const handleCheckIsCreateSuccess = () => {
+        if (isClickAddAccount === true && errorForName === false && errorForPhone === false && errorForPassword === false 
+            // && messageCheckDuplicate === "Phone number does not exist"
+            ) {
+            setCheckIsCreateSuccess(true);
+            console.log(checkIsCreateSuccess);
+        } else {
+            // Sao ở đây nó không set lại thành false:>
+            if (messageCheckDuplicate === "Phone number exists") {
+                setCheckIsCreateSuccess(false);
+                console.log(checkIsCreateSuccess);
+            }
+        }
+    }
+
+    const handleGetData = async () => {
+        try {
+            const response = await axios.get("http://localhost:8080/account/countAccountByPhoneNumber", {
+                params: {
+                    phone: inputs.accountPhone,
+                },
+            });
+    
+            const message = response.data.message;
+            setMessageCheckDuplicate(message);
+    
+            console.log(message);
+    
+            if (message === "Phone number exists") {
+                alert("Exist");
+            } else {
+                handleErrorForName();
+                handleErrorForPhone();
+                handleErrorForPassword();
+    
+                if (
+                    inputs.accountPhone !== "" &&
+                    inputs.accountName !== "" &&
+                    inputs.accountPassword !== "" &&
+                    !errorForName &&
+                    !errorForPhone &&
+                    !errorForPassword
+                ) {
+                    await axios.post("http://localhost:8080/transaction-manager/createccount", inputs);
+                    // if (checkIsCreateSuccess === false) {
+                    //     handleCheckIsCreateSuccess();
+                    // }
+                }
+            }
+        } catch (error) {
+            console.error(error);
+        }
+    };    
+
     return (
         <div className={clsx(style.container, props.className)}>
+
             <div className={clsx(style["form-container"])}>
+                <div className={checkIsCreateSuccess ? clsx(style["alert-successfully"]) : clsx(style["alert-successfully-hidden"])} data-aos="zoom-in">
+                    <p>
+                        Create Account Successfully!
+                    </p>
+                    <span className={clsx(style.wrapper)}>
+                        <svg className={clsx(style.checkmark)} xmlns="http://www.w3.org/2000/svg" viewBox="0 0 52 52">
+                            <circle className={clsx(style["checkmark__circle"])} cx="20" cy="20" r="25" fill="none" />
+                            <path className={clsx(style["checkmark__check"])} fill="none" d="M14.1 27.2l7.1 7.2 16.7-16.8" />
+                        </svg>
+                    </span>
+                </div>
+
                 <form action="">
                     <div>
                         <label htmlFor="name" className={clsx(style.labelName)}>

@@ -21,7 +21,7 @@ app.listen(8080, async () => {
     // console.log("Server is running on port 8080");
     // try {
     //     //const orderReceiveResult = await AccountController.showAccountByPhoneAndPassword();
-    //     const accounts = await AccountController.showAccountByPhoneAndPassword();
+    //     const accounts = await AccountController.countAccountByPhoneNumber();
     //     console.log('aaaaaaaaaaa ' + accounts);
     // } catch (err) {
     //     console.error(err);
