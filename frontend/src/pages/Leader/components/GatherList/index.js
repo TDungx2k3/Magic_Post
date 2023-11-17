@@ -1,25 +1,34 @@
 import clsx from "clsx"
 import style from "./GatherList.module.scss"
-import { Fragment } from "react";
+import { Fragment, useEffect, useState } from "react";
 import Gather from "../Gather"
 import { Link } from "react-router-dom";
+import axios from "axios";
 
-let gatherList = [
-    {
-        gatherId: "g1",
-        gatherName: "Bac",
-        gatherManagerName: "Dung",
-        gatherManagerPhone: "0329579903"
-    },
-    {
-        gatherId: "g2",
-        gatherName: "Bac",
-        gatherManagerName: "Dung",
-        gatherManagerPhone: "0329579903"
-    }
-]
 
 function GatherList() {
+
+    const [gatherList, setGatherList] = useState([])
+
+    const [rerender] = useState(true);
+
+    const getAllGathers = async(e) => {
+        try {
+            await axios
+            .get("http://localhost:8080/leader/showAllGathers")
+            .then((res) => {
+                setGatherList(res.data);
+                console.log(res.data);
+            })
+        } catch (error) {
+            console.log(error);
+        }
+    }
+
+    useEffect(() => {
+        getAllGathers();
+    }, [rerender]);
+
     return (
         <Fragment>
             <div className={clsx(style.gatherListContainer)}>
@@ -37,13 +46,13 @@ function GatherList() {
                 {
                     gatherList.map((gather, index) => {
                         let gatherData = {
-                            gatherId: gather.gatherId,
-                            gatherName: gather.gatherName,
-                            gatherManagerName: gather.gatherManagerName,
-                            gatherManagerPhone: gather.gatherManagerPhone
+                            gatherId: gather.gather_id,
+                            gatherName: gather.gather_name,
+                            gatherManagerName: gather.account.account_name,
+                            gatherManagerPhone: gather.account.account_phone
                         }
                         return(
-                            <Gather key = {index} data={gatherData}/>
+                            <Gather key={index} data={gatherData}/>
                         );
                     })
                 }

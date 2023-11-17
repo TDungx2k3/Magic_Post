@@ -22,7 +22,15 @@ class LeaderController {
             await sequelize.authenticate();
             await sequelize.sync();
             let gathers = [];
-            gathers = await Gathering.findAll();
+            gathers = await Gathering.findAll(
+                {
+                    include: [
+                        {
+                            model: Account,
+                        }
+                    ]
+                }
+            );
             res.json(gathers);
         } catch (error) {
             res.send(error);
@@ -85,7 +93,18 @@ class LeaderController {
             await sequelize.authenticate();
             await sequelize.sync();
             let trans = [];
-            trans = await Transaction.findAll();
+            trans = await Transaction.findAll(
+                {
+                    where: {
+                        gather_id: req.query.gather_id
+                    },
+                    include: [{
+                        model: Account,
+                        attributes: ['account_name',
+                    'account_phone']
+                    }]
+                }
+            );
             res.json(trans);
         } catch (error) {
             res.send(error);

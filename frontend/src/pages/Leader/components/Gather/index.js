@@ -12,7 +12,7 @@ function Gather(props) {
         <Fragment>
             <div className= {clsx(style.gatherContainer)}
             data-aos="zoom-in-up" data-aos-duration="1000">
-                <Link to = '/' className= {clsx(style.gatherInfo)}>
+                <Link to = {`/leaderManageGather?gather_id=${props.data.gatherId}`} className= {clsx(style.gatherInfo)}>
                     <div>
                         <label htmlFor="gatherName">Gather Name: </label>
                         <span id="gatherName">{props.data.gatherName}</span>

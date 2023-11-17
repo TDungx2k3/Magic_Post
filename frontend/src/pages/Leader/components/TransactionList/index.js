@@ -6,79 +6,23 @@ import { Link } from "react-router-dom";
 
 
 
-function TransactionList() {
-    const maxItemsInOnePage = 2;
-    
+function TransactionList(props) {
+    const maxItemsInOnePage = 5;
+    let transactionList = props.data;
+    transactionList.sort((a, b) => {
+        const nameA = a.trans_name.toUpperCase();
+        const nameB = b.trans_name.toUpperCase();
 
-    let transactionList = [
-        {
-            transactionId: "",
-            transactionName: "Bac",
-            transactionManagerName: "Dung0",
-            transactionManagerPhone: "0329579903"
-        },
-        {
-            transactionId: "",
-            transactionName: "Bac",
-            transactionManagerName: "Dung1",
-            transactionManagerPhone: "0329579903"
-        },
-        {
-            transactionId: "",
-            transactionName: "Bac",
-            transactionManagerName: "Dung2",
-            transactionManagerPhone: "0329579903"
-        },
-        {
-            transactionId: "",
-            transactionName: "Bac",
-            transactionManagerName: "Dung3",
-            transactionManagerPhone: "0329579903"
-        },
-        {
-            transactionId: "",
-            transactionName: "Bac",
-            transactionManagerName: "Dung4",
-            transactionManagerPhone: "0329579903"
-        },
-        {
-            transactionId: "",
-            transactionName: "Bac",
-            transactionManagerName: "Dung5",
-            transactionManagerPhone: "0329579903"
-        },
-        {
-            transactionId: "",
-            transactionName: "Bac",
-            transactionManagerName: "Dung6",
-            transactionManagerPhone: "0329579903"
-        },
-        {
-            transactionId: "",
-            transactionName: "Bac",
-            transactionManagerName: "Dung7",
-            transactionManagerPhone: "0329579903"
-        },
-        {
-            transactionId: "",
-            transactionName: "Bac",
-            transactionManagerName: "Dung8",
-            transactionManagerPhone: "0329579903"
-        },
-        {
-            transactionId: "",
-            transactionName: "Bac",
-            transactionManagerName: "Dung9",
-            transactionManagerPhone: "0329579903"
-        },
-        {
-            transactionId: "",
-            transactionName: "Bac",
-            transactionManagerName: "Dung10",
-            transactionManagerPhone: "0329579903"
-        },
-    ];
-
+        if (nameA < nameB) {
+            return -1;
+        } else if (nameA > nameB) {
+            return 1;
+        } else {
+            return 0;
+        }
+    });
+    console.log(transactionList);
+    console.log(transactionList);
     let cnt = transactionList.length;
     let numOfPages = Math.ceil(cnt / maxItemsInOnePage);
     const [pageNum, setPageNum] = useState(1);
@@ -103,9 +47,9 @@ function TransactionList() {
                 {
                     transactionList.map((transaction, index) => {
                         let transactionData = {
-                            transactionName: transaction.transactionName,
-                            transactionManagerName: transaction.transactionManagerName,
-                            transactionManagerPhone: transaction.transactionManagerPhone
+                            transactionName: transaction.trans_name,
+                            transactionManagerName: transaction.account.account_name,
+                            transactionManagerPhone: transaction.account.account_phone
                         }
                         if(index >= (pageNum-1) * maxItemsInOnePage 
                         && index < (pageNum * maxItemsInOnePage)) {
