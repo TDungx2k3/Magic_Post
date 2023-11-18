@@ -3,8 +3,8 @@ const { Transaction } = require('../models/transactionsModel');
 const { Account } = require("../models/accountsModel");
 const { Order } = require("../models/ordersModel");
 const { Delivery } = require("../models/deliveriesModel");
+const bcrypt = require('bcrypt');
 
-// <<<<<<< HEAD:backend/controllers/transactionManager.js
 Order.hasMany(Delivery, {
     foreignKey: 'order_id'
 })
@@ -36,19 +36,28 @@ class transactionManagerController {
 
     createAccountEmployee = async (req, res) => {
         const data = req.body;
-        Account.create({
-            // account_id_: data.accountId,
-            account_name: data.accountName,
-            account_phone: data.accountPhone,
-            account_password: data.accountPassword,
-            role_id: 3,
-            unit: "test",
+        const saltRounds = 10;
+        const plaintextPassword = data.accountPassword;
+        bcrypt.hash(plaintextPassword, saltRounds, (err, hash) => {
+            if (err) {
+                console.error('Error hashing password:', err);
+            } else {
+                data.accountPassword = hash;
+            }
+            Account.create({
+                account_name: data.accountName,
+                account_phone: data.accountPhone,
+                account_password: data.accountPassword,
+                role_id: 3,
+                unit: "test",
+            });
         });
+        console.log("akjfkaf" + data.accountPassword);
     };
 
     showAllOrderReceive = async (req, res) => {
         try {
-            
+
             await sequelize.authenticate();
             await sequelize.sync();
             const allOrderReceive = await Order.findAll({
@@ -75,7 +84,7 @@ class transactionManagerController {
             console.error(err);
         }
     };
-    
+
     showAllOrderSend = async (req, res) => {
         try {
             await sequelize.authenticate();

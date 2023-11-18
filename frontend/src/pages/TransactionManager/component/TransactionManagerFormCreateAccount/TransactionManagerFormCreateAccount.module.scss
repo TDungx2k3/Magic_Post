@@ -138,6 +138,7 @@ form div input {
     z-index: 1;
     border: #000 2px;
     border-radius: 20px;
+    animation: test 2s ease forwards;
 }
 
 .alert-successfully-hidden {
@@ -216,5 +217,17 @@ form div input {
     }
     100% {
         transform: scale(1.1);
+    }
+}
+
+@keyframes test {
+    0% {
+        display: flex;
+    }
+    99% {
+        display: flex;
+    }
+    100% {
+        display: none;
     }
 }

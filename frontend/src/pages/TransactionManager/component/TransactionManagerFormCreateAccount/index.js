@@ -1,11 +1,13 @@
 import clsx from "clsx";
 import style from "./TransactionManagerFormCreateAccount.module.scss";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import axios from "axios";
 
 // Call API được rồi, nma gần như mới là test, vì chưa lấy unit nên đang để unit defalt là "test, còn lại gần như ok"
 
 function TransactionManagerFormCreateAccount(props) {
+    const addAccount = useRef();
+
     const [inputs, setInputs] = useState({
         accountName: "",
         accountPhone: "",
@@ -18,13 +20,13 @@ function TransactionManagerFormCreateAccount(props) {
 
     const [isClickAddAccount, setIsClickAddAccount] = useState(false);
 
-    const handleIsClickAddAccount = () => {
+    const handleIsClickAddAccount = async () => {
         setIsClickAddAccount(true);
         handleErrorForName();
         handleErrorForPhone();
         handleErrorForPassword();
-        handleGetData();
-        handleCheckIsCreateSuccess();
+        await handleGetData();
+        // handleCheckIsCreateSuccess();
     };
 
     const handleErrorForName = () => {
@@ -66,65 +68,76 @@ function TransactionManagerFormCreateAccount(props) {
 
     const [checkIsCreateSuccess, setCheckIsCreateSuccess] = useState(false);
 
-    const handleCheckIsCreateSuccess = () => {
-        if (isClickAddAccount === true && errorForName === false && errorForPhone === false && errorForPassword === false 
-            // && messageCheckDuplicate === "Phone number does not exist"
-            ) {
-            setCheckIsCreateSuccess(true);
-            console.log(checkIsCreateSuccess);
-        } else {
-            // Sao ở đây nó không set lại thành false:>
-            if (messageCheckDuplicate === "Phone number exists") {
-                setCheckIsCreateSuccess(false);
-                console.log(checkIsCreateSuccess);
-            }
-        }
-    }
+    // const handleCheckIsCreateSuccess = () => {
+    //     console.log(messageCheckDuplicate);
+    //     if (isClickAddAccount === true && errorForName === false && errorForPhone === false && errorForPassword === false && messageCheckDuplicate === "Phone number does not exist") {
+    //         setCheckIsCreateSuccess(true);
+    //         console.log(checkIsCreateSuccess);
+    //     } else {
+    //         setCheckIsCreateSuccess(false);
+    //         console.log(checkIsCreateSuccess);
+    //     }
+    // };
 
-    const handleGetData = async () => {
-        try {
-            const response = await axios.get("http://localhost:8080/account/countAccountByPhoneNumber", {
-                params: {
-                    phone: inputs.accountPhone,
-                },
-            });
-    
+    const handleGetData = () => {
+        axios.get("http://localhost:8080/account/countAccountByPhoneNumber", {
+            params: {
+                phone: inputs.accountPhone,
+            },
+        })
+        .then((response) => {
             const message = response.data.message;
             setMessageCheckDuplicate(message);
+            console.log(messageCheckDuplicate);
+            if (isClickAddAccount === true && errorForName === false && errorForPhone === false && errorForPassword === false && messageCheckDuplicate === "Phone number does not exist") {
+                setCheckIsCreateSuccess(true);
+                console.log(checkIsCreateSuccess);
+            } else {
+                setCheckIsCreateSuccess(false);
+                console.log("aaa" + checkIsCreateSuccess);
+            }
     
-            console.log(message);
-    
-            if (message === "Phone number exists") {
+            if (messageCheckDuplicate === "Phone number exists") {
                 alert("Exist");
             } else {
-                handleErrorForName();
-                handleErrorForPhone();
-                handleErrorForPassword();
-    
+                // handleErrorForName();
+                // handleErrorForPhone();
+                // handleErrorForPassword();
+                // handleCheckIsCreateSuccess();
                 if (
                     inputs.accountPhone !== "" &&
                     inputs.accountName !== "" &&
                     inputs.accountPassword !== "" &&
-                    !errorForName &&
-                    !errorForPhone &&
-                    !errorForPassword
+                    errorForName === false &&
+                    errorForPhone === false &&
+                    errorForPassword === false &&
+                    messageCheckDuplicate === "Phone number does not exist" &&
+                    checkIsCreateSuccess === true
                 ) {
-                    await axios.post("http://localhost:8080/transaction-manager/createccount", inputs);
-                    // if (checkIsCreateSuccess === false) {
-                    //     handleCheckIsCreateSuccess();
-                    // }
+                    // addAccount.current.click();
+                    return axios.post("http://localhost:8080/transaction-manager/createccount", inputs);
+                    // alert("aigo")
+                } else {
+                    if (messageCheckDuplicate === "" || checkIsCreateSuccess === false) {
+                        addAccount.current.click();
+                        console.log(("aiuqf"));
+                    }
                 }
             }
-        } catch (error) {
+        })
+        .then(() => {
+            // Điều gì đó sau khi hoàn tất axios.post
+        })
+        .catch((error) => {
             console.error(error);
-        }
+        });
     };    
 
     return (
         <div className={clsx(style.container, props.className)}>
 
             <div className={clsx(style["form-container"])}>
-                <div className={checkIsCreateSuccess ? clsx(style["alert-successfully"]) : clsx(style["alert-successfully-hidden"])} data-aos="zoom-in">
+                <div className={clsx({[style["alert-successfully"]] : checkIsCreateSuccess}, {[style["alert-successfully-hidden"]] : !checkIsCreateSuccess})} data-aos="zoom-in">
                     <p>
                         Create Account Successfully!
                     </p>
@@ -203,7 +216,10 @@ function TransactionManagerFormCreateAccount(props) {
             </div>
 
             <div className={clsx(style.accept)}>
-                <button className={clsx(style["add-account"])} onClick={handleIsClickAddAccount}>
+                <button 
+                    className={clsx(style["add-account"])}
+                    onClick={handleIsClickAddAccount}
+                    ref={addAccount}>
                     Add Account
                 </button>
             </div>
