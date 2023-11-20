@@ -18,7 +18,7 @@ function GatherList() {
             .get("http://localhost:8080/leader/showAllGathers")
             .then((res) => {
                 setGatherList(res.data);
-                console.log(res.data);
+                // console.log(res.data);
             })
         } catch (error) {
             console.log(error);

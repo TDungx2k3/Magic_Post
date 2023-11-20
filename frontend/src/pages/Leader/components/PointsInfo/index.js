@@ -8,18 +8,18 @@ function PointsInfo(props) {
             <div className = {clsx(style.infoContainer)}>
                 <div className = {clsx(style.pointInfoContainer)}>
                     <label>Name: </label>
-                    <span className = {clsx(style.pointName)}>Kho tập trung miền Bắc</span>
+                    <span className = {clsx(style.pointName)}>{props.data.gather_name}</span>
                 </div>
 
                 <div className = {clsx(style.managerInfoContainer)}>
                     <div className = {clsx(style.nameContainer)}>
                         <label>Manager Name: </label>
-                        <span className = {clsx(style.managerName)}>Dang Tien Dung</span>
+                        <span className = {clsx(style.managerName)}>{props.data.account.account_name}</span>
                     </div>
 
                     <div className = {clsx(style.phoneContainer)}>
                         <label>Manager Phone: </label>
-                        <span className = {clsx(style.managerPhone)}>1111111111</span>
+                        <span className = {clsx(style.managerPhone)}>{props.data.account.account_phone}</span>
                     </div>
                 </div>
             </div>

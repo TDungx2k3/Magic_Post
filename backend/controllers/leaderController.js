@@ -38,6 +38,32 @@ class LeaderController {
         }
     };
 
+    getGatherInfoWithID = async (req, res) => {
+        try {
+            await sequelize.authenticate();
+            await sequelize.sync();
+            let gather = [];
+            gather = await Gathering.findAll(
+                {
+                    include: {
+                        model: Account,
+                        attributes: [
+                            "account_name",
+                            "account_phone"
+                        ]
+                    },
+                    where: {
+                        gather_id: req.query.gather_id
+                    },
+                }
+            );
+            res.json(gather);
+        } catch (error) {
+            res.send(error);
+            console.log(error);
+        }
+    };
+
     getMaxGatherId = async () => {
         try {
             await sequelize.authenticate();
