@@ -1,7 +1,9 @@
+const { where } = require('sequelize');
 const { sequelize } = require('../configdb/db');
 const { Account } = require('../models/accountsModel');
 const { Gathering } = require('../models/gatheringsModel');
 const { Transaction } = require('../models/transactionsModel');
+const bcrypt = require('bcrypt');
 
 Gathering.belongsTo(Account, {
     foreignKey: 'account_id',
@@ -63,6 +65,79 @@ class LeaderController {
             console.log(error);
         }
     };
+
+    updateGather = async (req, res) => {
+        // console.log(req.body);
+        try {
+            await sequelize.authenticate();
+            await sequelize.sync();
+            await Gathering.update(
+                {
+                    gather_name: req.body.gather_name,
+                },
+                {
+                    where: {
+                        gather_id: req.body.gather_id,
+                    }
+                }
+            );
+        } catch (error) {
+            res.send(error);
+            console.log(error);
+        }
+    };
+
+    updateManager = async(req, res) => {
+        try {
+            await sequelize.authenticate();
+            await sequelize.sync();
+            await Account.update(
+                {
+                    account_name: req.body.manager_name,
+                    account_phone: req.body.manager_phone,
+                },
+                {
+                    where: {
+                        account_id: req.body.manager_id,
+                    }
+                }
+            );
+        } catch (error) {
+            res.send(error);
+            console.log(error);
+        }
+    }
+
+    updateManagerPassword = async(req, res) => {
+        console.log(req.body);
+        try {
+            await sequelize.authenticate();
+            await sequelize.sync();
+            const saltRounds = 10;
+            const plaintextPassword = req.body.new_password;
+            bcrypt.hash(plaintextPassword, saltRounds, async (err, hash) => {
+                if (err) {
+                    console.error('Error hashing password:', err);
+                } else {
+                    // console.log(11212);
+                    await Account.update(
+                        {
+                            account_password: hash,
+                        },
+                        {
+                            where: {
+                                account_id: req.body.manager_id,
+                            }
+                        }
+                    );
+                }
+            });
+            
+        } catch (error) {
+            res.send(error);
+            console.log(error);
+        }
+    }
 
     getMaxGatherId = async () => {
         try {

@@ -10,7 +10,7 @@
     display: flex;
     width: 80%;
     font-size: 20px;
-    margin: 8px auto;
+    margin: 8px auto 0px;
 }
 
 .gatherInfoContainer {
@@ -67,13 +67,27 @@
     text-align: left;
 }
 
+.nameContainer {
+    display: block;
+}
+
+.phoneContainer {
+    display: block;
+}
+
 .managerInfoContainer {
     flex: 1;
     text-align: left;
 }
 
+.newPasswordContainer {
+    display: block;
+}
+
 .err {
     min-height: 50px;
+    color: red;
+    font-size: 16px;
 }
 
 .optionActive {
