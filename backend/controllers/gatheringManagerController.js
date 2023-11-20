@@ -33,6 +33,8 @@ class GatheringManagerController {
     });
   };
 
+  
+
   test = async (req, res) => {
     const data = await sequelize.query(
       "SELECT * FROM accounts INNER JOIN gatherings ON accounts.account_id = gatherings.account_id",

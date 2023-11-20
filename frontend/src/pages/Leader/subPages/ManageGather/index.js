@@ -12,9 +12,37 @@ function ManageGather() {
 
     const location = useLocation();
     const gatherId = new URLSearchParams(location.search).get("gather_id");
-    console.log(gatherId);
-    const [data, setData] = useState([])
+    // console.log(gatherId);
+    const [transactionsData, setTransactionsData] = useState([])
     const [rerender] = useState(true);
+    const [gatherInfo, setGatherInfo] = useState(
+        {
+            gather_name: "",
+            account: {
+                account_name: "",
+                account_phone: ""
+            }
+        }
+    );
+
+    const getGatherInfo = async(e) => {
+        try {
+            await axios
+            .get("http://localhost:8080/leader/getGatherInfo",
+            {
+                params:{
+                    gather_id : gatherId
+                }
+            }
+            )
+            .then((res) => {
+                // console.log(res.data);
+                setGatherInfo(res.data[0])
+            })
+        } catch (error) {
+            console.log(error);
+        }
+    }
 
     const getAllTransactionsWithGatherId = async(e) => {
         try {
@@ -27,8 +55,8 @@ function ManageGather() {
             }
             )
             .then((res) => {
-                console.log(res.data);
-                setData(res.data)
+                // console.log(res.data);
+                setTransactionsData(res.data)
             })
         } catch (error) {
             console.log(error);
@@ -36,6 +64,7 @@ function ManageGather() {
     }
 
     useEffect(() => {
+        getGatherInfo();
         getAllTransactionsWithGatherId();
     }, [rerender]);
 
@@ -43,7 +72,7 @@ function ManageGather() {
     return (
         <Fragment>
             <Header/>
-            <PointsInfo />
+            <PointsInfo data = {gatherInfo}/>
             <div className={clsx(style.content)}>
                 <div className= {clsx(style.manageGatherNav)}>
                     <div className={clsx(style.transManage, {[style.active] : manageState == 1} )}
@@ -62,7 +91,7 @@ function ManageGather() {
                     }}
                     >Employees</div>
                 </div>
-                <TransactionList data = {data}/>
+                <TransactionList data = {transactionsData}/>
             </div>
             
             <Footer/>
