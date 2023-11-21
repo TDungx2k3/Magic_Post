@@ -52,3 +52,10 @@
     border-top-right-radius: 40px;
     border-bottom-right-radius: 40px;
 }
+
+@media screen and (max-width: 768px) {
+    .manageForTransactionManagerNav {
+        margin-bottom: 40px;
+        font-size: 16px;
+    }
+}

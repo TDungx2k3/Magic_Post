@@ -55,7 +55,7 @@ class transactionManagerController {
         console.log("akjfkaf" + data.accountPassword);
     };
 
-    showAllOrderReceive = async (req, res) => {
+    showAllOrderReceived = async (req, res) => {
         try {
 
             await sequelize.authenticate();
@@ -85,17 +85,19 @@ class transactionManagerController {
         }
     };
 
-    showAllOrderSend = async (req, res) => {
+    showAllOrderSent = async (req, res) => {
         try {
             await sequelize.authenticate();
             await sequelize.sync();
-            const allOrderSend = await Order.findAll({
+            const allOrderSent = await Order.findAll({
                 attributes: ["order_id", "weight", "price"],
                 include: [
                     {
                         model: Delivery,
                         where: {
-                            date: req.body.deliveries.date
+                            deliver_status: 1,
+                            from_id: "t01"
+                            // date: req.body.deliveries.date
                         },
                         attributes: ["from_id"],
                         include: [
@@ -103,12 +105,13 @@ class transactionManagerController {
                                 model: Transaction,
                                 attributes: ["trans_id"]
                             }
-                        ]
+                        ],
+                        required: true
                     },
                 ]
             });
-            res.json(allOrderSend);
-            // return allOrderReceive[0].dataValues.deliveries;
+            res.json(allOrderSent);
+            // return allOrderSent;
         } catch (err) {
             console.error(err);
         }

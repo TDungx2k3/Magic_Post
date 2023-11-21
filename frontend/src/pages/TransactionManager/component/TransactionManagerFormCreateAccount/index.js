@@ -157,7 +157,6 @@ function TransactionManagerFormCreateAccount(props) {
                         <input
                             type="text"
                             className={clsx(style["input-zone"])}
-                            id={clsx(style.name)}
                             onBlur={handleErrorForName}
                             name="accountName"
                             onChange={handleChange}
@@ -178,7 +177,6 @@ function TransactionManagerFormCreateAccount(props) {
                         <input
                             type="text"
                             className={clsx(style["input-zone"])}
-                            id={clsx(style.phone)}
                             onBlur={handleErrorForPhone}
                             name="accountPhone"
                             onChange={handleChange}
@@ -199,7 +197,6 @@ function TransactionManagerFormCreateAccount(props) {
                         <input
                             type="password"
                             className={clsx(style["input-zone"])}
-                            id={clsx(style.password)}
                             onBlur={handleErrorForPassword}
                             name="accountPassword"
                             onChange={handleChange}
