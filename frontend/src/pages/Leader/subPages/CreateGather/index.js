@@ -1,13 +1,12 @@
 import { Fragment, useState, useEffect } from "react";
 import clsx from "clsx";
-import style from './ModifyGather.module.scss';
-import { Link, useLocation } from "react-router-dom";
+import style from './CreateGather.module.scss';
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import axios from "axios";
 
-function ModifyGather() {
+function CreateGather() {
+    const navigate = useNavigate();
 
-    const location = useLocation();
-    const gatherId = new URLSearchParams(location.search).get("gather_id");
     // console.log(gatherId);
     
     const [rerender] = useState(true);
@@ -19,33 +18,12 @@ function ModifyGather() {
 
     const [gatherInfo, setGatherInfo] = useState(
         {
-            account_id: "",
             gather_name: "",
-            account: {
-                account_name: "",
-                account_phone: ""
-            }
+            account_name: "",
+            account_phone: "",
+            account_password: ""
         }
     );
-
-    const getGatherData = async(e) => {
-        try {
-            await axios
-            .get("http://localhost:8080/leader/getGatherInfo",
-            {
-                params:{
-                    gather_id : gatherId
-                }
-            }
-            )
-            .then((res) => {
-                console.log(res.data);
-                setGatherInfo(res.data[0])
-            })
-        } catch (error) {
-            console.log(error);
-        }
-    };
 
     const checkGatherName = () => {
         let gName = document.querySelector("." + style.gatherNameContainer + " input").value;
@@ -81,38 +59,45 @@ function ModifyGather() {
         }
     };
 
-    const updateGather = async(gName) => {
+    const createGather = async(gId, gName, mId) => {
+        console.log("cg");
         try {
-            await axios.post("http://localhost:8080/leader/updateGather",
+            const response = await axios.post("http://localhost:8080/leader/createGather",
             {
-                gather_id: gatherId,
-                gather_name: gName
+                gather_id: gId,
+                gather_name: gName,
+                account_id: mId,
             }
-            )
+            );
         } catch (error) {
             console.log(error);
         }
     };
 
-    const updateManager = async(mName, mPhone) => {
+    const createGatherManager = async(mName, mPhone) => {
+        console.log("cgm");
         try {
-            await axios.post("http://localhost:8080/leader/updateManager",
+            await axios.post("http://localhost:8080/leader/createGatherManager",
             {
-                manager_id: gatherInfo.account_id,
                 manager_name: mName,
                 manager_phone: mPhone
             }
-            )
+            );
+            
+            
         } catch (error) {
             console.log(error);
         }
+        console.log("cgme");
     }
 
-    const updateManagerPassword = async(newPwd) => {
+    const updateManagerPassword = async(newMId, newPwd) => {
+        console.log(newMId);
+        console.log(newPwd);
         try {
             await axios.post("http://localhost:8080/leader/updateManagerPassword",
             {
-                manager_id: gatherInfo.account_id,
+                manager_id: newMId,
                 new_password: newPwd
             }
             )
@@ -120,37 +105,97 @@ function ModifyGather() {
             console.log(error);
         }
     }
+    
+    const handleChange = (e) => {
+        setGatherInfo((prev) => {
+            return {
+                ...prev,
+                [e.target.name]: e.target.value,
+            };
+        });
+    };
 
-    const handleSubmit = (e) => {
-        let gName = document.querySelector("." + style.gatherNameContainer + " input").value;
-        let mName = document.querySelector("." + style.nameContainer + " input").value;
-        let mPhone = document.querySelector("." + style.phoneContainer + " input").value;
-        let newPwd = document.querySelector("." + style.newPasswordContainer + " input").value;
+    const checkCntPhone = async(e) => {
+        try {
+            const res = await axios.get("http://localhost:8080/leader/getCntPhone",
+            {
+                params :{
+                    account_phone: gatherInfo.account_phone,
+                }
+            }
+            );
+            return res.data;
+        } catch (error) {
+            console.log(error);
+        }
+    }
 
+    const getNewestID = async() => {
+        try {
+            const res = await axios.get("http://localhost:8080/leader/getNewestId",);
+            return res.data;
+        } catch (error) {
+            console.log(error);
+        }
+    }
+
+    const getNewGatherId = async() => {
+        try {
+            const res = await axios.get("http://localhost:8080/leader/getMaxGatherId",);
+            return res.data;
+        } catch (error) {
+            console.log(error);
+        }
+    }
+
+    const handleSubmit = async(e) => {
+        
         checkGatherName();
         checkManagerName();
         checkManagerPhone();
         checkNewPassword();
 
-        if(gatherNameErr === ""
+        let cnt = await checkCntPhone();
+        if(cnt > 0) {
+            alert("This phone number is already used by another account");
+        }
+        else if(gatherNameErr === ""
         && managerNameErr === ""
         && managerPhoneErr === ""
         && newPasswordErr === "" ) {
-            alert("Click OK to update gather and manager with infomation below.");
-            updateGather(gName);
-            updateManager(mName, mPhone);
-            if(newPwd !== "") {
-                console.log(newPwd);
-                updateManagerPassword(newPwd);
+            let newMId = await getNewestID() + 1;
+            let newGId = await getNewGatherId();
+            if(window.confirm("Click OK to create gather and manager with infomation below.")) {
+
+                await Promise.all([
+                    createGatherManager(gatherInfo.account_name, gatherInfo.account_phone),
+                    createGather(newGId, gatherInfo.gather_name, 5),
+                    console.log(1),
+                ]);
+                
             }
+            
+            if(gatherInfo.account_password !== "") {
+                // console.log(newPwd);
+                await updateManagerPassword(newMId, gatherInfo.account_password);
+            }
+
+            console.log(3);
+            await new Promise(resolve => setTimeout(resolve, 500));
+            await axios.post("http://localhost:8080/leader/updateAccountInGather",
+            {
+                account_id: newMId,
+                gather_id: newGId,  
+            }
+            );
+            console.log(4);
+            navigate("/leader");
         }
-        else {
-            e.preventDefault();
-        }
+        
     }
     
     useEffect(() => {
-        getGatherData();
+        
     }, [rerender]);
 
     return (
@@ -173,12 +218,13 @@ function ModifyGather() {
                     <div className = {clsx(style.gatherNameContainer)}>
                         <label>Gather Name: </label>
                         <br/>
-                        <input type="text" defaultValue={gatherInfo.gather_name}
-                        placeholder="Enter Gather Name!"
+                        <input type="text" placeholder="Enter Gather Name"
                         onBlur={checkGatherName}
                         onClick={() => {
                             setGatherNameErr("");
                         }}
+                        name="gather_name"
+                        onChange={handleChange}
                         />
                         <br/>
                         <div className={clsx(style.err)}>{gatherNameErr}</div>
@@ -193,12 +239,14 @@ function ModifyGather() {
                     <div className = {clsx(style.nameContainer)}>
                         <label>Manager Name: </label>
                         <br/>
-                        <input type="text" defaultValue={gatherInfo.account.account_name}
-                        placeholder="Enter Manager Name!"
+                        <input type="text"
+                        placeholder="Enter Manager Name"
                         onBlur={checkManagerName}
                         onClick={() => {
                             setManagerNameErr("");
                         }}
+                        name="account_name"
+                        onChange={handleChange}
                         />
                         <br/>
                         <div className={clsx(style.err)}>{managerNameErr}</div>
@@ -206,12 +254,14 @@ function ModifyGather() {
 
                     <div className = {clsx(style.phoneContainer)}>
                         <label>Manager Phone: </label>
-                        <input type="text" defaultValue={gatherInfo.account.account_phone}
-                        placeholder="Enter Manager Phone Number!"
+                        <input type="text"
+                        placeholder="Enter Manager Phone Number"
                         onBlur={checkManagerPhone}
                         onClick={() => {
                             setManagerPhoneErr("");
                         }}
+                        name="account_phone"
+                        onChange={handleChange}
                         />
                         <br/>
                         <div className={clsx(style.err)}>{managerPhoneErr}</div>
@@ -229,6 +279,8 @@ function ModifyGather() {
                         onClick={() => {
                             setNewPasswordErr("");
                         }}
+                        name="account_password"
+                        onChange={handleChange}
                         />
                         <br/>
                         <div className={clsx(style.err)}>{newPasswordErr}</div>
@@ -237,13 +289,11 @@ function ModifyGather() {
             </div>
 
             <div className={clsx(style.confirmBtns)}>
-                <Link to = {`/leader`} className={clsx(style.saveBtn)}
-                onClick={(e) => {
-                    handleSubmit(e);
-                }}
+                <div className={clsx(style.saveBtn)}
+                onClick={handleSubmit}
                 >
                     Save
-                </Link>
+                </div>
 
                 <Link to = "/leader" className={clsx(style.cancelBtn)}>
                     Cancel
@@ -254,4 +304,4 @@ function ModifyGather() {
     );
 }
 
-export default ModifyGather;
+export default CreateGather;

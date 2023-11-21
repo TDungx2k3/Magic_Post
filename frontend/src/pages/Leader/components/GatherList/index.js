@@ -33,9 +33,9 @@ function GatherList() {
         <Fragment>
             <div className={clsx(style.gatherListContainer)}>
                 <div className={clsx(style.functionContainer)}>
-                    <div className={clsx(style.addBtn)}>
+                    <Link to = '/createGather' className={clsx(style.addBtn)}>
                         <i className= "ti-plus"></i>
-                    </div>
+                    </Link>
 
                     <div className={clsx(style.searchBar)}>
                         <i className= "ti-search"></i>

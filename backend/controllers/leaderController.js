@@ -132,14 +132,97 @@ class LeaderController {
                     );
                 }
             });
-            
+            res.send();
+        } catch (error) {
+            res.send(error);
+            console.log(error);
+        }
+    };
+
+    countPhoneNumber = async(req, res) => {
+        // console.log(1111);
+        // console.log(req);
+        try {
+            await sequelize.authenticate();
+            await sequelize.sync();
+            const cnt = await Account.count(
+                {
+                    where: {
+                        account_phone: req.query.account_phone,
+                    }
+                }
+            );
+            res.json(cnt);
         } catch (error) {
             res.send(error);
             console.log(error);
         }
     }
 
-    getMaxGatherId = async () => {
+    getNewestId = async(req, res) => {
+        // console.log(1111);
+        // console.log(req);
+        try {
+            await sequelize.authenticate();
+            await sequelize.sync();
+            const newestId = await Account.max("account_id");
+            res.json(newestId);
+        } catch (error) {
+            res.send(error);
+            console.log(error);
+        }
+    }
+
+    createGatherManager = async(req, res) => {
+        try {
+            await sequelize.authenticate();
+            await sequelize.sync();
+            const saltRounds = 10;
+            const plaintextPassword = "000000";
+            bcrypt.hash(plaintextPassword, saltRounds, async (err, hash) => {
+                if (err) {
+                    console.error('Error hashing password:', err);
+                } else {
+                    // console.log(11212);
+                    await Account.create(
+                        {
+                            account_name: req.body.manager_name,
+                            account_phone: req.body.manager_phone,
+                            account_password: hash,
+                            role_id: 5
+                        }
+                    );
+                }
+            });
+            res.send();
+        } catch (error) {
+            res.send(error);
+            console.log(error);
+        }
+    };
+
+    updateAccountInGather = async(req, res) => {
+        try {
+            await sequelize.authenticate();
+            await sequelize.sync();
+            await Gathering.update(
+                {
+                    account_id: req.body.account_id,
+                },
+                {
+                    where: {
+                        gather_id: req.body.gather_id,
+                    }
+                }
+            );
+            res.send();
+        } catch (error) {
+            res.send(error);
+            console.log(error);
+        }
+    }
+
+    getMaxGatherId = async (req, res) => {
         try {
             await sequelize.authenticate();
             await sequelize.sync(); 
@@ -147,6 +230,7 @@ class LeaderController {
                 attributes: ['gather_id'],
                 raw: true, // Trả về kết quả dưới dạng mảng JSON đơn giản thay vì mô hình Sequelize
             });
+            res.json("g" + (Math.max(...allGatherIds.map((obj) => parseInt(obj.gather_id.substring(1)))) + 1));
             // console.log(Math.max(...allGatherIds.map((obj) => parseInt(obj.gather_id.substring(1)))));
             return Math.max(...allGatherIds.map((obj) => parseInt(obj.gather_id.substring(1))));
         } catch (error) {
@@ -156,14 +240,14 @@ class LeaderController {
     };
 
     createGather = async (req, res) => {
+        console.log("create gather");
         const data = req.body;
-
-        let temp = await this.getMaxTranId();
-        Gathering.create({
-            gather_id: "g" + (temp + 1),
-            gather_name: data.gatherName,
-            account_id: data.accountId,
-        })
+        await Gathering.create({
+            gather_id: data.gather_id,
+            gather_name: data.gather_name,
+             account_id: data.account_id,
+        });
+        res.send();
     };
 
     showAllGatherManagers = async (req, res) => {

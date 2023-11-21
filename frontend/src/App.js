@@ -16,6 +16,7 @@ import { createContext, useState } from 'react';
 import ManageGather from './pages/Leader/subPages/ManageGather';
 import ModifyGather from './pages/Leader/subPages/ModifyGather';
 import ModifyTransaction from './pages/Leader/subPages/ModifyTransaction';
+import CreateGather from './pages/Leader/subPages/CreateGather';
 
 export const LoginContext = createContext();
 
@@ -60,6 +61,7 @@ function App() {
             <Route path = '/leaderManageGather' element={<ManageGather/>} />
             <Route path = '/modifyGather' element={<ModifyGather/>} />
             <Route path = '/modifyTransaction' element={<ModifyTransaction/>} />
+            <Route path = '/createGather' element={<CreateGather/>} />
           </Routes>
         </Router>
       </div>
