@@ -12,7 +12,7 @@ function Login() {
   // isLogin để lưu trữ thông tin xem người dùng đã đăng nhập hay chưa
   // setIsLogin là hàm thay đổi trạng thái true/false của isLogin
   // userInfo dùng để lưu thông tin của người dùng khi đăng nhập
-  const { isLogin, setIsLogin, userInfo } = useContext(LoginContext)
+  const { isLogin, setIsLogin, userInfo, setUserInfo} = useContext(LoginContext)
 
   const [passHide, setPassHide] = useState(false); // Trạng thái ẩn/hiện của mật khẩu
 
@@ -132,6 +132,7 @@ function Login() {
             userInfo.uName = response.data.accounts.account_name;
             userInfo.uPhone = inputs.phone; 
             userInfo.uPassword = inputs.password;
+            // alert("Login successfully");
           }
           setMessage(response.data.message);
           console.log(message);

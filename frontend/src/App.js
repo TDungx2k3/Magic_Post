@@ -24,14 +24,14 @@ function App() {
   const [isLogin, setIsLogin] = useState(false); //Trạng thái đăng nhập
 
   // Lưu trữ thông tin người đăng nhập
-  let userInfo = {
-      uId : "",
-      uName : "",
-      uPhone : "",
-      uPassword : "",
-      uRole: "",
-      uUnit: ""
-  }
+  const [userInfo, setUserInfo] = useState({
+    uId : "",
+    uName : "",
+    uPhone : "",
+    uPassword : "",
+    uRole: "",
+    uUnit: ""
+});
   
   
   AOS.init();
@@ -47,7 +47,7 @@ function App() {
 
   document.title = 'Magic Post';
   return (
-    <LoginContext.Provider value={{isLogin, setIsLogin, userInfo}}>
+    <LoginContext.Provider value={{isLogin, setIsLogin, userInfo, setUserInfo}}>
       <div className="App">
         <Router>
           <Routes>
