@@ -61,13 +61,15 @@ class transactionManagerController {
             await sequelize.authenticate();
             await sequelize.sync();
             const allOrderReceive = await Order.findAll({
-                attributes: ["order_id", "weight", "price"],
+                attributes: ["order_id", "weight", "price", "date"],
                 include: [
                     {
                         model: Delivery,
                         attributes: ["to_id"],
                         where: {
-                            date: req.body.deliveries.date
+                            // date: req.body.deliveries.date
+                            to_id: "t01",
+                            deliver_status: 1
                         },
                         include: [
                             {
@@ -90,7 +92,7 @@ class transactionManagerController {
             await sequelize.authenticate();
             await sequelize.sync();
             const allOrderSent = await Order.findAll({
-                attributes: ["order_id", "weight", "price"],
+                attributes: ["order_id", "weight", "price", "date"],
                 include: [
                     {
                         model: Delivery,

@@ -9,13 +9,13 @@
     font-family: Roboto, sans-serif;
     font-weight: bold;
     width: 80%;
-    height: 200px;
+    height: fit-content;
     border-radius: 60px;
 }
 
 .sub-container {
-    margin-top: auto;
-    margin-bottom: auto;
+    margin-top: 20px;
+    margin-bottom: 20px;
     text-align: left;
     background-color: #3D4FD2;
     border-radius: 50px;
@@ -57,4 +57,22 @@
     100% {
       transform: scale(1.0);
     }
+}
+
+@media screen and (max-width: 768px) {
+  .container {
+    font-size: 20px;
+  }
+}
+
+@media screen and (max-width: 678px) {
+  .container {
+    font-size: 18px;
+  }
+}
+
+@media screen and (max-width: 562px) {
+  .container {
+    font-size: 16px;
+  }
 }

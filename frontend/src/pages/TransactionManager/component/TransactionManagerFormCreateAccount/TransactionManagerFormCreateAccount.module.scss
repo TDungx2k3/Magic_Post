@@ -6,6 +6,7 @@
     font-weight: bold;
     margin-top: 2%;
     margin-bottom: 2%;
+    // width: fit-content;
 }
 
 .form-container {
@@ -235,6 +236,17 @@ form div input {
     }
 }
 
+@media screen and (min-width: 876px) {
+    .error {
+        left: 65%;
+    }
+
+    form div input {
+        width: 38%;
+        margin-left: 10px;
+    }
+}
+
 @media screen and (max-width: 876px) {
     .container {
         font-size: 18px;
@@ -249,6 +261,7 @@ form div input {
         width: 38%;
         margin-left: 5px;
         height: 40px;
+        font-size: 18px;
     }
 
     .add-account {
@@ -272,6 +285,7 @@ form div input {
         margin-left: 5px;
         width: 36%;
         height: 40px;
+        font-size: 16px;
     }
 
     .add-account {
@@ -295,11 +309,36 @@ form div input {
         margin-left: 5px;
         width: 34%;
         height: 40px;
+        font-size: 14px;
     }
 
     .add-account {
         padding: 6px 12px;
         height: 8%;
         font-size: 14px;
+    }
+}
+
+@media screen and (max-width: 562px) {
+    .container {
+        font-size: 12px;
+    }
+
+    .error {
+        font-size: 11px;
+        left: 60%;
+    }
+
+    form div input {
+        margin-left: 3px;
+        width: 34%;
+        height: 34px;
+        font-size: 12px;
+    }
+
+    .add-account {
+        padding: 6px 12px;
+        height: 8%;
+        font-size: 12px;
     }
 }

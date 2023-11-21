@@ -9,7 +9,7 @@ function StatisticOrdersSent(props) {
     const handleGetData = async () => {
         try {
             const response = await axios.get(
-                "http://localhost:8080/transaction-manager/test-get-order-sent"
+                "http://localhost:8080/transaction-manager/get-order-sent"
             );
             setData(response.data);
         } catch (err) {
@@ -25,8 +25,8 @@ function StatisticOrdersSent(props) {
 
     return (
         <div className={clsx(style.container, props.className)}>
-            <div className={clsx(style["sub-container"])}>
-                {data.map((order) => (
+            {data.map((order) => (
+                <div className={clsx(style["sub-container"])}>
                     <div key={order.order_id}>
                         <div>
                             <label htmlFor="Order ID">Order ID: </label>
@@ -43,15 +43,13 @@ function StatisticOrdersSent(props) {
                             <span>{order.price} $</span>
                         </div>
 
-                        {order.deliveries.map((delivery, index) => (
-                            <div key={index}>
-                                <label htmlFor="From ID">From ID: </label>
-                                <span>{delivery.from_id}</span>
-                            </div>
-                        ))}
+                        <div>
+                            <label htmlFor="Date">Date: </label>
+                            <span>{order.date}</span>
+                        </div>
                     </div>
-                ))}
-            </div>
+                </div>
+            ))}
         </div>
     );
 }
