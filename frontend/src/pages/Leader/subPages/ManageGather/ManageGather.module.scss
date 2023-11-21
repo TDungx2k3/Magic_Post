@@ -19,6 +19,8 @@
 .transManage {
     flex: 1;
     padding: 12px;
+    border-top-left-radius: 40px;
+    border-bottom-left-radius: 40px;
 }
 
 .transManage:hover {
@@ -43,6 +45,8 @@
 .employeesManage {
     flex: 1;
     padding: 12px;
+    border-top-right-radius: 40px;
+    border-bottom-right-radius: 40px;
 }
 
 .employeesManage:hover {

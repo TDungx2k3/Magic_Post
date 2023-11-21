@@ -21,8 +21,8 @@ function TransactionList(props) {
             return 0;
         }
     });
-    console.log(transactionList);
-    console.log(transactionList);
+    // console.log(transactionList);
+    // console.log(transactionList);
     let cnt = transactionList.length;
     let numOfPages = Math.ceil(cnt / maxItemsInOnePage);
     const [pageNum, setPageNum] = useState(1);
