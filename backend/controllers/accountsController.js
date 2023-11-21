@@ -51,17 +51,12 @@ class AccountController {
             })
           }
         });
-<<<<<<< HEAD
-      }
-      
-=======
+
       } else {
         res.json({
           message: 'Phone/Password do not match',
         })
       }
-
->>>>>>> 7d2d1336e3af9c8dbc72347301bcf55e903862dc
     } catch (error) {
       console.error(error);
     }
