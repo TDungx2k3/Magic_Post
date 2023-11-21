@@ -20,7 +20,7 @@ export const LoginContext = createContext();
 
 function App() {
   // Khai báo các thông tin chung cần dùng của cả trang web
-  const [isLogin, setIsLogin] = useState(false) //Trạng thái đăng nhập
+  const [isLogin, setIsLogin] = useState(false); //Trạng thái đăng nhập
 
   // Lưu trữ thông tin người đăng nhập
   let userInfo = {

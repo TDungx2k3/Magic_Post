@@ -126,3 +126,23 @@
 .linkToService:hover {
     cursor: pointer;
 }
+
+.isLoginBtn {
+    display: flex;
+    justify-content: space-between;
+}
+
+.isLoginInfor {
+    display: flex;
+    margin: 0px 0px 0px 55px;
+    padding: 8px 16px;
+}
+
+.isLoginInfor div {
+    margin-right: 10px;
+}
+
+.invalid {
+    display: none;
+}
+

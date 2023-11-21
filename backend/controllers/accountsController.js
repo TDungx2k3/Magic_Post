@@ -32,24 +32,31 @@ class AccountController {
         where: {
           account_phone: data.phone,
         },
-      })
+      });
       //.then((accounts) => { return res.json(accounts) });
       // return accounts.toJSON();
-      bcrypt.compare(data.password, accounts.account_password, (err, result) => {
-        if (err) {
-          console.error('Error comparing passwords:', err);
-        } else if (result) {
-          console.log("OK");
-          res.json({
-            accounts,
-            message: 'Login successfully',
-          });
-        } else {
-          res.json({
-            message: 'Phone/Password do not match',
-          })
-        }
-      });
+      if(accounts) {
+        bcrypt.compare(data.password, accounts.account_password, (err, result) => {
+          if (err) {
+            console.error('Error comparing passwords:', err);
+          } else if (result) {
+            console.log("OK");
+            res.json({
+              accounts,
+              message: 'Login successfully',
+            });
+          } else {
+            res.json({
+              message: 'Phone/Password do not match',
+            })
+          }
+        });
+      } else {
+        res.json({
+          message: 'Phone/Password do not match',
+        })
+      }
+
     } catch (error) {
       console.error(error);
     }
