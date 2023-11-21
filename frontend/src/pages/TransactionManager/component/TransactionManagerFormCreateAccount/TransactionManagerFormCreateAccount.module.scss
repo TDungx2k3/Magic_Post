@@ -57,30 +57,30 @@ form div input {
     position: relative;
 }
 
-.button-container {
-    display: flex;
-    justify-content: space-around;
-    align-items: center;
-    margin: 0px 20px;
-}
+// .button-container {
+//     display: flex;
+//     justify-content: space-around;
+//     align-items: center;
+//     margin: 0px 20px;
+// }
 
-.btns {
-    flex: 1;
-    height: 100px;
-    margin: 0 2%;
-    border: 3px solid #000;
-    border-radius: 16px;
-    cursor: pointer;
-    background-color: #00BFFF;
-    padding: 10px 20px;
-    font-size: 24px;
-    font-family: Roboto, sans-serif;
-    font-weight: bold;
-}
+// .btns {
+//     flex: 1;
+//     height: 100px;
+//     margin: 0 2%;
+//     border: 3px solid #000;
+//     border-radius: 16px;
+//     cursor: pointer;
+//     background-color: #00BFFF;
+//     padding: 10px 20px;
+//     font-size: 24px;
+//     font-family: Roboto, sans-serif;
+//     font-weight: bold;
+// }
 
-.btns:hover {
-    animation: scaleUp 0.5s ease forwards;
-}
+// .btns:hover {
+//     animation: scaleUp 0.5s ease forwards;
+// }
 
 .error {
     font-size: 18px;
@@ -91,12 +91,12 @@ form div input {
 }
 
 .error-hidden {
-    font-size: 18px;
-    color: #FF0000;
+    // font-size: 18px;
+    // color: #FF0000;
     position: absolute;
     visibility: hidden;
-    left: 65%;
-    margin-top: 1.2%;
+    // left: 65%;
+    // margin-top: 1.2%;
 }
 
 .accept {
@@ -215,6 +215,7 @@ form div input {
     0% {
         transform: scale(1);
     }
+
     100% {
         transform: scale(1.1);
     }
@@ -224,10 +225,81 @@ form div input {
     0% {
         display: flex;
     }
+
     99% {
         display: flex;
     }
+
     100% {
         display: none;
+    }
+}
+
+@media screen and (max-width: 876px) {
+    .container {
+        font-size: 18px;
+    }
+
+    .error {
+        font-size: 16px;
+        left: 64%;
+    }
+
+    form div input {
+        width: 38%;
+        margin-left: 5px;
+        height: 40px;
+    }
+
+    .add-account {
+        padding: 8px 16px;
+        height: 10%;
+        font-size: 18px;
+    }
+}
+
+@media screen and (max-width: 768px) {
+    .container {
+        font-size: 16px;
+    }
+
+    .error {
+        font-size: 15px;
+        left: 62%;
+    }
+
+    form div input {
+        margin-left: 5px;
+        width: 36%;
+        height: 40px;
+    }
+
+    .add-account {
+        padding: 7px 14px;
+        height: 9%;
+        font-size: 16px;
+    }
+}
+
+@media screen and (max-width: 678px) {
+    .container {
+        font-size: 14px;
+    }
+
+    .error {
+        font-size: 13px;
+        left: 60%;
+    }
+
+    form div input {
+        margin-left: 5px;
+        width: 34%;
+        height: 40px;
+    }
+
+    .add-account {
+        padding: 6px 12px;
+        height: 8%;
+        font-size: 14px;
     }
 }
