@@ -46,6 +46,7 @@ function Login() {
       });
       if (isLogin === true) {
         loginBtnRef.current.click();
+        // loginBtnRef.current.click();
       } else {
         setIsLogin(true);
       }
@@ -123,15 +124,17 @@ function Login() {
       await axios
         .post("http://localhost:8080/account/login", inputs)
         .then((response) => {
-          setMessage(response.data.message);
-          if(message === 'Login successfully') {
+          let checkResponseMessage = response.data.message;
+          if(checkResponseMessage === 'Login successfully') {
             console.log(response.data.accounts.account_id);
             console.log(response.data.accounts.account_name);
             userInfo.uId = response.data.accounts.account_id;
             userInfo.uName = response.data.accounts.account_name;
-            userInfo.uPhone = inputs.phone;
+            userInfo.uPhone = inputs.phone; 
             userInfo.uPassword = inputs.password;
           }
+          setMessage(response.data.message);
+          console.log(message);
           //alert(message);
         })
         .catch((err) => {
@@ -221,9 +224,8 @@ function Login() {
           <section>
             <Link to="/">
               <button className={style.submitSignInBtn} ref={loginBtnRef}
-              onClick={(e) => {
+              onClick={ (e) => {
                 handlePassReplication();
-                console.log(message);
                 if(message !== "Login successfully") {
                   e.preventDefault();
                 }

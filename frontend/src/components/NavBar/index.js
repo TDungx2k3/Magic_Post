@@ -2,12 +2,16 @@ import clsx from "clsx";
 import AOS from 'aos';
 import style from "./NavBar.module.scss"
 import logo from '../../assets/icons/logo.png'
-import { useEffect } from "react";
+import { useState, useEffect, useContext } from "react";
 import { Link } from "react-router-dom";
 import { Link as ScrollLink, animateScroll as scroll, scroller } from 'react-scroll';
+import { LoginContext } from "../../App";
 
 
 function NavBar() {
+    const { isLogin, setIsLogin, userInfo } = useContext(LoginContext);
+    console.log(userInfo.uName);
+    
     return (
         <nav id={clsx(style.navBarContainer)}>
             <ScrollLink to ="top" className={clsx(style.logo)} spy={true} smooth={true} duration={500}>
@@ -34,17 +38,29 @@ function NavBar() {
                     <Link to ="#">Contact Us</Link>
                 </div>
             </div>
-
-            <div className={clsx(style.rolesBtns)}>
-                <div className={clsx(style.forCustomers)}>
-                    <Link to ="#">For Customers</Link>
-                </div>
-        
-                <div className={clsx(style.forEmployees)}>
-                    <Link to ="/login">For Delivery Partners</Link>
-                </div>
-            </div>
             
+            <section className={clsx({[style.invalid] : (isLogin)})}>
+                <div className={clsx(style.rolesBtns)}>
+                    <div className={clsx(style.forCustomers)}>
+                        <Link to ="#">For Customers</Link>
+                    </div>
+            
+                    <div className={clsx(style.forEmployees)}>
+                        <Link to ="/login">For Delivery Partners</Link>
+                    </div>
+                </div>
+            </section>
+            <section className={clsx({[style.invalid] : (!isLogin)}, style.isLoginBtn)}>
+                <div className={style.isLoginInfor}>
+                    <div><i className="ti-user"></i></div>
+                    <div>{userInfo.uName}</div>
+                </div>
+                <div className={clsx(style.rolesBtns)}>    
+                    <div className={clsx(style.forEmployees)}>
+                        <a href="/login"> Log Out</a>
+                    </div>
+                </div>
+            </section>             
         </nav>
     );
 }
