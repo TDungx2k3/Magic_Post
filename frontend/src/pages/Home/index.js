@@ -2,6 +2,8 @@ import axios from "axios";
 import { Fragment } from "react";
 import Header from "../../components/Header";
 import Footer from "../../components/Footer";
+import { LoginContext } from "../../App";
+import { useContext } from "react";
 import clsx from"clsx";
 import style from "./Home.module.scss";
 import parcelsIcon from "../../assets/icons/parcels_since_inception_50be16b3a9.svg";
@@ -12,8 +14,10 @@ import VNMapIcon from "../../assets/icons/vnMap.png";
 import shippingService from "../../assets/icons/shipping_services_afa97d2a96.svg";
 import fulfillmentService from "../../assets/icons/fulfillment_services_53d479b72c.svg";
 import ecomService from "../../assets/icons/magnum_48dfaa6c33.svg";
-import digitalService from "../../assets/icons/digital_services_b4b4505fa3.svg"
+import digitalService from "../../assets/icons/digital_services_b4b4505fa3.svg";
 function Home() {
+    const { isLogin, setIsLogin, userInfo } = useContext(LoginContext);
+
     const getMatchesInfo = async (e) => {
         try {
             await axios.get("http://localhost:8080/account/showAllAccounts")
