@@ -105,7 +105,8 @@ class transactionManagerController {
                                 model: Transaction,
                                 attributes: ["trans_id"]
                             }
-                        ]
+                        ],
+                        required: true
                     },
                 ]
             });
