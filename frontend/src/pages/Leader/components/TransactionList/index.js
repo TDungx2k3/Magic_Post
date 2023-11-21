@@ -47,6 +47,7 @@ function TransactionList(props) {
                 {
                     transactionList.map((transaction, index) => {
                         let transactionData = {
+                            transactionId: transaction.trans_id,
                             transactionName: transaction.trans_name,
                             transactionManagerName: transaction.account.account_name,
                             transactionManagerPhone: transaction.account.account_phone

@@ -11,6 +11,10 @@ router.post("/test-create", leaderController.createGather);
 router.get("/getGatherInfo", leaderController.getGatherInfoWithID);
 router.post("/updateGather", leaderController.updateGather);
 router.post("/updateManager", leaderController.updateManager);
-router.post("/updateManagerPassword", leaderController.updateManagerPassword)
+router.post("/updateManagerPassword", leaderController.updateManagerPassword);
+
+router.get("/getTransactionInfo", leaderController.getTransactionInfoWithID);
+router.post("/updateTransaction", leaderController.updateTransaction)
+
 
 module.exports = router;

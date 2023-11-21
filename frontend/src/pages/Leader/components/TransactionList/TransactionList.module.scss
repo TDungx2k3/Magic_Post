@@ -72,6 +72,12 @@
     border-radius: 24px;
 }
 
+.pageBtn:hover {
+    cursor: pointer;
+    background-color: rgba(84, 84, 84, .5);
+    color: #fff;
+}
+
 .pageBtnActive {
     background-color: rgb(84, 84, 84);
     color: #fff;

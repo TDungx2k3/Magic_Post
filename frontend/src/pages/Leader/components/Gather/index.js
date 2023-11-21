@@ -41,9 +41,9 @@ function Gather(props) {
                         <i className= "ti-trash" ></i>
                     </div>
 
-                    <div className= {clsx(style.modifyBtn)}>
+                    <Link to = {`/modifyGather?gather_id=${props.data.gatherId}`} className= {clsx(style.modifyBtn)}>
                         <i className= "ti-reload"></i>
-                    </div>
+                    </Link>
                 </div>
             </div>
 

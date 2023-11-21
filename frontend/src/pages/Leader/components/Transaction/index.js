@@ -41,9 +41,9 @@ function Transaction(props) {
                         <i className= "ti-trash" ></i>
                     </div>
 
-                    <div className= {clsx(style.modifyBtn)}>
+                    <Link to = {`/modifyTransaction?trans_id=${props.data.transactionId}`} className= {clsx(style.modifyBtn)}>
                         <i className= "ti-reload"></i>
-                    </div>
+                    </Link>
                 </div>
             </div>
 

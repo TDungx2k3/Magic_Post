@@ -1,26 +1,26 @@
 import { Fragment, useState, useEffect } from "react";
 import clsx from "clsx";
-import style from './ModifyGather.module.scss';
+import style from './ModifyTransaction.module.scss';
 import { Link, useLocation } from "react-router-dom";
 import axios from "axios";
 
-function ModifyGather() {
+function ModifyTransaction() {
 
     const location = useLocation();
-    const gatherId = new URLSearchParams(location.search).get("gather_id");
-    // console.log(gatherId);
+    const transId = new URLSearchParams(location.search).get("trans_id");
     
     const [rerender] = useState(true);
     const [options, setOptions] = useState(1);
-    const [gatherNameErr, setGatherNameErr] = useState("");
+    const [transNameErr, setTransNameErr] = useState("");
     const [managerNameErr, setManagerNameErr] = useState("");
     const [managerPhoneErr, setManagerPhoneErr] = useState("");
     const [newPasswordErr, setNewPasswordErr] = useState("");
 
-    const [gatherInfo, setGatherInfo] = useState(
+    const [transInfo, setTransInfo] = useState(
         {
             account_id: "",
-            gather_name: "",
+            trans_name: "",
+            gather_id: "",
             account: {
                 account_name: "",
                 account_phone: ""
@@ -28,30 +28,30 @@ function ModifyGather() {
         }
     );
 
-    const getGatherData = async(e) => {
+    const getTransData = async(e) => {
         try {
             await axios
-            .get("http://localhost:8080/leader/getGatherInfo",
+            .get("http://localhost:8080/leader/getTransactionInfo",
             {
                 params:{
-                    gather_id : gatherId
+                    trans_id : transId,
                 }
             }
             )
             .then((res) => {
                 console.log(res.data);
-                setGatherInfo(res.data[0])
+                setTransInfo(res.data[0])
             })
         } catch (error) {
             console.log(error);
         }
     };
 
-    const checkGatherName = () => {
-        let gName = document.querySelector("." + style.gatherNameContainer + " input").value;
+    const checkTransName = () => {
+        let gName = document.querySelector("." + style.transNameContainer + " input").value;
         // console.log(gName);
         if(gName === "") {
-            setGatherNameErr("Please enter valid gather name!")
+            setTransNameErr("Please enter valid transaction name!")
         }
     };
 
@@ -81,12 +81,12 @@ function ModifyGather() {
         }
     };
 
-    const updateGather = async(gName) => {
+    const updateTrans = async(tName) => {
         try {
-            await axios.post("http://localhost:8080/leader/updateGather",
+            await axios.post("http://localhost:8080/leader/updateTransaction",
             {
-                gather_id: gatherId,
-                gather_name: gName
+                trans_id: transId,
+                trans_name: tName
             }
             )
         } catch (error) {
@@ -98,7 +98,7 @@ function ModifyGather() {
         try {
             await axios.post("http://localhost:8080/leader/updateManager",
             {
-                manager_id: gatherInfo.account_id,
+                manager_id: transInfo.account_id,
                 manager_name: mName,
                 manager_phone: mPhone
             }
@@ -112,7 +112,7 @@ function ModifyGather() {
         try {
             await axios.post("http://localhost:8080/leader/updateManagerPassword",
             {
-                manager_id: gatherInfo.account_id,
+                manager_id: transInfo.account_id,
                 new_password: newPwd
             }
             )
@@ -122,22 +122,22 @@ function ModifyGather() {
     }
 
     const handleSubmit = (e) => {
-        let gName = document.querySelector("." + style.gatherNameContainer + " input").value;
+        let tName = document.querySelector("." + style.transNameContainer + " input").value;
         let mName = document.querySelector("." + style.nameContainer + " input").value;
         let mPhone = document.querySelector("." + style.phoneContainer + " input").value;
         let newPwd = document.querySelector("." + style.newPasswordContainer + " input").value;
 
-        checkGatherName();
+        checkTransName();
         checkManagerName();
         checkManagerPhone();
         checkNewPassword();
 
-        if(gatherNameErr === ""
+        if(transNameErr === ""
         && managerNameErr === ""
         && managerPhoneErr === ""
         && newPasswordErr === "" ) {
-            alert("Click OK to update gather and manager with infomation below.");
-            updateGather(gName);
+            alert("Click OK to update transaction and manager with infomation below.");
+            updateTrans(tName);
             updateManager(mName, mPhone);
             if(newPwd !== "") {
                 console.log(newPwd);
@@ -150,12 +150,12 @@ function ModifyGather() {
     }
     
     useEffect(() => {
-        getGatherData();
+        getTransData();
     }, [rerender]);
 
     return (
         <Fragment>
-            <div className={clsx(style.gatherOptionContainer)}>
+            <div className={clsx(style.transOptionContainer)}>
                 <div className={clsx(style.managerOption, {[style.optionActive] : options === 1})}
                 onClick={() => {
                     setOptions(1);
@@ -168,19 +168,19 @@ function ModifyGather() {
                 >Change Password</div>
             </div>
 
-            <div className = {clsx(style.modifyGatherContainer)}>
-                <div className={clsx(style.gatherInfoContainer)}>
-                    <div className = {clsx(style.gatherNameContainer)}>
-                        <label>Gather Name: </label>
+            <div className = {clsx(style.modifyTransContainer)}>
+                <div className={clsx(style.transInfoContainer)}>
+                    <div className = {clsx(style.transNameContainer)}>
+                        <label>Transaction Name: </label>
                         <br/>
-                        <input type="text" defaultValue={gatherInfo.gather_name}
-                        onBlur={checkGatherName}
+                        <input type="text" defaultValue={transInfo.trans_name}
+                        onBlur={checkTransName}
                         onClick={() => {
-                            setGatherNameErr("");
+                            setTransNameErr("");
                         }}
                         />
                         <br/>
-                        <div className={clsx(style.err)}>{gatherNameErr}</div>
+                        <div className={clsx(style.err)}>{transNameErr}</div>
                     </div>
 
                     
@@ -192,7 +192,7 @@ function ModifyGather() {
                     <div className = {clsx(style.nameContainer)}>
                         <label>Manager Name: </label>
                         <br/>
-                        <input type="text" defaultValue={gatherInfo.account.account_name}
+                        <input type="text" defaultValue={transInfo.account.account_name}
                         onBlur={checkManagerName}
                         onClick={() => {
                             setManagerNameErr("");
@@ -204,7 +204,7 @@ function ModifyGather() {
 
                     <div className = {clsx(style.phoneContainer)}>
                         <label>Manager Phone: </label>
-                        <input type="text" defaultValue={gatherInfo.account.account_phone}
+                        <input type="text" defaultValue={transInfo.account.account_phone}
                         onBlur={checkManagerPhone}
                         onClick={() => {
                             setManagerPhoneErr("");
@@ -234,21 +234,19 @@ function ModifyGather() {
             </div>
 
             <div className={clsx(style.confirmBtns)}>
-                <Link to = {`/leader`} className={clsx(style.saveBtn)}
-                onClick={(e) => {
-                    handleSubmit(e);
-                }}
+                <Link to = {`/leaderManageGather?gather_id=${transInfo.gather_id}`} className={clsx(style.saveBtn)}
+                onClick={handleSubmit}
                 >
                     Save
                 </Link>
 
-                <Link to = "/leader" className={clsx(style.cancelBtn)}>
+                <div className={clsx(style.cancelBtn)}>
                     Cancel
-                </Link>
+                </div>
             </div>
         </Fragment>
         
     );
 }
 
-export default ModifyGather;
+export default ModifyTransaction;

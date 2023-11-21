@@ -262,6 +262,56 @@ class LeaderController {
             console.log(error);
         }
     };
+
+    getTransactionInfoWithID = async (req, res) => {
+        try {
+            await sequelize.authenticate();
+            await sequelize.sync();
+            let trans = [];
+            trans = await Transaction.findAll(
+                {
+                    include: {
+                        model: Account,
+                        attributes: [
+                            "account_name",
+                            "account_phone"
+                        ]
+                    },
+                    where: {
+                        trans_id: req.query.trans_id
+                    },
+                }
+            );
+            // console.log(trans);
+            res.json(trans);
+        } catch (error) {
+            res.send(error);
+            console.log(error);
+        }
+    };
+
+    updateTransaction = async (req, res) => {
+        // console.log(req.body);
+        try {
+            await sequelize.authenticate();
+            await sequelize.sync();
+            await Transaction.update(
+                {
+                    trans_name: req.body.trans_name,
+                },
+                {
+                    where: {
+                        trans_id: req.body.trans_id,
+                    }
+                }
+            );
+        } catch (error) {
+            res.send(error);
+            console.log(error);
+        }
+    };
+
+
 }
 
 module.exports = new LeaderController();

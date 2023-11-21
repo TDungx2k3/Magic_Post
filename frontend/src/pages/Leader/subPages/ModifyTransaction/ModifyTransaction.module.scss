@@ -1,0 +1,134 @@
+.modifyTransContainer {
+    display: flex;
+    font-size: 24px;
+    width: 90%;
+    margin: 40px auto;
+    min-height: 350px;
+}
+
+.modifyTransContainer input {
+    display: flex;
+    width: 80%;
+    font-size: 20px;
+    margin: 8px auto 0px;
+}
+
+.transInfoContainer {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+.changePasswordContainer {
+    flex: 1;
+    text-align: left;
+}
+
+.transOptionContainer {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+    background-color: #4b5de8;
+    color: #fff;
+    font-size: 20px;
+    width: 80%;
+    margin: 20px auto 0px;
+    border-radius: 24px;
+}
+
+.managerOption {
+    flex: 1;
+    border-top-left-radius: 24px;
+    border-bottom-left-radius: 24px;
+    padding: 12px 0px;
+}
+
+.managerOption:hover {
+    cursor: pointer;
+    background-color: #99a5ff;
+    color: #333;
+}
+
+.passwordOption {
+    flex: 1;
+    border-top-right-radius: 24px;
+    border-bottom-right-radius: 24px;
+    padding: 12px 0px;
+}
+
+.passwordOption:hover {
+    cursor: pointer;
+    background-color: #99a5ff;
+    color: #333;
+}
+
+.transNameContainer {
+    flex: 1;
+    text-align: left;
+}
+
+.nameContainer {
+    display: block;
+}
+
+.phoneContainer {
+    display: block;
+}
+
+.managerInfoContainer {
+    flex: 1;
+    text-align: left;
+}
+
+.newPasswordContainer {
+    display: block;
+}
+
+.err {
+    min-height: 50px;
+    color: red;
+    font-size: 16px;
+}
+
+.optionActive {
+    background-color: #001eff;
+}
+
+.hidden {
+    display: none;
+}
+
+.confirmBtns {
+    display: flex;
+    flex-direction: row;
+    font-size: 24px;
+    width: 90%;
+    margin: 0px auto;
+    justify-content: space-around;
+}
+
+.saveBtn {
+    background-color: rgb(0, 255, 0);
+    min-width: 150px;
+    padding: 12px 20px;
+    border-radius: 24px;
+    color: #fff;
+}
+
+.saveBtn:hover {
+    background-color: rgb(0, 174, 41);
+    cursor: pointer;
+}
+
+.cancelBtn {
+    background-color: red;
+    min-width: 150px;
+    padding: 12px 20px;
+    border-radius: 24px;
+    color: #fff;
+}
+
+.cancelBtn:hover {
+    cursor: pointer;
+    background-color: rgb(172, 0, 0);
+}
