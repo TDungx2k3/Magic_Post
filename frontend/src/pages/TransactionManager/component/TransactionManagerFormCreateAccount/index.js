@@ -25,7 +25,7 @@ function TransactionManagerFormCreateAccount(props) {
         handleErrorForName();
         handleErrorForPhone();
         handleErrorForPassword();
-        await handleGetData();
+        handleGetData();
         // handleCheckIsCreateSuccess();
     };
 
@@ -68,24 +68,13 @@ function TransactionManagerFormCreateAccount(props) {
 
     const [checkIsCreateSuccess, setCheckIsCreateSuccess] = useState(false);
 
-    // const handleCheckIsCreateSuccess = () => {
-    //     console.log(messageCheckDuplicate);
-    //     if (isClickAddAccount === true && errorForName === false && errorForPhone === false && errorForPassword === false && messageCheckDuplicate === "Phone number does not exist") {
-    //         setCheckIsCreateSuccess(true);
-    //         console.log(checkIsCreateSuccess);
-    //     } else {
-    //         setCheckIsCreateSuccess(false);
-    //         console.log(checkIsCreateSuccess);
-    //     }
-    // };
-
-    const handleGetData = () => {
+    const handleGetData = async () => {
         axios.get("http://localhost:8080/account/countAccountByPhoneNumber", {
             params: {
                 phone: inputs.accountPhone,
             },
         })
-        .then((response) => {
+        .then(async (response) => {
             const message = response.data.message;
             setMessageCheckDuplicate(message);
             console.log(messageCheckDuplicate);
@@ -100,10 +89,6 @@ function TransactionManagerFormCreateAccount(props) {
             if (messageCheckDuplicate === "Phone number exists") {
                 alert("Exist");
             } else {
-                // handleErrorForName();
-                // handleErrorForPhone();
-                // handleErrorForPassword();
-                // handleCheckIsCreateSuccess();
                 if (
                     inputs.accountPhone !== "" &&
                     inputs.accountName !== "" &&
@@ -114,9 +99,13 @@ function TransactionManagerFormCreateAccount(props) {
                     messageCheckDuplicate === "Phone number does not exist" &&
                     checkIsCreateSuccess === true
                 ) {
-                    // addAccount.current.click();
-                    return axios.post("http://localhost:8080/transaction-manager/createccount", inputs);
-                    // alert("aigo")
+                    await axios.post("http://localhost:8080/transaction-manager/createAccount", inputs);
+                    document.getElementsByName("accountName")[0].value = "";
+                    document.getElementsByName("accountPhone")[0].value = "";
+                    document.getElementsByName("accountPassword")[0].value = "";
+                    setTimeout(() => {
+                        setCheckIsCreateSuccess(false);
+                    }, 2000);
                 } else {
                     if (messageCheckDuplicate === "" || checkIsCreateSuccess === false) {
                         addAccount.current.click();
@@ -126,7 +115,6 @@ function TransactionManagerFormCreateAccount(props) {
             }
         })
         .then(() => {
-            // Điều gì đó sau khi hoàn tất axios.post
         })
         .catch((error) => {
             console.error(error);

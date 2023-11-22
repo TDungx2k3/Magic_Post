@@ -14,20 +14,7 @@ function NavBar() {
     const navigate = useNavigate();
     return (
         <nav id={clsx(style.navBarContainer)}>
-            <Link to ="/" className={clsx(style.logo)}
-            onClick={() => {
-                navigate("/");
-                setTimeout(() => {
-                    console.log(2);
-                    scroll.scrollTo(document.getElementById('top').offsetTop, {
-                        spy: true,
-                        smooth: true,
-                        duration: 500,
-                    });
-                }, 10);
-            }}
-            >
-
+            <ScrollLink to ="top" className={clsx(style.logo)} spy={true} smooth={true} duration={500}>
                 <img src={logo} alt="Logo"/>
             </Link>
 
@@ -51,7 +38,7 @@ function NavBar() {
                 }} >
                     <Link to ="">Company <i style={{marginTop: "4px"}} className="ti-angle-down"></i></Link>
                     <ul data-aos="fade-up">
-                        <li><Link to ="">About Us</Link></li>
+                        <li><Link to ="/about-us">About Us</Link></li>
                         <li><Link to ="">Investors</Link></li>
                     </ul>
                 </div>

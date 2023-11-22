@@ -13,7 +13,7 @@ function OurJourney() {
   const [activeYear, setActiveYear] = useState(null);
 
   return (
-    <div className={clsx(style.container)}>
+    <div className={clsx(style.container)} data-aos="zoom-in-up" id="our-journey">
       <h1>Our Journey</h1>
       <div className={clsx(style['our-journey'])}>
         {years.map((item) => (

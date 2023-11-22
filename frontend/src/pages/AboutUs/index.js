@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
 import { Fragment } from "react";
-import AboutEcomExpress from "./components/AboutEcomExpress";
+import AboutDDDExpress from "./components/AboutDDDExpress";
 import OurJourney from "./components/OurJourney";
 import Team from "./components/Team";
 import Header from "../../components/Header";
@@ -10,7 +10,7 @@ function AboutUs() {
     return (
         <Fragment>
             <Header />
-            <AboutEcomExpress data-aos="zoom-in-up" />
+            <AboutDDDExpress />
             <OurJourney />
             <Team />
             <Footer />
