@@ -10,8 +10,11 @@ import { LoginContext } from "../../App";
 
 function NavBar() {
     const { isLogin, setIsLogin, userInfo } = useContext(LoginContext);
-    console.log(userInfo.uName);
+    // console.log(userInfo.uName);
     const navigate = useNavigate();
+    const [isSmallSubNav, setIsSmallSubNav] = useState(false);
+    const [isSmallCompany, setIsSmallCompany] = useState(false);
+    
     return (
         <nav id={clsx(style.navBarContainer)}>
             <Link to ="/" className={clsx(style.logo)}
@@ -83,7 +86,58 @@ function NavBar() {
                         <a href="/login"> Log Out</a>
                     </div>
                 </div>
-            </section>             
+            </section>   
+
+            <div className={clsx(style.smallNavContainer)}>
+                <i className="ti-menu"
+                onClick={() => {
+                    setIsSmallSubNav(!isSmallSubNav);
+                    setIsSmallCompany(false);
+                }}
+                ></i>
+                <div className={clsx(style.smallSubNav, {[style.hidden] : !isSmallSubNav})}
+                data-aos="fade-right">
+                    <div>
+                        <Link to = "/"
+                        onClick={() => {
+                            setTimeout(() => {
+                                console.log(2);
+                                scroll.scrollTo(document.getElementById('topService').offsetTop, {
+                                    spy: true,
+                                    smooth: true,
+                                    duration: 500,
+                                });
+                            }, 10);
+                        }}
+                        >Service</Link>
+                    </div>
+                    <div onMouseOver={() => {
+                        AOS.refresh();
+                    }} >
+                        <Link to =""
+                        onClick={() => {
+                            setIsSmallCompany(!isSmallCompany);
+                            
+                        }}
+                        >Company <i style={{marginTop: "4px"}} className={clsx("ti-angle-double-right")}></i></Link>
+                        <ul data-aos="fade-right" className={clsx({[style.hidden]:!isSmallCompany})}
+                        onClick={(e) => {
+                            e.stopPropagation();
+                        }}
+                        >
+                            <li><Link to ="/about-us">About Us</Link></li>
+                            <li><Link to ="">Investors</Link></li>
+                        </ul>
+                    </div>
+                    <div>
+                        <Link to ="#">Career</Link>
+                    </div>
+                    <div>
+                        <Link to ="#">Contact Us</Link>
+                    </div>
+                </div>
+                
+            </div>
         </nav>
     );
 }

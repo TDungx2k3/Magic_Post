@@ -56,12 +56,12 @@
     align-items: center;
     z-index: 11;
     background-color: white;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 8px 20px 0 rgba(0, 0, 0, 0.19);
 }
 
 .subNavContainer > div:nth-child(2):hover ul {
     display: flex;
-    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 8px 20px 0 rgba(0, 0, 0, 0.19);
-    
+
 }
 
 .subNavContainer > div > ul > li {
@@ -151,3 +151,109 @@
     display: none;
 }
 
+.smallNavContainer {
+    position: fixed;
+    top: 80px;
+    text-align: left;
+    left: 0px;
+    z-index: 10;
+    background-color: rgba($color: #fff, $alpha: 0.8);
+    padding: 8px;
+    display: flex;
+    flex-direction: row;
+    display: none;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 8px 20px 0 rgba(0, 0, 0, 0.19);
+}
+
+.smallNavContainer > i {
+    font-size: 36px;
+}
+
+.smallNavContainer > i:hover {
+    cursor: pointer;
+    opacity: 0.8;
+}
+
+.smallNavContainer > div > div {
+    position: relative;
+    padding: 12px 36px;
+    text-wrap: nowrap;
+    justify-content: center; 
+    align-items: center; 
+}
+
+.smallNavContainer > div > div > a:hover {
+    color: black;
+}
+
+
+
+.smallNavContainer > div > div > ul {
+    flex-direction: column;
+    position: absolute;
+    top: 0px;
+    list-style: none;
+    padding: 0px;
+    margin: 0;
+    justify-content: center; 
+    align-items: center;
+    z-index: 11;
+    background-color: white;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 8px 20px 0 rgba(0, 0, 0, 0.19);
+    left: 160px;
+}
+
+// .smallNavContainer > div > div:nth-child(2):hover ul {
+//     display: flex;
+
+// }
+
+.smallNavContainer > div > div > ul > li {
+    position: relative;
+    text-align: left;
+    list-style: none;
+    
+    padding: 8px 40px;
+    justify-content: center;
+    align-items: center;
+    box-shadow: 10px #888888;
+}
+
+.smallNavContainer > div > div > ul > li:hover {
+    background-color: gray;
+}
+
+.smallNavContainer > div > div > ul > li:hover a {
+    color: #fff;
+}
+
+.smallNavContainer > div > div > ul > li:first-child {
+    border-bottom: solid 1px #333;
+}
+
+.smallNavContainer > div > div a {
+    text-decoration: none;
+    color: #4A7493;
+}
+
+@media screen and (max-width: 940px) {
+    #navBarContainer {
+        width: 100%;
+        height: 56px;
+        font-size: 12px;
+        padding: 12px 0px;
+    }
+
+    .subNavContainer {
+        display: none;
+    }
+
+    .smallNavContainer {
+        display: flex;
+        font-size: 16px;
+    }
+}
+
+.hidden {
+    display: none;
+}
