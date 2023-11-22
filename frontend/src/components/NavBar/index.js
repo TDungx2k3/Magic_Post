@@ -14,7 +14,19 @@ function NavBar() {
     const navigate = useNavigate();
     return (
         <nav id={clsx(style.navBarContainer)}>
-            <ScrollLink to ="top" className={clsx(style.logo)} spy={true} smooth={true} duration={500}>
+            <Link to ="/" className={clsx(style.logo)}
+            onClick={() => {
+                navigate("/");
+                setTimeout(() => {
+                    console.log(2);
+                    scroll.scrollTo(document.getElementById('top').offsetTop, {
+                        spy: true,
+                        smooth: true,
+                        duration: 500,
+                    });
+                }, 10);
+            }}
+            >
                 <img src={logo} alt="Logo"/>
             </Link>
 
