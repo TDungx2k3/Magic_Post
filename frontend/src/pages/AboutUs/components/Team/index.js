@@ -3,7 +3,7 @@ import style from "./Team.module.scss";
 
 function Team() {
     return (
-        <div className={clsx(style.container)}>
+        <div className={clsx(style.container)} data-aos="zoom-in-up" id="team">
             <h1>Organization Structure</h1>
             <div className={clsx(style["members-container"])}>
                 <div className={clsx(style["specific-member"])}>

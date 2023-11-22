@@ -25,6 +25,10 @@
     font-weight: initial;
 }
 
+.footerContainer .aboutUs span {
+    cursor: pointer;
+}
+
 .aboutUs {
     display: flex;
     flex-direction: column;

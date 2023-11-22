@@ -1,8 +1,9 @@
 import clsx from "clsx";
 import AOS from 'aos';
 import style from "./Footer.module.scss";
-import facebookImage from "../../assets/images/facebook.png"
-import instagramImage from "../../assets/images/instagram.png"
+import { Link as ScrollLink } from 'react-scroll';
+import facebookImage from "../../assets/images/facebook.png";
+import instagramImage from "../../assets/images/instagram.png";
 
 function Footer() {
     return (
@@ -10,16 +11,29 @@ function Footer() {
             <div className={clsx(style.aboutUs)}>
                 About Us
                 <span>
-                    <a href="#">About Ecom Express</a>
+                    <ScrollLink to="about-ddd-express" spy={true} smooth={true} duration={500} activeClass={style.activeLink}>
+                        About DDD Express
+                    </ScrollLink>
+
+                </span>
+
+                <span>
+                    <ScrollLink to="our-journey" spy={true} smooth={true} duration={500} activeClass={style.activeLink}>
+                        Our Journey
+                    </ScrollLink>
+
+                </span>
+
+                <span>
+                    <ScrollLink to="team" spy={true} smooth={true} duration={500} activeClass={style.activeLink}>
+                        Team
+                    </ScrollLink>
+
                 </span>
                 <span>
-                    <a href="#">Our Journey</a>
-                </span>
-                <span>
-                    <a href="#">Team</a>
-                </span>
-                <span>
-                    <a href="#">Career</a>
+                    <ScrollLink to="career" spy={true} smooth={true} duration={500} activeClass={style.activeLink}>
+                        Career
+                    </ScrollLink>
                 </span>
             </div>
 

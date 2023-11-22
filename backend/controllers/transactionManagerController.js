@@ -52,6 +52,7 @@ class transactionManagerController {
                 unit: "test",
             });
         });
+        res.send();
         console.log("akjfkaf" + data.accountPassword);
     };
 
