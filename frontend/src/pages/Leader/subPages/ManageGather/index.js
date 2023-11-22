@@ -14,7 +14,7 @@ function ManageGather() {
     const gatherId = new URLSearchParams(location.search).get("gather_id");
     // console.log(gatherId);
     const [transactionsData, setTransactionsData] = useState([])
-    const [rerender] = useState(true);
+    const [rerender, setRerender] = useState(true);
     const [gatherInfo, setGatherInfo] = useState(
         {
             gather_name: "",

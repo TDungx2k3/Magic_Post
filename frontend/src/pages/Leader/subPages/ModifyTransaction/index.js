@@ -1,11 +1,12 @@
 import { Fragment, useState, useEffect } from "react";
 import clsx from "clsx";
 import style from './ModifyTransaction.module.scss';
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import axios from "axios";
 
 function ModifyTransaction() {
 
+    const navigate = useNavigate();
     const location = useLocation();
     const transId = new URLSearchParams(location.search).get("trans_id");
     
@@ -121,7 +122,23 @@ function ModifyTransaction() {
         }
     }
 
-    const handleSubmit = (e) => {
+    const checkCntPhone = async(e) => {
+        try {
+            const res = await axios.get("http://localhost:8080/leader/getCntPhone",
+            {
+                params :{
+                    account_phone: transInfo.account.account_phone,
+                }
+            }
+            );
+            return res.data;
+        } catch (error) {
+            console.log(error);
+        }
+    }
+
+
+    const handleSubmit = async(e) => {
         let tName = document.querySelector("." + style.transNameContainer + " input").value;
         let mName = document.querySelector("." + style.nameContainer + " input").value;
         let mPhone = document.querySelector("." + style.phoneContainer + " input").value;
@@ -132,20 +149,22 @@ function ModifyTransaction() {
         checkManagerPhone();
         checkNewPassword();
 
-        if(transNameErr === ""
+        let cnt = await checkCntPhone();
+        if(cnt > 0 && transInfo.account.account_phone !== mPhone) {
+            alert("This phone number is already used by another account");
+        }
+        else if(transNameErr === ""
         && managerNameErr === ""
         && managerPhoneErr === ""
         && newPasswordErr === "" ) {
             alert("Click OK to update transaction and manager with infomation below.");
-            updateTrans(tName);
-            updateManager(mName, mPhone);
+            await updateTrans(tName);
+            await updateManager(mName, mPhone);
             if(newPwd !== "") {
                 console.log(newPwd);
-                updateManagerPassword(newPwd);
+                await updateManagerPassword(newPwd);
             }
-        }
-        else {
-            e.preventDefault();
+            navigate("/leaderManageGather?gather_id=" + transInfo.gather_id)
         }
     }
     
@@ -234,11 +253,11 @@ function ModifyTransaction() {
             </div>
 
             <div className={clsx(style.confirmBtns)}>
-                <Link to = {`/leaderManageGather?gather_id=${transInfo.gather_id}`} className={clsx(style.saveBtn)}
+                <div to = {`/leaderManageGather?gather_id=${transInfo.gather_id}`} className={clsx(style.saveBtn)}
                 onClick={handleSubmit}
                 >
                     Save
-                </Link>
+                </div>
 
                 <div className={clsx(style.cancelBtn)}>
                     Cancel

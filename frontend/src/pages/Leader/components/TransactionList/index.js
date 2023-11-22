@@ -2,13 +2,14 @@ import clsx from "clsx"
 import style from "./TransactionList.module.scss"
 import { Fragment, useState } from "react";
 import Transaction from "../Transaction"
-import { Link } from "react-router-dom";
-
-
+import { Link, useNavigate } from "react-router-dom";
 
 function TransactionList(props) {
+
+    const navigate = useNavigate();
     const maxItemsInOnePage = 5;
     let transactionList = props.data;
+    console.log(transactionList);
     transactionList.sort((a, b) => {
         const nameA = a.trans_name.toUpperCase();
         const nameB = b.trans_name.toUpperCase();
@@ -34,7 +35,11 @@ function TransactionList(props) {
         <Fragment>
             <div className={clsx(style.transactionListContainer)}>
                 <div className={clsx(style.functionContainer)}>
-                    <div className={clsx(style.addBtn)}>
+                    <div className={clsx(style.addBtn)}
+                    onClick={() => {
+                        navigate("/createTransaction?gather_id=" + props.data[0].gather_id)
+                    }}
+                    >
                         <i className= "ti-plus"></i>
                     </div>
 
@@ -47,6 +52,7 @@ function TransactionList(props) {
                 {
                     transactionList.map((transaction, index) => {
                         let transactionData = {
+                            gatherId: transaction.gather_id,
                             transactionId: transaction.trans_id,
                             transactionName: transaction.trans_name,
                             transactionManagerName: transaction.account.account_name,

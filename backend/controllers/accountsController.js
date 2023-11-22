@@ -1,6 +1,7 @@
 const bcrypt = require('bcrypt');
 const { sequelize } = require('../configdb/db');
 const { Account } = require('../models/accountsModel');
+const { Transaction } = require('../models/transactionsModel');
 
 
 class AccountController {
@@ -86,7 +87,44 @@ class AccountController {
       console.error(error);
       res.status(500).json({ error: 'Internal Server Error' });
     }
+  };
+
+  deleteAllAccountInTransaction = async(req, res) => {
+    try {
+      await sequelize.authenticate();
+      await sequelize.sync();
+      console.log(111);
+      console.log(req.body);
+      await Account.destroy(
+        {
+          where: {
+            unit: req.body.unit,
+          }
+        }
+      );
+      res.send();
+    } catch(error) {
+      console.log(error);
+    }
+  };
+
+  deleteTransaction = async(req, res) => {
+    try {
+      await sequelize.authenticate();
+      await sequelize.sync();
+      await Transaction.destroy(
+        {
+          where: {
+            trans_id: req.body.trans_id,
+          }
+        }
+      );
+      res.send();
+    } catch(error) {
+      console.log(error);
+    }
   }
+
 }
 
 module.exports = new AccountController();

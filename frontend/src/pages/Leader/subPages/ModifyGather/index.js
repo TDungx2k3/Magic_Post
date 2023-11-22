@@ -1,11 +1,12 @@
 import { Fragment, useState, useEffect } from "react";
 import clsx from "clsx";
 import style from './ModifyGather.module.scss';
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import axios from "axios";
 
 function ModifyGather() {
 
+    const navigate = useNavigate();
     const location = useLocation();
     const gatherId = new URLSearchParams(location.search).get("gather_id");
     // console.log(gatherId);
@@ -121,7 +122,22 @@ function ModifyGather() {
         }
     }
 
-    const handleSubmit = (e) => {
+    const checkCntPhone = async(e) => {
+        try {
+            const res = await axios.get("http://localhost:8080/leader/getCntPhone",
+            {
+                params :{
+                    account_phone: gatherInfo.account.account_phone,
+                }
+            }
+            );
+            return res.data;
+        } catch (error) {
+            console.log(error);
+        }
+    }
+
+    const handleSubmit = async(e) => {
         let gName = document.querySelector("." + style.gatherNameContainer + " input").value;
         let mName = document.querySelector("." + style.nameContainer + " input").value;
         let mPhone = document.querySelector("." + style.phoneContainer + " input").value;
@@ -132,20 +148,22 @@ function ModifyGather() {
         checkManagerPhone();
         checkNewPassword();
 
-        if(gatherNameErr === ""
+        let cnt = await checkCntPhone();
+        if(cnt > 0 && mPhone !== gatherInfo.account.account_phone) {
+            alert("This phone number is already used by another account");
+        }
+        else if(gatherNameErr === ""
         && managerNameErr === ""
         && managerPhoneErr === ""
         && newPasswordErr === "" ) {
             alert("Click OK to update gather and manager with infomation below.");
-            updateGather(gName);
-            updateManager(mName, mPhone);
+            await updateGather(gName);
+            await updateManager(mName, mPhone);
             if(newPwd !== "") {
                 console.log(newPwd);
-                updateManagerPassword(newPwd);
+                await updateManagerPassword(newPwd);
             }
-        }
-        else {
-            e.preventDefault();
+            navigate("/leader");
         }
     }
     
@@ -237,13 +255,13 @@ function ModifyGather() {
             </div>
 
             <div className={clsx(style.confirmBtns)}>
-                <Link to = {`/leader`} className={clsx(style.saveBtn)}
+                <div to = {`/leader`} className={clsx(style.saveBtn)}
                 onClick={(e) => {
                     handleSubmit(e);
                 }}
                 >
                     Save
-                </Link>
+                </div>
 
                 <Link to = "/leader" className={clsx(style.cancelBtn)}>
                     Cancel

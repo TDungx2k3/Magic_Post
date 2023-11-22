@@ -1,35 +1,37 @@
 import { Fragment, useState, useEffect } from "react";
 import clsx from "clsx";
-import style from './CreateGather.module.scss';
+import style from './CreateTransaction.module.scss';
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import axios from "axios";
 
-function CreateGather() {
+function CreateTransaction() {
     const navigate = useNavigate();
 
-    // console.log(gatherId);
+    const location = useLocation();
+    const gatherId = new URLSearchParams(location.search).get("gather_id");
     
     const [rerender] = useState(true);
     const [options, setOptions] = useState(1);
-    const [gatherNameErr, setGatherNameErr] = useState("");
+    const [transactionNameErr, setTransactionNameErr] = useState("");
     const [managerNameErr, setManagerNameErr] = useState("");
     const [managerPhoneErr, setManagerPhoneErr] = useState("");
     const [newPasswordErr, setNewPasswordErr] = useState("");
 
-    const [gatherInfo, setGatherInfo] = useState(
+    const [transactionInfo, setTransactionInfo] = useState(
         {
-            gather_name: "",
+            transaction_name: "",
             account_name: "",
             account_phone: "",
-            account_password: ""
+            account_password: "",
+            gather_id: ""
         }
     );
 
-    const checkGatherName = () => {
-        let gName = document.querySelector("." + style.gatherNameContainer + " input").value;
+    const checkTransactionName = () => {
+        let tName = document.querySelector("." + style.transactionNameContainer + " input").value;
         // console.log(gName);
-        if(gName === "") {
-            setGatherNameErr("Please enter valid gather name!")
+        if(tName === "") {
+            setTransactionNameErr("Please enter valid transaction name!")
         }
     };
 
@@ -59,14 +61,15 @@ function CreateGather() {
         }
     };
 
-    const createGather = async(gId, gName, mId) => {
+    const createTransaction = async(tId, tName, mId, gId) => {
         console.log("cg");
         try {
-            const response = await axios.post("http://localhost:8080/leader/createGather",
+            const response = await axios.post("http://localhost:8080/leader/createTransaction",
             {
-                gather_id: gId,
-                gather_name: gName,
+                transaction_id: tId,
+                transaction_name: tName,
                 account_id: mId,
+                gather_id: gId
             }
             );
         } catch (error) {
@@ -74,16 +77,15 @@ function CreateGather() {
         }
     };
 
-    const createGatherManager = async(mName, mPhone) => {
+    const createTransactionManager = async(mName, mPhone) => {
         console.log("cgm");
         try {
-            await axios.post("http://localhost:8080/leader/createGatherManager",
+            await axios.post("http://localhost:8080/leader/createTransactionManager",
             {
                 manager_name: mName,
-                manager_phone: mPhone
+                manager_phone: mPhone,
             }
             );
-            
             
         } catch (error) {
             console.log(error);
@@ -107,7 +109,7 @@ function CreateGather() {
     }
     
     const handleChange = (e) => {
-        setGatherInfo((prev) => {
+        setTransactionInfo((prev) => {
             return {
                 ...prev,
                 [e.target.name]: e.target.value,
@@ -120,7 +122,7 @@ function CreateGather() {
             const res = await axios.get("http://localhost:8080/leader/getCntPhone",
             {
                 params :{
-                    account_phone: gatherInfo.account_phone,
+                    account_phone: transactionInfo.account_phone,
                 }
             }
             );
@@ -128,7 +130,7 @@ function CreateGather() {
         } catch (error) {
             console.log(error);
         }
-    };
+    }
 
     const getNewestAID = async() => {
         try {
@@ -139,9 +141,9 @@ function CreateGather() {
         }
     }
 
-    const getNewGatherId = async() => {
+    const getNewTransactionId = async() => {
         try {
-            const res = await axios.get("http://localhost:8080/leader/getMaxGatherId",);
+            const res = await axios.get("http://localhost:8080/leader/getMaxTransactionId",);
             return res.data;
         } catch (error) {
             console.log(error);
@@ -150,7 +152,7 @@ function CreateGather() {
 
     const handleSubmit = async(e) => {
         
-        checkGatherName();
+        checkTransactionName();
         checkManagerName();
         checkManagerPhone();
         checkNewPassword();
@@ -159,44 +161,43 @@ function CreateGather() {
         if(cnt > 0) {
             alert("This phone number is already used by another account");
         }
-        else if(gatherNameErr === ""
+        else if(transactionNameErr === ""
         && managerNameErr === ""
         && managerPhoneErr === ""
         && newPasswordErr === "" ) {
-            let newMId = await getNewestAID() + 1;
-            let newGId = await getNewGatherId();
-            if(window.confirm("Click OK to create gather and manager with infomation below.")) {
+            let newTId = await getNewTransactionId();
+            if(window.confirm("Click OK to create transaction and manager with infomation below.")) {
 
                 await Promise.all([
-                    createGatherManager(gatherInfo.account_name, gatherInfo.account_phone),
-                    createGather(newGId, gatherInfo.gather_name, 5),
+                    createTransactionManager(transactionInfo.account_name, transactionInfo.account_phone),
+                    createTransaction(newTId, transactionInfo.transaction_name, 5, gatherId),
                     console.log(1),
                 ]);
                 
             }
-            
-            if(gatherInfo.account_password !== "") {
+            let newMId = await getNewestAID() + 1;
+            if(transactionInfo.account_password !== "") {
                 // console.log(newPwd);
-                await updateManagerPassword(newMId, gatherInfo.account_password);
+                await updateManagerPassword(newMId, transactionInfo.account_password);
             }
 
-            console.log(newMId);
+            console.log(3);
             await new Promise(resolve => setTimeout(resolve, 100));
-            // update account_id in gatherings
-            await axios.post("http://localhost:8080/leader/updateAccountInGather",
+            // update account_id in transactions
+            await axios.post("http://localhost:8080/leader/updateAccountInTransaction",
             {
                 account_id: newMId,
-                gather_id: newGId,  
+                transaction_id: newTId,  
             }
             );
-            console.log(4);
             // update unit in accounts
             await axios.post("http://localhost:8080/leader/updateUnitInAccount",
             {
                 account_id: newMId,
-                unit: newGId,  
+                unit: newTId,  
             }
             );
+            console.log(4);
             navigate("/leader");
         }
         
@@ -208,7 +209,7 @@ function CreateGather() {
 
     return (
         <Fragment>
-            <div className={clsx(style.gatherOptionContainer)}>
+            <div className={clsx(style.transactionOptionContainer)}>
                 <div className={clsx(style.managerOption, {[style.optionActive] : options === 1})}
                 onClick={() => {
                     setOptions(1);
@@ -221,21 +222,21 @@ function CreateGather() {
                 >Change Password</div>
             </div>
 
-            <div className = {clsx(style.modifyGatherContainer)}>
-                <div className={clsx(style.gatherInfoContainer)}>
-                    <div className = {clsx(style.gatherNameContainer)}>
-                        <label>Gather Name: </label>
+            <div className = {clsx(style.modifyTransactionContainer)}>
+                <div className={clsx(style.transactionInfoContainer)}>
+                    <div className = {clsx(style.transactionNameContainer)}>
+                        <label>Transaction Name: </label>
                         <br/>
-                        <input type="text" placeholder="Enter Gather Name"
-                        onBlur={checkGatherName}
+                        <input type="text" placeholder="Enter Transaction Name"
+                        onBlur={checkTransactionName}
                         onClick={() => {
-                            setGatherNameErr("");
+                            setTransactionNameErr("");
                         }}
-                        name="gather_name"
+                        name="transaction_name"
                         onChange={handleChange}
                         />
                         <br/>
-                        <div className={clsx(style.err)}>{gatherNameErr}</div>
+                        <div className={clsx(style.err)}>{transactionNameErr}</div>
                     </div>
 
                     
@@ -312,4 +313,4 @@ function CreateGather() {
     );
 }
 
-export default CreateGather;
+export default CreateTransaction;

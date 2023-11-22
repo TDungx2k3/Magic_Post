@@ -17,6 +17,7 @@ import ManageGather from './pages/Leader/subPages/ManageGather';
 import ModifyGather from './pages/Leader/subPages/ModifyGather';
 import ModifyTransaction from './pages/Leader/subPages/ModifyTransaction';
 import CreateGather from './pages/Leader/subPages/CreateGather';
+import CreateTransaction from './pages/Leader/subPages/CreateTransaction';
 
 export const LoginContext = createContext();
 
@@ -62,6 +63,7 @@ function App() {
             <Route path = '/modifyGather' element={<ModifyGather/>} />
             <Route path = '/modifyTransaction' element={<ModifyTransaction/>} />
             <Route path = '/createGather' element={<CreateGather/>} />
+            <Route path = '/createTransaction' element={<CreateTransaction/>} />
           </Routes>
         </Router>
       </div>

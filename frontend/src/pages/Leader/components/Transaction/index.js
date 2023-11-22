@@ -1,9 +1,36 @@
 import clsx from "clsx"
 import style from "./Transaction.module.scss"
 import { Fragment, useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import axios from "axios";
 
 function Transaction(props) {
+
+    const navigate = useNavigate();
+    // console.log(props.data.transactionId);
+    const deleteAllAccountInTransaction = async() => {
+        try {
+            await axios.post("http://localhost:8080/account/deleteAllAccountInTransaction",
+            {
+                unit: props.data.transactionId,
+            }
+            );
+        } catch (error) {
+            console.log(error);
+        }
+    };
+
+    const deleteTransaction = async() => {
+        try {
+            await axios.post("http://localhost:8080/account/deleteTransaction",
+            {
+                trans_id: props.data.transactionId,
+            }
+            );
+        } catch (error) {
+            console.log(error);
+        }
+    }
 
     
     const [confirmHidden, setConfirmHidden] = useState(true);
@@ -59,11 +86,16 @@ function Transaction(props) {
                 }}>
                     <h2>Are you sure to delete this transactioning?</h2>
                     <p>This action is irreversible.</p>
-                    <div className={clsx(style.confirmBtns)}>
+                    <div className={(style.confirmBtns)}>
                         <div className={clsx(style.yesBtn)}
-                        onClick={(e) => {
-                            setConfirmHidden(true);
-                            e.stopPropagation();
+                        onClick={async(e) => {
+                            
+                            if(window.confirm("Do you want to delete this transaction?")) {
+                                await deleteTransaction();
+                                await deleteAllAccountInTransaction();
+                                setConfirmHidden(true);
+                                navigate("/leader")
+                            }
                         }}
                         >Yes</div>
                         <div className={clsx(style.noBtn)}

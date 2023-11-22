@@ -81,6 +81,7 @@ class LeaderController {
                     }
                 }
             );
+            res.send();
         } catch (error) {
             res.send(error);
             console.log(error);
@@ -102,6 +103,7 @@ class LeaderController {
                     }
                 }
             );
+            res.send();
         } catch (error) {
             res.send(error);
             console.log(error);
@@ -159,7 +161,7 @@ class LeaderController {
         }
     }
 
-    getNewestId = async(req, res) => {
+    getNewestAId = async(req, res) => {
         // console.log(1111);
         // console.log(req);
         try {
@@ -212,6 +214,27 @@ class LeaderController {
                 {
                     where: {
                         gather_id: req.body.gather_id,
+                    }
+                }
+            );
+            res.send();
+        } catch (error) {
+            res.send(error);
+            console.log(error);
+        }
+    };
+
+    updateUnitInAccount = async(req, res) => {
+        try {
+            await sequelize.authenticate();
+            await sequelize.sync();
+            await Account.update(
+                {
+                    unit: req.body.unit,
+                },
+                {
+                    where: {
+                        account_id: req.body.account_id,
                     }
                 }
             );
@@ -297,7 +320,7 @@ class LeaderController {
         }
     };
 
-    getMaxTranId = async () => {
+    getMaxTranId = async (req, res) => {
         try {
             await sequelize.authenticate();
             await sequelize.sync(); 
@@ -305,7 +328,8 @@ class LeaderController {
                 attributes: ['trans_id'],
                 raw: true, // Trả về kết quả dưới dạng mảng JSON đơn giản thay vì mô hình Sequelize
             });
-            return Math.max(...allTranIds.map((obj) => parseInt(obj.trans_id.substring(1)) ));
+            res.json("t" + (Math.max(...allTranIds.map((obj) => parseInt(obj.trans_id.substring(1)))) + 1));
+            return Math.max(...allTranIds.map((obj) => parseInt(obj.trans_id.substring(1))));
         } catch (error) {
             console.error("Lỗi khi lấy trans_id lớn nhất:", error);
             throw error; // Hoặc xử lý lỗi theo cách bạn muốn ở đây.
@@ -389,12 +413,73 @@ class LeaderController {
                     }
                 }
             );
+            res.send();
         } catch (error) {
             res.send(error);
             console.log(error);
         }
     };
 
+    createTransaction = async (req, res) => {
+        console.log("create trans");
+        const data = req.body;
+        await Transaction.create({
+            trans_id: data.transaction_id,
+            trans_name: data.transaction_name,
+            account_id: data.account_id,
+            gather_id: data.gather_id,
+        });
+        res.send();
+    };
+
+    createTransactionManager = async(req, res) => {
+        try {
+            await sequelize.authenticate();
+            await sequelize.sync();
+            const saltRounds = 10;
+            const plaintextPassword = "000000";
+            bcrypt.hash(plaintextPassword, saltRounds, async (err, hash) => {
+                if (err) {
+                    console.error('Error hashing password:', err);
+                } else {
+                    // console.log(11212);
+                    await Account.create(
+                        {
+                            account_name: req.body.manager_name,
+                            account_phone: req.body.manager_phone,
+                            account_password: hash,
+                            role_id: 2,
+                        }
+                    );
+                }
+            });
+            res.send();
+        } catch (error) {
+            res.send(error);
+            console.log(error);
+        }
+    };
+
+    updateAccountInTransaction = async(req, res) => {
+        try {
+            await sequelize.authenticate();
+            await sequelize.sync();
+            await Transaction.update(
+                {
+                    account_id: req.body.account_id,
+                },
+                {
+                    where: {
+                        trans_id: req.body.transaction_id,
+                    }
+                }
+            );
+            res.send();
+        } catch (error) {
+            res.send(error);
+            console.log(error);
+        }
+    };
 
 }
 
