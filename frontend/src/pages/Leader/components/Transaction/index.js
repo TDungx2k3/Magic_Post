@@ -94,7 +94,10 @@ function Transaction(props) {
                                 await deleteTransaction();
                                 await deleteAllAccountInTransaction();
                                 setConfirmHidden(true);
-                                navigate("/leader")
+                                navigate("/leader");
+                                setTimeout(() => {
+                                    navigate("/leaderManageGather?gather_id=" + props.data.gatherId)
+                                }, 0);
                             }
                         }}
                         >Yes</div>

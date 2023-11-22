@@ -2,6 +2,7 @@ const bcrypt = require('bcrypt');
 const { sequelize } = require('../configdb/db');
 const { Account } = require('../models/accountsModel');
 const { Transaction } = require('../models/transactionsModel');
+const { Gathering } = require('../models/gatheringsModel')
 
 
 class AccountController {
@@ -123,7 +124,43 @@ class AccountController {
     } catch(error) {
       console.log(error);
     }
-  }
+  };
+
+  deleteGather = async(req, res) => {
+    try {
+      await sequelize.authenticate();
+      await sequelize.sync();
+      await Gathering.destroy(
+        {
+          where: {
+            gather_id: req.body.gather_id,
+          }
+        }
+      );
+      res.send();
+    } catch(error) {
+      console.log(error);
+    }
+  };
+
+  deleteAllAccountInGather = async(req, res) => {
+    try {
+      await sequelize.authenticate();
+      await sequelize.sync();
+      console.log(111);
+      console.log(req.body);
+      await Account.destroy(
+        {
+          where: {
+            unit: req.body.unit,
+          }
+        }
+      );
+      res.send();
+    } catch(error) {
+      console.log(error);
+    }
+  };
 
 }
 

@@ -175,14 +175,15 @@ function CreateTransaction() {
                 ]);
                 
             }
-            let newMId = await getNewestAID() + 1;
+            await new Promise(resolve => setTimeout(resolve, 100));
+            let newMId = await getNewestAID();
             if(transactionInfo.account_password !== "") {
                 // console.log(newPwd);
                 await updateManagerPassword(newMId, transactionInfo.account_password);
             }
 
             console.log(3);
-            await new Promise(resolve => setTimeout(resolve, 100));
+            
             // update account_id in transactions
             await axios.post("http://localhost:8080/leader/updateAccountInTransaction",
             {

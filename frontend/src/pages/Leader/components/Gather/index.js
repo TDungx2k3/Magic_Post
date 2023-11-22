@@ -1,13 +1,38 @@
 import clsx from "clsx"
 import style from "./Gather.module.scss"
 import { Fragment, useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import axios from "axios";
 
 function Gather(props) {
 
-    
+    const navigate = useNavigate();
     const [confirmHidden, setConfirmHidden] = useState(true);
     const [isHide, setIsHide] = useState(true);
+
+    const deleteAllAccountInGather = async() => {
+        try {
+            await axios.post("http://localhost:8080/account/deleteAllAccountInTransaction",
+            {
+                unit: props.data.gatherId,
+            }
+            );
+        } catch (error) {
+            console.log(error);
+        }
+    };
+
+    const deleteGather = async() => {
+        try {
+            await axios.post("http://localhost:8080/account/deleteGather",
+            {
+                gather_id: props.data.gatherId,
+            }
+            );
+        } catch (error) {
+            console.log(error);
+        }
+    }
     return (
         <Fragment>
             <div className= {clsx(style.gatherContainer)}
@@ -61,9 +86,16 @@ function Gather(props) {
                     <p>This action is irreversible.</p>
                     <div className={clsx(style.confirmBtns)}>
                         <div className={clsx(style.yesBtn)}
-                        onClick={(e) => {
-                            setConfirmHidden(true);
-                            e.stopPropagation();
+                        onClick={async(e) => {
+                            if(window.confirm("Do you want to delete this transaction?")) {
+                                await deleteGather();
+                                await deleteAllAccountInGather();
+                                setConfirmHidden(true);
+                                navigate("/");
+                                setTimeout(() => {
+                                    navigate("/leader")
+                                }, 0);
+                            }
                         }}
                         >Yes</div>
                         <div className={clsx(style.noBtn)}

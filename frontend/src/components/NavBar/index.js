@@ -3,7 +3,7 @@ import AOS from 'aos';
 import style from "./NavBar.module.scss"
 import logo from '../../assets/icons/logo.png'
 import { useState, useEffect, useContext } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { Link as ScrollLink, animateScroll as scroll, scroller } from 'react-scroll';
 import { LoginContext } from "../../App";
 
@@ -11,16 +11,40 @@ import { LoginContext } from "../../App";
 function NavBar() {
     const { isLogin, setIsLogin, userInfo } = useContext(LoginContext);
     console.log(userInfo.uName);
-    
+    const navigate = useNavigate();
     return (
         <nav id={clsx(style.navBarContainer)}>
-            <ScrollLink to ="top" className={clsx(style.logo)} spy={true} smooth={true} duration={500}>
+            <Link to ="/" className={clsx(style.logo)}
+            onClick={() => {
+                navigate("/");
+                setTimeout(() => {
+                    console.log(2);
+                    scroll.scrollTo(document.getElementById('top').offsetTop, {
+                        spy: true,
+                        smooth: true,
+                        duration: 500,
+                    });
+                }, 10);
+            }}
+            >
+
                 <img src={logo} alt="Logo"/>
-            </ScrollLink>
+            </Link>
 
             <div className={clsx(style.subNavContainer)}>
                 <div>
-                    <ScrollLink className={clsx(style.linkToService)} to ="topService" spy={true} smooth={true} duration={500}>Service</ScrollLink>
+                    <Link to = "/"
+                    onClick={() => {
+                        setTimeout(() => {
+                            console.log(2);
+                            scroll.scrollTo(document.getElementById('topService').offsetTop, {
+                                spy: true,
+                                smooth: true,
+                                duration: 500,
+                            });
+                        }, 10);
+                    }}
+                    >Service</Link>
                 </div>
                 <div onMouseOver={() => {
                     AOS.refresh();
