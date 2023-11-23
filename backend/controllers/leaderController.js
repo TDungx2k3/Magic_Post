@@ -5,6 +5,7 @@ const { Gathering } = require('../models/gatheringsModel');
 const { Transaction } = require('../models/transactionsModel');
 const { Role } = require("../models/rolesModel");
 const bcrypt = require('bcrypt');
+const Joi = require('joi');
 
 Gathering.belongsTo(Account, {
     foreignKey: 'account_id',
@@ -46,29 +47,37 @@ class LeaderController {
     };
 
     getGatherInfoWithID = async (req, res) => {
-        try {
-            await sequelize.authenticate();
-            await sequelize.sync();
-            let gather = [];
-            gather = await Gathering.findAll(
-                {
-                    include: {
-                        model: Account,
-                        attributes: [
-                            "account_name",
-                            "account_phone"
-                        ]
-                    },
-                    where: {
-                        gather_id: req.query.gather_id
-                    },
-                }
-            );
-            res.json(gather);
-        } catch (error) {
-            res.send(error);
+        let validateRs = Joi.string().required().pattern(/g\d/).validate(req.query.gather_id);
+        if(validateRs.error)
+        {
             console.log(error);
         }
+        else {
+            try {
+                await sequelize.authenticate();
+                await sequelize.sync();
+                let gather = [];
+                gather = await Gathering.findAll(
+                    {
+                        include: {
+                            model: Account,
+                            attributes: [
+                                "account_name",
+                                "account_phone"
+                            ]
+                        },
+                        where: {
+                            gather_id: req.query.gather_id
+                        },
+                    }
+                );
+                res.json(gather);
+            } catch (error) {
+                res.send(error);
+                console.log(error);
+            }
+        }
+        
     };
 
     updateGather = async (req, res) => {
