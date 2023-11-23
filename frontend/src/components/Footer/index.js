@@ -1,39 +1,49 @@
 import clsx from "clsx";
 import AOS from 'aos';
 import style from "./Footer.module.scss";
-import { Link as ScrollLink } from 'react-scroll';
+import { Link as RouterLink } from "react-router-dom";
+import { Link as ScrollLink, animateScroll as scroll, scroller } from 'react-scroll';
 import facebookImage from "../../assets/images/facebook.png";
 import instagramImage from "../../assets/images/instagram.png";
 
 function Footer() {
+    const scrollToElement = (elementId) => {
+        setTimeout(() => {
+            scroll.scrollTo(document.getElementById(elementId).offsetTop, {
+                spy: true,
+                smooth: true,
+                duration: 500,
+            });
+        }, 10);
+    };
+
     return (
         <div className={clsx(style.footerContainer)}>
             <div className={clsx(style.aboutUs)}>
                 About Us
                 <span>
-                    <ScrollLink to="about-ddd-express" spy={true} smooth={true} duration={500} activeClass={style.activeLink}>
+                    <RouterLink to="/about-us" onClick={() => scrollToElement('about-ddd-express')}>
                         About DDD Express
-                    </ScrollLink>
-
+                    </RouterLink>
                 </span>
 
                 <span>
-                    <ScrollLink to="our-journey" spy={true} smooth={true} duration={500} activeClass={style.activeLink}>
+                    <RouterLink to="/about-us" onClick={() => scrollToElement('our-journey')}>
                         Our Journey
-                    </ScrollLink>
+                    </RouterLink>
 
                 </span>
 
                 <span>
-                    <ScrollLink to="team" spy={true} smooth={true} duration={500} activeClass={style.activeLink}>
+                    <RouterLink to="/about-us" onClick={() => scrollToElement('team')}>
                         Team
-                    </ScrollLink>
+                    </RouterLink>
 
                 </span>
                 <span>
-                    <ScrollLink to="career" spy={true} smooth={true} duration={500} activeClass={style.activeLink}>
+                    <RouterLink to="/about-us" onClick={() => scrollToElement('career')}>
                         Career
-                    </ScrollLink>
+                    </RouterLink>
                 </span>
             </div>
 
