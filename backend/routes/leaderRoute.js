@@ -27,6 +27,6 @@ router.post("/createTransaction", leaderController.createTransaction);
 router.get("/getMaxTransactionId", leaderController.getMaxTranId);
 router.post("/createTransactionManager", leaderController.createTransactionManager);
 router.post("/updateAccountInTransaction", leaderController.updateAccountInTransaction);
-
+router.get("/getAllEmployeesInUnit", leaderController.getEmployeesInUnit)
 
 module.exports = router;

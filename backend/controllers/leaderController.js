@@ -3,6 +3,7 @@ const { sequelize } = require('../configdb/db');
 const { Account } = require('../models/accountsModel');
 const { Gathering } = require('../models/gatheringsModel');
 const { Transaction } = require('../models/transactionsModel');
+const { Role } = require("../models/rolesModel");
 const bcrypt = require('bcrypt');
 
 Gathering.belongsTo(Account, {
@@ -18,6 +19,10 @@ Transaction.belongsTo(Account, {
 Account.hasMany(Transaction, {
     foreignKey: 'account_id',
 });
+
+Role.hasOne(Account, {
+    foreignKey: "role_id"
+})
 class LeaderController {
     showAllGathers = async (req, res) => {
         try {
@@ -480,6 +485,31 @@ class LeaderController {
             console.log(error);
         }
     };
+
+    getEmployeesInUnit = async(req, res) => {
+        try {
+            await sequelize.authenticate();
+            await sequelize.sync();
+            console.log(req.query);
+            let employees = [];
+            employees = await Role.findAll(
+                {
+                    include: {
+                        model: Account,
+                        where: {
+                            unit: req.query.unit,
+                        },
+                    },
+                    
+                }
+            );
+            // console.log(trans);
+            res.json(employees);
+        } catch (error) {
+            res.send(error);
+            console.log(error);
+        }
+    }
 
 }
 

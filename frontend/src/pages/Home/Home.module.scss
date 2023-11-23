@@ -28,14 +28,25 @@
 .colsContainer {
     display: flex;
     flex-direction: row;
+    flex-wrap: wrap;
     justify-content: space-around;
     z-index: 1;
     position: relative;
 }
 
+.colsContainer > div {
+    display: flex;
+    flex-direction: column;
+}
+
 .subCol {
     display: flex;
     flex-direction: row;
+    flex: 1;
+}
+
+.subCol > img {
+    height: fit-content;
 }
 
 .subCol:first-child {
@@ -167,3 +178,71 @@
       transform: scale(1.0);
     }
 }
+
+@media screen and (max-width: 499px) {
+
+    .infoContainer > h1 {
+        font-size: 36px;
+    }
+
+    .colsContainer {
+        justify-content: space-between;
+        width: 100%;
+    }
+
+    .colsContainer > div {
+        flex-direction: column;
+        width: 100%;
+    }
+
+    .subCol {
+        width: 100%;
+        align-items: center;
+        margin-bottom: 12px;
+    }
+
+    .info {
+        flex: 1;
+    }
+
+    .servicesContainer {
+        display: flex;
+        justify-content: center;
+        width: 100%;
+        box-sizing: border-box;
+        align-items: center;
+    }
+
+    .servicesContainer h1 {
+        padding: 0px;
+    }
+
+    .services {
+        display: flex;
+        flex-direction: column;
+        margin: 0px;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .services > div {
+        padding: 12px 24px;
+        width: 100%;
+    }
+
+}
+
+@media screen and (min-width: 500px) and (max-width: 700px) {
+    .infoContainer > h1 {
+        font-size: 54px;
+    }
+
+    .colsContainer {
+        flex-direction: column;
+    }
+
+    .colsContainer > div {
+        flex-direction: row;
+    }
+}
+

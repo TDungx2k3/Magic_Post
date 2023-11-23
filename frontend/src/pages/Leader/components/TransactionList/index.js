@@ -9,7 +9,7 @@ function TransactionList(props) {
     const navigate = useNavigate();
     const maxItemsInOnePage = 5;
     let transactionList = props.data;
-    console.log(transactionList);
+    // console.log(transactionList);
     transactionList.sort((a, b) => {
         const nameA = a.trans_name.toUpperCase();
         const nameB = b.trans_name.toUpperCase();

@@ -7,13 +7,15 @@ import style from './ManageGather.module.scss';
 import TransactionList from '../../components/TransactionList';
 import { useLocation } from "react-router-dom";
 import axios from "axios";
+import EmployeeList from "../../components/EmployeeList";
 
 function ManageGather() {
 
     const location = useLocation();
     const gatherId = new URLSearchParams(location.search).get("gather_id");
     // console.log(gatherId);
-    const [transactionsData, setTransactionsData] = useState([])
+    const [transactionsData, setTransactionsData] = useState([]);
+    const [employeeList, setEmployeeList] = useState([]);
     const [rerender, setRerender] = useState(true);
     const [gatherInfo, setGatherInfo] = useState(
         {
@@ -61,11 +63,31 @@ function ManageGather() {
         } catch (error) {
             console.log(error);
         }
+    };
+
+    const getAllEmployees = async(e) => {
+        try {
+            await axios
+            .get("http://localhost:8080/leader/getAllEmployeesInUnit",
+            {
+                params: {
+                    unit: gatherId,
+                }
+            }
+            )
+            .then((res) => {
+                setEmployeeList(res.data);
+                console.log(res.data);
+            })
+        } catch (error) {
+            console.log(error);
+        }
     }
 
     useEffect(() => {
         getGatherInfo();
         getAllTransactionsWithGatherId();
+        getAllEmployees();
     }, [rerender]);
 
     const [manageState, setManageState] = useState(1);
@@ -75,23 +97,31 @@ function ManageGather() {
             <PointsInfo data = {gatherInfo}/>
             <div className={clsx(style.content)}>
                 <div className= {clsx(style.manageGatherNav)}>
-                    <div className={clsx(style.transManage, {[style.active] : manageState == 1} )}
+                    <div className={clsx(style.transManage, {[style.active] : manageState === 1} )}
                     onClick={() => {
                         setManageState(1);
                     }}
                     >Transactions</div>
-                    <div className={clsx(style.ordersManage, {[style.active] : manageState == 2})}
+                    <div className={clsx(style.ordersManage, {[style.active] : manageState === 2})}
                     onClick={() => {
                         setManageState(2);
                     }}
                     >Orders</div>
-                    <div className={clsx(style.employeesManage, {[style.active] : manageState == 3})}
+                    <div className={clsx(style.employeesManage, {[style.active] : manageState === 3})}
                     onClick={() => {
                         setManageState(3);
                     }}
                     >Employees</div>
                 </div>
-                <TransactionList data = {transactionsData}/>
+                <div className={clsx(style.subPage, {[style.hidden] : manageState !== 1})}>
+                    <TransactionList data = {transactionsData}/>
+                </div>
+                
+                <div className={clsx(style.subPage, {[style.hidden] : manageState !== 3})}>
+                    <EmployeeList data = {employeeList}/>
+                </div>
+                
+                
             </div>
             
             <Footer/>

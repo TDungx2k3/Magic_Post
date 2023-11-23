@@ -55,7 +55,6 @@ function App() {
           <Routes>
             <Route path='/' element={<Home />} />
             <Route path="/leader" element={<Leader />} />
-            <Route path="/footer" element={<Footer />} />
             <Route path="/login" element={<Login />} />
             <Route path="/about-us" element={<AboutUs />} />
             <Route path='/transaction-manager' element={<TransactionManager />}/>
