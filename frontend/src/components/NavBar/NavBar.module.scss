@@ -1,10 +1,11 @@
 #navBarContainer {
     width: 100%;
-    height: 56px;
+    height: 80px;
     display: flex;
     flex-direction: row;
     font-size: 16px;
     justify-content: space-around;
+    align-items: center;
     text-align: center;
     align-items: center;
     position: fixed;
@@ -153,7 +154,7 @@
 
 .smallNavContainer {
     position: fixed;
-    top: 56px;
+    top: 80px;
     text-align: left;
     left: 0px;
     z-index: 10;
@@ -239,7 +240,7 @@
 @media screen and (max-width: 940px) {
     #navBarContainer {
         width: 100%;
-        height: 56px;
+        height: 80px;
         font-size: 12px;
         padding: 12px 0px;
     }

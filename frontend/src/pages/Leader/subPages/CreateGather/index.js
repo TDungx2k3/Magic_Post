@@ -3,10 +3,11 @@ import clsx from "clsx";
 import style from './CreateGather.module.scss';
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import axios from "axios";
+import { LoginContext } from "../../../../App";
 
 function CreateGather() {
     const navigate = useNavigate();
-
+    const { isLogin, setIsLogin, userInfo, setUserInfo} = useContext(LoginContext);
     // console.log(gatherId);
     
     const [rerender] = useState(true);
@@ -201,9 +202,13 @@ function CreateGather() {
         }
         
     }
-    
+    let cnt = 0;
     useEffect(() => {
-        
+        if(!isLogin && cnt === 0) {
+            cnt ++;
+            alert("You have to login before access this page!");
+            navigate("/login");
+        }
     }, [rerender]);
 
     return (

@@ -1,13 +1,15 @@
-import { Fragment, useState, useEffect } from "react";
+import { Fragment, useState, useEffect, useContext } from "react";
 import clsx from "clsx";
 import style from './ModifyTransaction.module.scss';
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import axios from "axios";
+import { LoginContext } from "../../../../App";
 
 function ModifyTransaction() {
 
     const navigate = useNavigate();
     const location = useLocation();
+    const { isLogin, setIsLogin, userInfo, setUserInfo} = useContext(LoginContext);
     const transId = new URLSearchParams(location.search).get("trans_id");
     
     const [rerender] = useState(true);
@@ -167,9 +169,14 @@ function ModifyTransaction() {
             navigate("/leaderManageGather?gather_id=" + transInfo.gather_id)
         }
     }
-    
+    let cnt = 0;
     useEffect(() => {
         getTransData();
+        if(!isLogin && cnt === 0) {
+            cnt ++;
+            alert("You have to login before access this page!");
+            navigate("/login");
+        }
     }, [rerender]);
 
     return (

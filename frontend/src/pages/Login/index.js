@@ -124,6 +124,7 @@ function Login() {
       await axios
         .post("http://localhost:8080/account/login", inputs)
         .then((response) => {
+          console.log(response);
           let checkResponseMessage = response.data.message;
           if(checkResponseMessage === 'Login successfully') {
             console.log(response.data.accounts.account_id);
@@ -131,7 +132,9 @@ function Login() {
             userInfo.uId = response.data.accounts.account_id;
             userInfo.uName = response.data.accounts.account_name;
             userInfo.uPhone = inputs.phone; 
-            userInfo.uPassword = inputs.password;
+            userInfo.uPassword = response.data.accounts.account_password;
+            userInfo.uRole = response.data.accounts.role_id;
+            userInfo.uUnit = response.data.accounts.unit;
             // alert("Login successfully");
           }
           setMessage(response.data.message);
@@ -229,6 +232,9 @@ function Login() {
                 handlePassReplication();
                 if(message !== "Login successfully") {
                   e.preventDefault();
+                }
+                else {
+                  window.scrollTo(0,0);
                 }
               }}
               >SIGN IN</button>

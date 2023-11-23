@@ -1,13 +1,15 @@
-import { Fragment, useState, useEffect } from "react";
+import { Fragment, useState, useEffect, useContext } from "react";
 import clsx from "clsx";
 import style from './ModifyGather.module.scss';
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import axios from "axios";
+import { LoginContext } from "../../../../App";
 
 function ModifyGather() {
 
     const navigate = useNavigate();
     const location = useLocation();
+    const { isLogin, setIsLogin, userInfo, setUserInfo} = useContext(LoginContext)
     const gatherId = new URLSearchParams(location.search).get("gather_id");
     // console.log(gatherId);
     
@@ -166,9 +168,14 @@ function ModifyGather() {
             navigate("/leader");
         }
     }
-    
+    let cnt = 0;
     useEffect(() => {
         getGatherData();
+        if(!isLogin && cnt === 0) {
+            cnt ++;
+            alert("You have to login before access this page!");
+            navigate("/login");
+        }
     }, [rerender]);
 
     return (

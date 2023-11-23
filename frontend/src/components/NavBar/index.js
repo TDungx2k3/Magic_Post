@@ -77,7 +77,16 @@ function NavBar() {
                 </div>
             </section>
             <section className={clsx({[style.invalid] : (!isLogin)}, style.isLoginBtn)}>
-                <div className={style.isLoginInfor}>
+                <div className={style.isLoginInfor}
+                onClick={
+                    () => {
+                        // console.log(userInfo.uRole === 1);
+                        if(userInfo.uRole === 1) {
+                            navigate("/leader");
+                        }
+                    }
+                }
+                >
                     <div><i className="ti-user"></i></div>
                     <div>{userInfo.uName}</div>
                 </div>
