@@ -6,7 +6,6 @@
     font-weight: bold;
     margin-top: 2%;
     margin-bottom: 2%;
-    // width: fit-content;
 }
 
 .form-container {
@@ -26,7 +25,7 @@ form {
     display: flex;
     flex-direction: column;
     width: 100%;
-    margin-right: -25%;
+    margin-left: 20%;
 }
 
 form div {
@@ -34,7 +33,6 @@ form div {
     flex-direction: row;
     align-items: center;
     margin-top: 5%;
-    /* position: relative; */
 }
 
 form div:last-child {
@@ -58,31 +56,6 @@ form div input {
     position: relative;
 }
 
-// .button-container {
-//     display: flex;
-//     justify-content: space-around;
-//     align-items: center;
-//     margin: 0px 20px;
-// }
-
-// .btns {
-//     flex: 1;
-//     height: 100px;
-//     margin: 0 2%;
-//     border: 3px solid #000;
-//     border-radius: 16px;
-//     cursor: pointer;
-//     background-color: #00BFFF;
-//     padding: 10px 20px;
-//     font-size: 24px;
-//     font-family: Roboto, sans-serif;
-//     font-weight: bold;
-// }
-
-// .btns:hover {
-//     animation: scaleUp 0.5s ease forwards;
-// }
-
 .error {
     font-size: 18px;
     color: #FF0000;
@@ -92,12 +65,8 @@ form div input {
 }
 
 .error-hidden {
-    // font-size: 18px;
-    // color: #FF0000;
     position: absolute;
     visibility: hidden;
-    // left: 65%;
-    // margin-top: 1.2%;
 }
 
 .accept {
@@ -152,9 +121,6 @@ form div input {
 }
 
 .wrapper {
-    // display: flex;
-    // justify-content: center;
-    // align-items: center;
     margin-right: 20px;
 }
 

@@ -9,6 +9,7 @@ const route = require("./routes/indexRoute");
 const leaderCon = require('./controllers/leaderController');
 const transactionManagerController = require('./controllers/transactionManagerController');
 const AccountController = require('./controllers/accountsController');
+const GatheringManagerController = require("./controllers/gatheringManagerController");
 
 app.use(express.json());
 
@@ -21,7 +22,7 @@ app.listen(8080, async () => {
     // console.log("Server is running on port 8080");
     // try {
     //     //const orderReceiveResult = await AccountController.showAccountByPhoneAndPassword();
-    //     const accounts = await AccountController.countAccountByPhoneNumber();
+    //     const accounts = await GatheringManagerController.showAllEmployee();
     //     console.log('aaaaaaaaaaa ' + accounts);
     // } catch (err) {
     //     console.error(err);

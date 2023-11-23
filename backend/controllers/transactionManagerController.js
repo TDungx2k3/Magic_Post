@@ -13,11 +13,23 @@ Delivery.belongsTo(Order, {
 })
 
 Transaction.hasMany(Delivery, {
-    foreignKey: "to_id"
-})
+    foreignKey: 'to_id',
+    as: 'toDeliveries'
+});
 Delivery.belongsTo(Transaction, {
-    foreignKey: "to_id"
-})
+    foreignKey: 'trans_id',
+    as: 'toTransaction' 
+});
+
+Transaction.hasMany(Delivery, {
+    foreignKey: 'from_id',
+    as: 'fromDeliveries'
+});
+Delivery.belongsTo(Transaction, {
+    foreignKey: 'trans_id',
+    as: 'fromTransaction'
+});
+
 class transactionManagerController {
     getMaxTransId = async () => {
         try {
@@ -75,7 +87,8 @@ class transactionManagerController {
                         include: [
                             {
                                 model: Transaction,
-                                attributes: ["trans_id"]
+                                attributes: ["trans_id"],
+                                as: "toTransaction"
                             }
                         ]
                     },
@@ -106,7 +119,8 @@ class transactionManagerController {
                         include: [
                             {
                                 model: Transaction,
-                                attributes: ["trans_id"]
+                                attributes: ["trans_id"],
+                                as: "fromTransaction"
                             }
                         ],
                         required: true
@@ -119,6 +133,7 @@ class transactionManagerController {
             console.error(err);
         }
     };
+
 };
 
 module.exports = new transactionManagerController();

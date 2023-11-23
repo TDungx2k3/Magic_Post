@@ -1,0 +1,122 @@
+.content {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+
+.manageForGatherManagerNav {
+    width: 90%;
+    background-color: #4b5de8;
+    margin-bottom: 40px;
+    font-size: 24px;
+    display: flex;
+    flex-direction: row;
+    border-radius: 40px;
+    color: #fff;
+}
+
+.manage-account-employee {
+    flex: 1;
+    padding: 12px;
+}
+
+.manage-account-employee-active {
+    background-color: #001EFF;
+    color: #fff;
+    flex: 1;
+    padding: 12px;
+    border-top-left-radius: 40px;
+    border-bottom-left-radius: 40px;
+}
+
+.manage-account-employee-active:hover {
+    cursor: pointer;
+    background-color: #99a5ff;
+    color: #333;
+}
+
+.manage-account-employee:hover {
+    cursor: pointer;
+    background-color: #99a5ff;
+    color: #333;
+    border-top-left-radius: 40px;
+    border-bottom-left-radius: 40px;
+}
+
+.statistic-sent {
+    flex: 1;
+    padding: 12px;
+}
+
+.statistic-sent:hover {
+    cursor: pointer;
+    background-color: #99a5ff;
+    color: #333;
+}
+
+.statistic-sent-active {
+    background-color: #001EFF;
+    color: #fff;
+    flex: 1;
+    padding: 12px;
+    // border-top-left-radius: 40px;
+    // border-bottom-left-radius: 40px;
+}
+
+.statistic-sent-active:hover {
+    cursor: pointer;
+    background-color: #99a5ff;
+    color: #333;
+}
+
+.statistic-received {
+    flex: 1;
+    padding: 12px;
+}
+
+.statistic-received:hover {
+    cursor: pointer;
+    background-color: #99a5ff;
+    color: #333;
+    border-top-right-radius: 40px;
+    border-bottom-right-radius: 40px;
+}
+
+.statistic-received-active {
+    flex: 1;
+    padding: 12px;
+    background-color: #001EFF;
+    color: #fff;
+    border-top-right-radius: 40px;
+    border-bottom-right-radius: 40px;
+}
+
+.statistic-received-active:hover {
+    cursor: pointer;
+    background-color: #99a5ff;
+    color: #333;
+    border-top-right-radius: 40px;
+    border-bottom-right-radius: 40px;
+}
+
+@media screen and (max-width: 768px) {
+    .manageForTransactionManagerNav {
+        margin-bottom: 40px;
+        font-size: 16px;
+    }
+}
+
+@media screen and (max-width: 678px) {
+    .manageForTransactionManagerNav {
+        margin-bottom: 40px;
+        font-size: 14px;
+    }
+}
+
+@media screen and (max-width: 562px) {
+    .manageForTransactionManagerNav {
+        margin-bottom: 30px;
+        font-size: 12px;
+    }
+}

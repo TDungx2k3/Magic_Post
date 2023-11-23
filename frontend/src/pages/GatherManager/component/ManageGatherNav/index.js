@@ -1,11 +1,11 @@
 import clsx from "clsx";
-import style from "./ManageTransaction.module.scss";
+import style from "./ManageGatherNav.module.scss";
 import { useState } from "react";
 
-function ManageTransaction({ onClickCreateAccount, onClickStatisticOrdersSent, onClickStatisticOrdersReceived }) {
-    const handleCreateAccountClick = () => {
-        if (onClickCreateAccount) {
-            onClickCreateAccount();
+function ManageGatherNav({ onClickManageAccountEmployee, onClickStatisticOrdersSent, onClickStatisticOrdersReceived }) {
+    const handleManageAccountEmployeeClick = () => {
+        if (onClickManageAccountEmployee) {
+            onClickManageAccountEmployee();
         }
     };
 
@@ -21,31 +21,31 @@ function ManageTransaction({ onClickCreateAccount, onClickStatisticOrdersSent, o
         }
     }
 
-    const [isClickCreateAccount, setIsClickCreateAccount] = useState(true);
+    const [isClickManageAccountEmployee, setIsClickManageAccountEmpoyee] = useState(true);
     const [isClickStatisticOrdersSent, setIsClickStatisticOrdersSent] = useState(false);
     const [isClickStatisticOrdersReceived, setIsClickStatisticOrdersReceived] = useState(false);
 
-    const handleIsClickCreateAccount = () => {
-        setIsClickCreateAccount(true);
+    const handleIsClickManageAccountEmployee = () => {
+        setIsClickManageAccountEmpoyee(true);
         setIsClickStatisticOrdersSent(false);
         setIsClickStatisticOrdersReceived(false);
     }
 
     const handleIsClickStatisticOrdersSent = () => {
         setIsClickStatisticOrdersSent(true);
-        setIsClickCreateAccount(false);
+        setIsClickManageAccountEmpoyee(false);
         setIsClickStatisticOrdersReceived(false);
     }
 
     const handleIsClickStatisticOrdersReceived = () => {
         setIsClickStatisticOrdersReceived(true);
         setIsClickStatisticOrdersSent(false);
-        setIsClickCreateAccount(false);
+        setIsClickManageAccountEmpoyee(false);
     }
 
-    const handleOnClickCreateAccount = () => {
-        handleCreateAccountClick();
-        handleIsClickCreateAccount();
+    const handleOnClickManageAccountEmployee = () => {
+        handleManageAccountEmployeeClick();
+        handleIsClickManageAccountEmployee();
     }
 
     const handleOnClickStatisticOrdersSent = () => {
@@ -60,12 +60,12 @@ function ManageTransaction({ onClickCreateAccount, onClickStatisticOrdersSent, o
 
     return (
         <div className={clsx(style.content)}>
-            <div className={clsx(style.manageForTransactionManagerNav)}>
+            <div className={clsx(style.manageForGatherManagerNav)}>
                 <div 
-                    className={isClickCreateAccount ? clsx(style["create-account-active"]) : clsx(style["create-account"])} 
-                    onClick={handleOnClickCreateAccount}
+                    className={isClickManageAccountEmployee ? clsx(style["manage-account-employee-active"]) : clsx(style["manage-account-employee"])} 
+                    onClick={handleOnClickManageAccountEmployee}
                 >
-                    Create Account
+                    Manage Account Employee
                 </div>
 
                 <div 
@@ -86,4 +86,4 @@ function ManageTransaction({ onClickCreateAccount, onClickStatisticOrdersSent, o
     );
 }
 
-export default ManageTransaction;
+export default ManageGatherNav;

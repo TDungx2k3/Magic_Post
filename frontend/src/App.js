@@ -11,6 +11,7 @@ import Login from './pages/Login';
 import AboutUs from "./pages/AboutUs"
 import Leader from './pages/Leader';
 import TransactionManager from './pages/TransactionManager';
+import GatherManager from './pages/GatherManager';
 import PointsInfo from './pages/Leader/components/PointsInfo';
 import { createContext, useState } from 'react';
 import ManageGather from './pages/Leader/subPages/ManageGather';
@@ -58,6 +59,7 @@ function App() {
             <Route path="/login" element={<Login />} />
             <Route path="/about-us" element={<AboutUs />} />
             <Route path='/transaction-manager' element={<TransactionManager />}/>
+            <Route path='/gather-manager' element={<GatherManager />}/>
             <Route path = '/leaderManageGather' element={<ManageGather/>} />
             <Route path = '/modifyGather' element={<ModifyGather/>} />
             <Route path = '/modifyTransaction' element={<ModifyTransaction/>} />

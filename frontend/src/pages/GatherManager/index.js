@@ -1,20 +1,21 @@
 import clsx from "clsx";
-import style from "./TransactionManager.module.scss";
-import { Fragment, useEffect, useState } from "react";
+import style from "./GatherManager.module.scss";
 import Header from "../../components/Header";
-import TransactionManagerFormCreateAccount from "./component/TransactionManagerFormCreateAccount";
+import ManageGatherNav from "./component/ManageGatherNav";
+import ManageAccountEmployee from "./component/ManageAccountEmpoyee";
 import StatisticOrdersSent from "./component/StatisticOrdersSent";
 import StatisticOrdersReceived from "./component/StatisticOrdersReceived";
-import ManageTransactionNav from "./component/ManageTransactionNav";
 import Footer from "../../components/Footer";
+import { Fragment } from "react";
+import { useState } from "react";
 
-function TransactionManager() {
-    const [isClickCreateAccount, setIsClickCreateAccount] = useState(true);
+function GatherManager() {
+    const [isClickManageAccountEmployee, setIsClickManageAccountEmployee] = useState(true);
     const [isClickStatisticOrdersSent, setIsClickStatisticOrdersSent] = useState(false);
     const [isClickStatisticOrdersReceived, setIsClickStatisticOrdersReceived] = useState(false);
 
-    const handleIsClickCreateAccount = () => {
-        setIsClickCreateAccount(true);
+    const handleIsClickManageAccountEmployee = () => {
+        setIsClickManageAccountEmployee(true);
         if (isClickStatisticOrdersSent === true) {
             setIsClickStatisticOrdersSent(false);
         }
@@ -25,8 +26,8 @@ function TransactionManager() {
 
     const handleIsClickStatisticOrdersSent = () => {
         setIsClickStatisticOrdersSent(true);
-        if (isClickCreateAccount === true) {
-            setIsClickCreateAccount(false);
+        if (isClickManageAccountEmployee === true) {
+            setIsClickManageAccountEmployee(false);
         }
         if (isClickStatisticOrdersReceived === true) {
             setIsClickStatisticOrdersReceived(false);
@@ -35,37 +36,34 @@ function TransactionManager() {
 
     const handleIsClickStatisticOrdersReceived = () => {
         setIsClickStatisticOrdersReceived(true);
-        if (isClickCreateAccount === true) {
-            setIsClickCreateAccount(false);
+        if (isClickManageAccountEmployee === true) {
+            setIsClickManageAccountEmployee(false);
         }
         if (isClickStatisticOrdersSent === true) {
             setIsClickStatisticOrdersSent(false);
         }
     }
 
-    console.log("create: " + isClickCreateAccount);
-    console.log("statistic: " + isClickStatisticOrdersSent);
-
     return (
         <Fragment>
             <Header />
-            <ManageTransactionNav 
-                onClickCreateAccount={handleIsClickCreateAccount} 
+            <ManageGatherNav 
+                onClickManageAccountEmployee={handleIsClickManageAccountEmployee} 
                 onClickStatisticOrdersSent={handleIsClickStatisticOrdersSent}
                 onClickStatisticOrdersReceived={handleIsClickStatisticOrdersReceived}
             />
-            <TransactionManagerFormCreateAccount 
-                className={clsx({[style["transaction-manager-form-create-account"]] : isClickCreateAccount === true}, {[style["transaction-manager-form-create-account-hidden"]] : isClickCreateAccount === false})}
+            <ManageAccountEmployee
+                className={clsx({[style["manage-account-employee"]] : isClickManageAccountEmployee === true}, {[style["manage-account-employee-hidden"]] : isClickManageAccountEmployee === false})}
             />
             <StatisticOrdersSent 
                 className={clsx({[style["statistic-orders-sent"]] : isClickStatisticOrdersSent === true}, {[style["statistic-orders-sent-hidden"]] : isClickStatisticOrdersSent === false})}
             />
             <StatisticOrdersReceived 
-                className={clsx({[style["statistic-orders-received"]] : isClickStatisticOrdersReceived === true}, {[style["statistic-orders-sent-hidden"]] : isClickStatisticOrdersReceived === false})}   
+                className={clsx({[style["statistic-orders-received"]] : isClickStatisticOrdersReceived === true}, {[style["statistic-orders-received-hidden"]] : isClickStatisticOrdersReceived === false})}
             />
             <Footer />
         </Fragment>
-    );
+    )
 }
 
-export default TransactionManager;
+export default GatherManager;
