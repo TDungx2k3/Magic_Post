@@ -11,11 +11,13 @@ function StatisticOrdersReceived(props) {
             const response = await axios.get(
                 "http://localhost:8080/transaction-manager/get-order-received"
             );
-            setData(response.data);
+            setData(response.data[0]);
         } catch (err) {
             console.error(err);
         }
     };
+
+    // console.log(data);
 
     useEffect(() => {
         handleGetData();
@@ -25,9 +27,9 @@ function StatisticOrdersReceived(props) {
 
     return (
         <div className={clsx(style.container, props.className)}>
-            {data.map((order) => (
-                <div className={clsx(style["sub-container"])}>
-                    <div key={order.order_id}>
+            {data.map((order, index) => (
+                <div className={clsx(style["sub-container"])} key={index}>
+                    <div>
                         <div>
                             <label htmlFor="Order ID">Order ID: </label>
                             <span>{order.order_id}</span>

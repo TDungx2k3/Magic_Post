@@ -4,31 +4,28 @@ const { Account } = require("../models/accountsModel");
 const { Order } = require("../models/ordersModel");
 const { Delivery } = require("../models/deliveriesModel");
 const bcrypt = require('bcrypt');
+const Joi = require('joi');
 
-Order.hasMany(Delivery, {
-    foreignKey: 'order_id'
-})
-Delivery.belongsTo(Order, {
-    foreignKey: "order_id"
-})
+// Order.hasMany(Delivery, {
+//     foreignKey: 'order_id'
+// })
+// Delivery.belongsTo(Order, {
+//     foreignKey: "order_id"
+// })
 
-Transaction.hasMany(Delivery, {
-    foreignKey: 'to_id',
-    as: 'toDeliveries'
-});
-Delivery.belongsTo(Transaction, {
-    foreignKey: 'trans_id',
-    as: 'toTransaction' 
-});
+// Transaction.hasMany(Delivery, {
+//     foreignKey: 'to_id'
+// });
+// Delivery.belongsTo(Transaction, {
+//     foreignKey: 'trans_id'
+// });
 
-Transaction.hasMany(Delivery, {
-    foreignKey: 'from_id',
-    as: 'fromDeliveries'
-});
-Delivery.belongsTo(Transaction, {
-    foreignKey: 'trans_id',
-    as: 'fromTransaction'
-});
+// Transaction.hasMany(Delivery, {
+//     foreignKey: 'from_id'
+// });
+// Delivery.belongsTo(Transaction, {
+//     foreignKey: 'trans_id'
+// });
 
 class transactionManagerController {
     getMaxTransId = async () => {
@@ -68,72 +65,65 @@ class transactionManagerController {
         console.log("akjfkaf" + data.accountPassword);
     };
 
+    // showAllOrderReceived = async (req, res) => {
+    //     try {
+
+    //         await sequelize.authenticate();
+    //         await sequelize.sync();
+    //         const allOrderReceive = await Order.findAll({
+    //             attributes: ["order_id", "weight", "price", "date"],
+    //             include: [
+    //                 {
+    //                     model: Delivery,
+    //                     attributes: ["to_id"],
+    //                     where: {
+    //                         // date: req.body.deliveries.date
+    //                         to_id: "t01",
+    //                         deliver_status: 1
+    //                     },
+    //                     include: [
+    //                         {
+    //                             model: Transaction,
+    //                             attributes: ["trans_id"]
+    //                         }
+    //                     ]
+    //                 },
+    //             ]
+    //         });
+    //         res.json(allOrderReceive);
+    //         // return allOrderReceive[0].dataValues.deliveries;
+    //     } catch (err) {
+    //         console.error(err);
+    //     }
+    // };
+
     showAllOrderReceived = async (req, res) => {
         try {
-
-            await sequelize.authenticate();
-            await sequelize.sync();
-            const allOrderReceive = await Order.findAll({
-                attributes: ["order_id", "weight", "price", "date"],
-                include: [
-                    {
-                        model: Delivery,
-                        attributes: ["to_id"],
-                        where: {
-                            // date: req.body.deliveries.date
-                            to_id: "t01",
-                            deliver_status: 1
-                        },
-                        include: [
-                            {
-                                model: Transaction,
-                                attributes: ["trans_id"],
-                                as: "toTransaction"
-                            }
-                        ]
-                    },
-                ]
-            });
-            res.json(allOrderReceive);
-            // return allOrderReceive[0].dataValues.deliveries;
-        } catch (err) {
-            console.error(err);
+            const allOrdersReceived = await sequelize.query(
+                "SELECT `orders`.order_id, `orders`.weight, `orders`.price, `orders`.date FROM `orders` JOIN deliveries ON orders.order_id = deliveries.order_id JOIN transactions ON deliveries.to_id = transactions.trans_id",
+                {raw: true,}
+              );
+            res.json(allOrdersReceived);
         }
-    };
+        catch(err) {
+            console.log(err);
+            res.send(err);
+        }
+    }
 
     showAllOrderSent = async (req, res) => {
         try {
-            await sequelize.authenticate();
-            await sequelize.sync();
-            const allOrderSent = await Order.findAll({
-                attributes: ["order_id", "weight", "price", "date"],
-                include: [
-                    {
-                        model: Delivery,
-                        where: {
-                            deliver_status: 1,
-                            from_id: "t01"
-                            // date: req.body.deliveries.date
-                        },
-                        attributes: ["from_id"],
-                        include: [
-                            {
-                                model: Transaction,
-                                attributes: ["trans_id"],
-                                as: "fromTransaction"
-                            }
-                        ],
-                        required: true
-                    },
-                ]
-            });
-            res.json(allOrderSent);
-            // return allOrderSent;
-        } catch (err) {
-            console.error(err);
+            const allOrdersSent = await sequelize.query(
+                "SELECT `orders`.order_id, `orders`.weight, `orders`.price, `orders`.date FROM `orders` JOIN deliveries ON orders.order_id = deliveries.order_id JOIN transactions ON deliveries.from_id = transactions.trans_id",
+                {raw: true,}
+              );
+            res.json(allOrdersSent);
+        }
+        catch(err) {
+            console.log(err);
+            res.send(err);
         }
     };
-
 };
 
 module.exports = new transactionManagerController();
