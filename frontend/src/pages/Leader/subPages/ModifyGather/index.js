@@ -50,13 +50,41 @@ function ModifyGather() {
         }
     };
 
+    const gatherNameNormalize = (name) => {
+        
+        const tenChuanHoa = name.replace(/\s+/g, " ").trim();
+        
+        return tenChuanHoa.charAt(0).toUpperCase() + tenChuanHoa.slice(1);
+    }
+
     const checkGatherName = () => {
         let gName = document.querySelector("." + style.gatherNameContainer + " input").value;
         // console.log(gName);
         if(gName === "") {
             setGatherNameErr("Please enter valid gather name!")
         }
+        else {
+            document.querySelector("." + style.gatherNameContainer + " input").value = gatherNameNormalize(gName);
+        }
     };
+
+    const managerNameNormalize = (name) => {
+        // Chia tách tên thành các từ
+        name = name.replace(/\s+/g, " ").trim();
+        const words = name.split(" ");
+
+        // Chuẩn hóa từng từ
+        const capitalizeWords = words.map((word) => {
+            // Loại bỏ dấu và viết hoa chữ cái đầu tiên của từ
+            const tuChuanHoa = word.replace(/[\u0300-\u036f\s]/g, "");
+            return tuChuanHoa.charAt(0).toUpperCase() + tuChuanHoa.slice(1);
+        });
+
+        // Kết hợp các từ đã chuẩn hóa để tạo tên mới
+        const rs = capitalizeWords.join(" ");
+
+        return rs;
+    }
 
     const checkManagerName = () => {
         let mName = document.querySelector("." + style.nameContainer + " input").value;
@@ -64,14 +92,20 @@ function ModifyGather() {
         if(mName === "") {
             setManagerNameErr("Please enter valid manager name!")
         }
+        else {
+            document.querySelector("." + style.nameContainer + " input").value = managerNameNormalize(mName);
+        }
     };
 
     const checkManagerPhone = () => {
         let mPhone = document.querySelector("." + style.phoneContainer + " input").value;
         // console.log(gName);
-        let phoneRegex = /^\d{10}$/;
+        let phoneRegex = /^0\d+$/;
         if(!mPhone.match(phoneRegex)) {
             setManagerPhoneErr("Please enter valid manager phone!")
+        }
+        else if(mPhone.length !== 10) {
+            setManagerPhoneErr("Your phone number must have 10 numbers!")
         }
     };
 
@@ -79,7 +113,10 @@ function ModifyGather() {
         let newPwd = document.querySelector("." + style.newPasswordContainer + " input").value;
         if(!(newPwd === "")) {
             if (newPwd.length < 6) {
-                setNewPasswordErr("Your password must be larger than 6 characters!")
+                setNewPasswordErr("Your password must be more than 6 characters!")
+            }
+            else if(newPwd.length > 30) {
+                setNewPasswordErr("Your password must be less than 30 characters!")
             }
         }
     };
