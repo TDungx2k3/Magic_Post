@@ -43,9 +43,6 @@ function TransactionManager() {
         }
     }
 
-    console.log("create: " + isClickCreateAccount);
-    console.log("statistic: " + isClickStatisticOrdersSent);
-
     return (
         <Fragment>
             <Header />

@@ -13,16 +13,16 @@ const { raw } = require("mysql2");
 //     foreignKey: 'account_id',
 // });
 
-Delivery.belongsTo(Order, {
-    foreignKey: 'order_id',
-})
-Order.hasMany(Delivery, {
-    foreignKey: 'order_id',
-})
+// Delivery.belongsTo(Order, {
+//     foreignKey: 'order_id',
+// })
+// Order.hasMany(Delivery, {
+//     foreignKey: 'order_id',
+// })
 
-Delivery.hasMany(Gathering, {
-  foreignKey: ''
-})
+// Delivery.hasMany(Gathering, {
+//   foreignKey: ''
+// })
 
 class GatheringManagerController {
   createAccountEmployee = async (req, res) => {

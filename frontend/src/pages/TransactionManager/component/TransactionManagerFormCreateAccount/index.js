@@ -25,7 +25,9 @@ function TransactionManagerFormCreateAccount(props) {
         handleErrorForName();
         handleErrorForPhone();
         handleErrorForPassword();
-        handleGetData();
+        if (errorForPhone === false) {
+            handleGetData();
+        }
         // handleCheckIsCreateSuccess();
     };
 
