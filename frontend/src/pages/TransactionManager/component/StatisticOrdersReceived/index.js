@@ -23,7 +23,7 @@ function StatisticOrdersReceived(props) {
         handleGetData();
     }, []);
 
-    console.log(data);
+    // console.log(data);
 
     return (
         <div className={clsx(style.container, props.className)}>

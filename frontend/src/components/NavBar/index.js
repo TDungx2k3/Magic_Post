@@ -84,6 +84,9 @@ function NavBar() {
                         if(userInfo.uRole === 1) {
                             navigate("/leader");
                         }
+                        if(userInfo.uRole === 2) {
+                            navigate("/transaction-manager");
+                        }
                     }
                 }
                 >

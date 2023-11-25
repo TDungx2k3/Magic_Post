@@ -60,7 +60,7 @@ class transactionManagerController {
                 account_phone: data.accountPhone,
                 account_password: data.accountPassword,
                 role_id: 3,
-                unit: "test",
+                unit: data.unit,
             });
         });
         res.send();
