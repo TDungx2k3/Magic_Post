@@ -1,11 +1,14 @@
-import { Fragment, useState, useEffect } from "react";
+import { Fragment, useState, useEffect, useContext } from "react";
 import clsx from "clsx";
 import style from './CreateTransaction.module.scss';
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import axios from "axios";
+import { LoginContext } from "../../../../App";
+
 
 function CreateTransaction() {
     const navigate = useNavigate();
+    const { isLogin, setIsLogin, userInfo, setUserInfo} = useContext(LoginContext);
 
     const location = useLocation();
     const gatherId = new URLSearchParams(location.search).get("gather_id");
@@ -27,12 +30,41 @@ function CreateTransaction() {
         }
     );
 
+    const transNameNormalize = (name) => {
+        
+        const tenChuanHoa = name.replace(/\s+/g, " ").trim();
+        
+        return tenChuanHoa.charAt(0).toUpperCase() + tenChuanHoa.slice(1);
+    };
+
+
     const checkTransactionName = () => {
         let tName = document.querySelector("." + style.transactionNameContainer + " input").value;
         // console.log(gName);
         if(tName === "") {
             setTransactionNameErr("Please enter valid transaction name!")
         }
+        else {
+            document.querySelector("." + style.transactionNameContainer + " input").value = transNameNormalize(tName);
+        }
+    };
+
+    const managerNameNormalize = (name) => {
+        // Chia tách tên thành các từ
+        name = name.replace(/\s+/g, " ").trim();
+        const words = name.split(" ");
+
+        // Chuẩn hóa từng từ
+        const capitalizeWords = words.map((word) => {
+            // Loại bỏ dấu và viết hoa chữ cái đầu tiên của từ
+            const tuChuanHoa = word.replace(/[\u0300-\u036f\s]/g, "");
+            return tuChuanHoa.charAt(0).toUpperCase() + tuChuanHoa.slice(1);
+        });
+
+        // Kết hợp các từ đã chuẩn hóa để tạo tên mới
+        const rs = capitalizeWords.join(" ");
+
+        return rs;
     };
 
     const checkManagerName = () => {
@@ -41,14 +73,20 @@ function CreateTransaction() {
         if(mName === "") {
             setManagerNameErr("Please enter valid manager name!")
         }
+        else {
+            document.querySelector("." + style.nameContainer + " input").value = managerNameNormalize(mName);
+        }
     };
 
     const checkManagerPhone = () => {
         let mPhone = document.querySelector("." + style.phoneContainer + " input").value;
         // console.log(gName);
-        let phoneRegex = /^\d{10}$/;
+        let phoneRegex = /^0\d+$/;
         if(!mPhone.match(phoneRegex)) {
             setManagerPhoneErr("Please enter valid manager phone!")
+        }
+        else if(mPhone.length !== 10) {
+            setManagerPhoneErr("Your phone number must have 10 numbers!")
         }
     };
 
@@ -58,11 +96,14 @@ function CreateTransaction() {
             if (newPwd.length < 6) {
                 setNewPasswordErr("Your password must be larger than 6 characters!")
             }
+            else if (newPwd.length > 30) {
+                setNewPasswordErr("Your password must be smaller than 30 characters!")
+            }
         }
     };
 
     const createTransaction = async(tId, tName, mId, gId) => {
-        console.log("cg");
+        // console.log("cg");
         try {
             const response = await axios.post("http://localhost:8080/leader/createTransaction",
             {
@@ -78,7 +119,7 @@ function CreateTransaction() {
     };
 
     const createTransactionManager = async(mName, mPhone) => {
-        console.log("cgm");
+        // console.log("cgm");
         try {
             await axios.post("http://localhost:8080/leader/createTransactionManager",
             {
@@ -90,12 +131,12 @@ function CreateTransaction() {
         } catch (error) {
             console.log(error);
         }
-        console.log("cgme");
+        // console.log("cgme");
     }
 
     const updateManagerPassword = async(newMId, newPwd) => {
-        console.log(newMId);
-        console.log(newPwd);
+        // console.log(newMId);
+        // console.log(newPwd);
         try {
             await axios.post("http://localhost:8080/leader/updateManagerPassword",
             {
@@ -106,7 +147,7 @@ function CreateTransaction() {
         } catch (error) {
             console.log(error);
         }
-    }
+    };
     
     const handleChange = (e) => {
         setTransactionInfo((prev) => {
@@ -130,7 +171,7 @@ function CreateTransaction() {
         } catch (error) {
             console.log(error);
         }
-    }
+    };
 
     const getNewestAID = async() => {
         try {
@@ -139,7 +180,7 @@ function CreateTransaction() {
         } catch (error) {
             console.log(error);
         }
-    }
+    };
 
     const getNewTransactionId = async() => {
         try {
@@ -148,7 +189,7 @@ function CreateTransaction() {
         } catch (error) {
             console.log(error);
         }
-    }
+    };
 
     const handleSubmit = async(e) => {
         
@@ -201,11 +242,15 @@ function CreateTransaction() {
             console.log(4);
             navigate("/leader");
         }
-        
-    }
+    };
     
+    let cnt = 0;
     useEffect(() => {
-        
+        if(!isLogin && cnt === 0) {
+            cnt ++;
+            alert("You have to login before access this page!");
+            navigate("/login");
+        }
     }, [rerender]);
 
     return (

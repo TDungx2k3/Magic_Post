@@ -25,6 +25,31 @@ Role.hasOne(Account, {
     foreignKey: "role_id"
 })
 class LeaderController {
+    gatherNameNormalize = (name) => {
+        
+        const tenChuanHoa = name.replace(/\s+/g, " ").trim();
+        
+        return tenChuanHoa.charAt(0).toUpperCase() + tenChuanHoa.slice(1);
+    };
+
+    managerNameNormalize = (name) => {
+        // Chia tách tên thành các từ
+        name = name.replace(/\s+/g, " ").trim();
+        const words = name.split(" ");
+
+        // Chuẩn hóa từng từ
+        const capitalizeWords = words.map((word) => {
+            // Loại bỏ dấu và viết hoa chữ cái đầu tiên của từ
+            const tuChuanHoa = word.replace(/[\u0300-\u036f\s]/g, "");
+            return tuChuanHoa.charAt(0).toUpperCase() + tuChuanHoa.slice(1);
+        });
+
+        // Kết hợp các từ đã chuẩn hóa để tạo tên mới
+        const rs = capitalizeWords.join(" ");
+
+        return rs;
+    };
+
     showAllGathers = async (req, res) => {
         try {
             await sequelize.authenticate();
@@ -81,99 +106,148 @@ class LeaderController {
     };
 
     updateGather = async (req, res) => {
-        // console.log(req.body);
-        try {
-            await sequelize.authenticate();
-            await sequelize.sync();
-            await Gathering.update(
-                {
-                    gather_name: req.body.gather_name,
-                },
-                {
-                    where: {
-                        gather_id: req.body.gather_id,
-                    }
-                }
-            );
-            res.send();
-        } catch (error) {
-            res.send(error);
-            console.log(error);
+        let gName = req.body.gather_name;
+        let gId = req.body.gather_id;
+        let validateGNameRs = Joi.string().required().validate(gName);
+        let validateGIdRs = Joi.string().regex(/^g\d+$/).required().validate(gId);
+        if(validateGNameRs.error)
+        {
+            console.log(validateGNameRs.error);
         }
+        else if (validateGIdRs.error) {
+            console.log(validateGIdRs.error);
+        }
+        else {
+            try {
+                gName = this.gatherNameNormalize(gName);
+                await sequelize.authenticate();
+                await sequelize.sync();
+                await Gathering.update(
+                    {
+                        gather_name: gName,
+                    },
+                    {
+                        where: {
+                            gather_id: gId,
+                        }
+                    }
+                );
+                res.send();
+            } catch (error) {
+                res.send(error);
+                console.log(error);
+            }
+        }
+        // console.log(req.body);
+        
     };
 
     updateManager = async(req, res) => {
-        try {
-            await sequelize.authenticate();
-            await sequelize.sync();
-            await Account.update(
-                {
-                    account_name: req.body.manager_name,
-                    account_phone: req.body.manager_phone,
-                },
-                {
-                    where: {
-                        account_id: req.body.manager_id,
-                    }
-                }
-            );
-            res.send();
-        } catch (error) {
-            res.send(error);
-            console.log(error);
+        let mPhone = req.body.manager_phone;
+        let mName = req.body.manager_name;
+        let mId = req.body.manager_id;
+        let validateMPhoneRs = Joi.string().required().pattern(/^0\d+$/).length(10).validate(mPhone);
+        let validateMNameRs = Joi.string().required().validate(mName);
+        let validateMIdRs = Joi.string().required().pattern(/^\d+$/).validate(mId);
+        if(validateMIdRs.error
+        || validateMNameRs.error
+        || validateMPhoneRs.error)
+        {
+            console.log(validateMIdRs.error);
+            console.log(validateMNameRs.error);
+            console.log(validateMPhoneRs.error);
         }
-    }
+        else {
+            try {
+                mName = this.managerNameNormalize(mName);
+                await sequelize.authenticate();
+                await sequelize.sync();
+                await Account.update(
+                    {
+                        account_name: mName,
+                        account_phone: mPhone,
+                    },
+                    {
+                        where: {
+                            account_id: mId,
+                        }
+                    }
+                );
+                res.send();
+            } catch (error) {
+                res.send(error);
+                console.log(error);
+            }
+        }
+    };
 
     updateManagerPassword = async(req, res) => {
         console.log(req.body);
-        try {
-            await sequelize.authenticate();
-            await sequelize.sync();
-            const saltRounds = 10;
-            const plaintextPassword = req.body.new_password;
-            bcrypt.hash(plaintextPassword, saltRounds, async (err, hash) => {
-                if (err) {
-                    console.error('Error hashing password:', err);
-                } else {
-                    // console.log(11212);
-                    await Account.update(
-                        {
-                            account_password: hash,
-                        },
-                        {
-                            where: {
-                                account_id: req.body.manager_id,
+        let mId = req.body.manager_id;
+        let mPass = req.body.new_password;
+        let validateMIdRs = Joi.string().required().pattern(/^\d+$/).validate(mId);
+        let validateMPassRs = Joi.string().required().min(6).max(30).validate(mPass)
+        if(validateMIdRs.error || validateMPassRs.error) {
+            console.log(validateMIdRs.error);
+            console.log(validateMPassRs.error);
+        }
+        else {
+            try {
+                await sequelize.authenticate();
+                await sequelize.sync();
+                const saltRounds = 10;
+                const plaintextPassword = mPass;
+                bcrypt.hash(plaintextPassword, saltRounds, async (err, hash) => {
+                    if (err) {
+                        console.error('Error hashing password:', err);
+                    } else {
+                        // console.log(11212);
+                        await Account.update(
+                            {
+                                account_password: hash,
+                            },
+                            {
+                                where: {
+                                    account_id: mId,
+                                }
                             }
-                        }
-                    );
-                }
-            });
-            res.send();
-        } catch (error) {
-            res.send(error);
-            console.log(error);
+                        );
+                    }
+                });
+                res.send();
+            } catch (error) {
+                res.send(error);
+                console.log(error);
+            }
         }
     };
 
     countPhoneNumber = async(req, res) => {
         // console.log(1111);
         // console.log(req);
-        try {
-            await sequelize.authenticate();
-            await sequelize.sync();
-            const cnt = await Account.count(
-                {
-                    where: {
-                        account_phone: req.query.account_phone,
-                    }
-                }
-            );
-            res.json(cnt);
-        } catch (error) {
-            res.send(error);
+        let aPhone = req.query.account_phone;
+        let validateAPhoneRs = Joi.string().required().pattern(/^0\d+$/).length(10).validate(aPhone);
+        if(validateAPhoneRs.error) {
             console.log(error);
         }
-    }
+        else {
+            try {
+                await sequelize.authenticate();
+                await sequelize.sync();
+                const cnt = await Account.count(
+                    {
+                        where: {
+                            account_phone: req.query.account_phone,
+                        }
+                    }
+                );
+                res.json(cnt);
+            } catch (error) {
+                res.send(error);
+                console.log(error);
+            }
+        }  
+    };
 
     getNewestAId = async(req, res) => {
         // console.log(1111);
@@ -190,74 +264,110 @@ class LeaderController {
     }
 
     createGatherManager = async(req, res) => {
-        try {
-            await sequelize.authenticate();
-            await sequelize.sync();
-            const saltRounds = 10;
-            const plaintextPassword = "000000";
-            bcrypt.hash(plaintextPassword, saltRounds, async (err, hash) => {
-                if (err) {
-                    console.error('Error hashing password:', err);
-                } else {
-                    // console.log(11212);
-                    await Account.create(
-                        {
-                            account_name: req.body.manager_name,
-                            account_phone: req.body.manager_phone,
-                            account_password: hash,
-                            role_id: 5
-                        }
-                    );
-                }
-            });
-            res.send();
-        } catch (error) {
-            res.send(error);
-            console.log(error);
+        let mPhone = req.body.manager_phone;
+        let mName = req.body.manager_name;
+        let validateMPhoneRs = Joi.string().required().pattern(/^0\d+$/).length(10).validate(mPhone);
+        let validateMNameRs = Joi.string().required().validate(mName);
+        if(validateMNameRs.error
+        || validateMPhoneRs.error)
+        {
+            console.log(validateMIdRs.error);
+            console.log(validateMNameRs.error);
+            console.log(validateMPhoneRs.error);
         }
+        else {
+            try {
+                await sequelize.authenticate();
+                await sequelize.sync();
+                const saltRounds = 10;
+                const plaintextPassword = "000000";
+                bcrypt.hash(plaintextPassword, saltRounds, async (err, hash) => {
+                    if (err) {
+                        console.error('Error hashing password:', err);
+                    } else {
+                        // console.log(11212);
+                        await Account.create(
+                            {
+                                account_name: mName,
+                                account_phone: mPhone,
+                                account_password: hash,
+                                role_id: 5
+                            }
+                        );
+                    }
+                });
+                res.send();
+            } catch (error) {
+                res.send(error);
+                console.log(error);
+            }
+        }
+        
     };
 
     updateAccountInGather = async(req, res) => {
-        try {
-            await sequelize.authenticate();
-            await sequelize.sync();
-            await Gathering.update(
-                {
-                    account_id: req.body.account_id,
-                },
-                {
-                    where: {
-                        gather_id: req.body.gather_id,
+        let gId = req.body.gather_id;
+        let aId = req.body.account_id;
+        let validateGIdRs = Joi.string().regex(/^g\d+$/).required().validate(gId);
+        let validateAIdRs = Joi.string().required().pattern(/^\d+$/).validate(aId);
+        if (validateGIdRs.error
+        || validateAIdRs.error) {
+            console.log(validateGIdRs.error);
+            console.log(validateAIdRs.error);
+        }
+        else {
+            try {
+                await sequelize.authenticate();
+                await sequelize.sync();
+                await Gathering.update(
+                    {
+                        account_id: aId,
+                    },
+                    {
+                        where: {
+                            gather_id: gId,
+                        }
                     }
-                }
-            );
-            res.send();
-        } catch (error) {
-            res.send(error);
-            console.log(error);
+                );
+                res.send();
+            } catch (error) {
+                res.send(error);
+                console.log(error);
+            }
         }
     };
 
     updateUnitInAccount = async(req, res) => {
-        try {
-            await sequelize.authenticate();
-            await sequelize.sync();
-            await Account.update(
-                {
-                    unit: req.body.unit,
-                },
-                {
-                    where: {
-                        account_id: req.body.account_id,
+        let unit = req.body.unit;
+        let aId = req.body.account_id;
+        let validateUnitRs = Joi.string().regex(/^[gt]\d+$/).required().validate(unit);
+        let validateAIdRs = Joi.string().required().pattern(/^\d+$/).validate(aId);
+        if(validateAIdRs.error
+        || validateUnitRs.error) {
+            console.log(validateAIdRs.error);
+            console.log(validateUnitRs.error);
+        } 
+        else {
+            try {
+                await sequelize.authenticate();
+                await sequelize.sync();
+                await Account.update(
+                    {
+                        unit: unit,
+                    },
+                    {
+                        where: {
+                            account_id: aId,
+                        }
                     }
-                }
-            );
-            res.send();
-        } catch (error) {
-            res.send(error);
-            console.log(error);
+                );
+                res.send();
+            } catch (error) {
+                res.send(error);
+                console.log(error);
+            }
         }
-    }
+    };
 
     getMaxGatherId = async (req, res) => {
         try {
@@ -277,14 +387,30 @@ class LeaderController {
     };
 
     createGather = async (req, res) => {
-        console.log("create gather");
-        const data = req.body;
-        await Gathering.create({
-            gather_id: data.gather_id,
-            gather_name: data.gather_name,
-             account_id: data.account_id,
-        });
-        res.send();
+        // console.log("create gather");
+        let gId = req.body.gather_id;
+        let gName = req.body.gather_name;
+        let aId = req.body.account_id;
+        let validateGIdRs = Joi.string().regex(/^g\d+$/).required().validate(gId);
+        let validateGNameRs = Joi.string().required().validate(gName);
+        let validateAIdRs = Joi.string().required().pattern(/^\d+$/).validate(aId);
+        if(validateAIdRs.error
+        || validateGNameRs.error
+        || validateGIdRs.error) {
+            console.log(validateAIdRs.error);
+            console.log(validateGNameRs.error);
+            console.log(validateGIdRs.error);
+        } 
+        else {
+            gName = this.gatherNameNormalize(gName);
+            await Gathering.create({
+                gather_id: gId,
+                gather_name: gName,
+                 account_id: aId,
+            });
+            res.send();
+        }
+        
     };
 
     showAllGatherManagers = async (req, res) => {
@@ -311,27 +437,35 @@ class LeaderController {
     };
 
     showAllTrans = async (req, res) => {
-        try {
-            await sequelize.authenticate();
-            await sequelize.sync();
-            let trans = [];
-            trans = await Transaction.findAll(
-                {
-                    where: {
-                        gather_id: req.query.gather_id
-                    },
-                    include: [{
-                        model: Account,
-                        attributes: ['account_name',
-                    'account_phone']
-                    }]
-                }
-            );
-            res.json(trans);
-        } catch (error) {
-            res.send(error);
-            console.log(error);
+        let gId = req.query.gather_id;
+        let validateGIdRs = Joi.string().regex(/^g\d+$/).required().validate(gId);
+        if(validateGIdRs.error) {
+            console.log(validateGIdRs.error);
         }
+        else {
+            try {
+                await sequelize.authenticate();
+                await sequelize.sync();
+                let trans = [];
+                trans = await Transaction.findAll(
+                    {
+                        where: {
+                            gather_id: gId
+                        },
+                        include: [{
+                            model: Account,
+                            attributes: ['account_name',
+                        'account_phone']
+                        }]
+                    }
+                );
+                res.json(trans);
+            } catch (error) {
+                res.send(error);
+                console.log(error);
+            }
+        }
+        
     };
 
     getMaxTranId = async (req, res) => {
@@ -351,15 +485,26 @@ class LeaderController {
     };
 
     createTran = async (req, res) => {
-        const data = req.body;
         let temp;
         temp = await this.getMaxTranId();
-        Transaction.create({
-            trans_id: "t" + (temp + 1),
-            trans_name: data.tranName,
-            account_id: data.accountId,
-            gather_id: data.gatherId,
-        });
+        let gId = req.body.gatherId;
+        let aId = req.body.account_id;
+        let tName = req.body.tranName;
+        let validateAIdRs = Joi.string().required().pattern(/^\d+$/).validate(aId);
+        let validateTNameRs = Joi.string().required().validate(tName);
+        let validateGIdRs = Joi.string().regex(/^g\d+$/).required().validate(gId);
+        if(validateAIdRs.error
+        || validateGIdRs.error
+        || validateTNameRs.error) {
+            tName = this.gatherNameNormalize(tName);
+            Transaction.create({
+                trans_id: "t" + (temp + 1),
+                trans_name: tName,
+                account_id: aId,
+                gather_id: gId,
+            });
+        }
+        
     };
 
     showAllTranManagers = async (req, res) => {
@@ -386,139 +531,206 @@ class LeaderController {
     };
 
     getTransactionInfoWithID = async (req, res) => {
-        try {
-            await sequelize.authenticate();
-            await sequelize.sync();
-            let trans = [];
-            trans = await Transaction.findAll(
-                {
-                    include: {
-                        model: Account,
-                        attributes: [
-                            "account_name",
-                            "account_phone"
-                        ]
-                    },
-                    where: {
-                        trans_id: req.query.trans_id
-                    },
-                }
-            );
-            // console.log(trans);
-            res.json(trans);
-        } catch (error) {
-            res.send(error);
-            console.log(error);
+        let tId = req.query.trans_id;
+        let validateTIdRs = Joi.string().regex(/^t\d+$/).required().validate(tId);
+        if(validateTIdRs.error) {
+            console.log(validateTIdRs.error);
         }
+        else {
+            try {
+                await sequelize.authenticate();
+                await sequelize.sync();
+                let trans = [];
+                trans = await Transaction.findAll(
+                    {
+                        include: {
+                            model: Account,
+                            attributes: [
+                                "account_name",
+                                "account_phone"
+                            ]
+                        },
+                        where: {
+                            trans_id: req.query.trans_id
+                        },
+                    }
+                );
+                // console.log(trans);
+                res.json(trans);
+            } catch (error) {
+                res.send(error);
+                console.log(error);
+            }
+        }
+        
     };
 
     updateTransaction = async (req, res) => {
         // console.log(req.body);
-        try {
-            await sequelize.authenticate();
-            await sequelize.sync();
-            await Transaction.update(
-                {
-                    trans_name: req.body.trans_name,
-                },
-                {
-                    where: {
-                        trans_id: req.body.trans_id,
+        let tId = req.body.trans_id;
+        let tName = req.body.trans_name;
+        let validateTIdRs = Joi.string().regex(/^t\d+$/).required().validate(tId);
+        let validateTNameRs = Joi.string().required().validate(tName);
+        if(validateTIdRs.error
+        || validateTNameRs.error) {
+            try {
+                tName = this.gatherNameNormalize(tName);
+                await sequelize.authenticate();
+                await sequelize.sync();
+                await Transaction.update(
+                    {
+                        trans_name: tName,
+                    },
+                    {
+                        where: {
+                            trans_id: tId,
+                        }
                     }
-                }
-            );
-            res.send();
-        } catch (error) {
-            res.send(error);
-            console.log(error);
+                );
+                res.send();
+            } catch (error) {
+                res.send(error);
+                console.log(error);
+            }
         }
+        
     };
 
     createTransaction = async (req, res) => {
-        console.log("create trans");
-        const data = req.body;
-        await Transaction.create({
-            trans_id: data.transaction_id,
-            trans_name: data.transaction_name,
-            account_id: data.account_id,
-            gather_id: data.gather_id,
-        });
-        res.send();
+        let tId = req.body.transaction_id;
+        let tName = req.body.transaction_name;
+        let gId = req.body.gather_id;
+        let aId = req.body.account_id;
+        let validateTIdRs = Joi.string().regex(/^t\d+$/).required().validate(tId);
+        let validateTNameRs = Joi.string().required().validate(tName);
+        let validateAIdRs = Joi.string().required().pattern(/^\d+$/).validate(aId);
+        let validateGIdRs = Joi.string().regex(/^g\d+$/).required().validate(gId);
+        if(validateAIdRs.error
+        || validateGIdRs.error
+        || validateTIdRs.error
+        || validateTNameRs.error) {
+            console.log(validateAIdRs.error);
+            console.log(validateGIdRs.error);
+            console.log(validateTIdRs.error);
+            console.log(validateTNameRs.error);
+        }
+        else {
+            console.log("create trans");
+            tName = this.gatherNameNormalize(tName);
+            await Transaction.create({
+                trans_id: tId,
+                trans_name: tName,
+                account_id: aId,
+                gather_id: gId,
+            });
+            res.send();
+        }
+        
     };
 
     createTransactionManager = async(req, res) => {
-        try {
-            await sequelize.authenticate();
-            await sequelize.sync();
-            const saltRounds = 10;
-            const plaintextPassword = "000000";
-            bcrypt.hash(plaintextPassword, saltRounds, async (err, hash) => {
-                if (err) {
-                    console.error('Error hashing password:', err);
-                } else {
-                    // console.log(11212);
-                    await Account.create(
-                        {
-                            account_name: req.body.manager_name,
-                            account_phone: req.body.manager_phone,
-                            account_password: hash,
-                            role_id: 2,
-                        }
-                    );
-                }
-            });
-            res.send();
-        } catch (error) {
-            res.send(error);
-            console.log(error);
+        let mPhone = req.body.manager_phone;
+        let mName = req.body.manager_name;
+        let validateMPhoneRs = Joi.string().required().pattern(/^0\d+$/).length(10).validate(mPhone);
+        let validateMNameRs = Joi.string().required().validate(mName);
+        if(validateMNameRs.error
+        || validateMPhoneRs.error) {
+            console.log(validateMNameRs.error);
+            console.log(validateMPhoneRs.error);
         }
+        else {
+            try {
+                await sequelize.authenticate();
+                await sequelize.sync();
+                const saltRounds = 10;
+                const plaintextPassword = "000000";
+                bcrypt.hash(plaintextPassword, saltRounds, async (err, hash) => {
+                    if (err) {
+                        console.error('Error hashing password:', err);
+                    } else {
+                        // console.log(11212);
+                        mName = this.managerNameNormalize(mName);
+                        await Account.create(
+                            {
+                                account_name: mName,
+                                account_phone: mPhone,
+                                account_password: hash,
+                                role_id: 2,
+                            }
+                        );
+                    }
+                });
+                res.send();
+            } catch (error) {
+                res.send(error);
+                console.log(error);
+            }
+        }
+        
     };
 
     updateAccountInTransaction = async(req, res) => {
-        try {
-            await sequelize.authenticate();
-            await sequelize.sync();
-            await Transaction.update(
-                {
-                    account_id: req.body.account_id,
-                },
-                {
-                    where: {
-                        trans_id: req.body.transaction_id,
+        let aId = req.body.account_id;
+        let tId = req.body.transaction_id;
+        let validateAIdRs = Joi.string().required().pattern(/^\d+$/).validate(aId);
+        let validateTIdRs = Joi.string().regex(/^t\d+$/).required().validate(tId);
+        if(validateAIdRs.error || validateTIdRs.error) {
+            console.log(validateAIdRs.error);
+            console.log(validateTIdRs.error);
+        }
+        else {
+            try {
+                await sequelize.authenticate();
+                await sequelize.sync();
+                await Transaction.update(
+                    {
+                        account_id: aId,
+                    },
+                    {
+                        where: {
+                            trans_id: tId,
+                        }
                     }
-                }
-            );
-            res.send();
-        } catch (error) {
-            res.send(error);
-            console.log(error);
+                );
+                res.send();
+            } catch (error) {
+                res.send(error);
+                console.log(error);
+            }
         }
     };
 
     getEmployeesInUnit = async(req, res) => {
-        try {
-            await sequelize.authenticate();
-            await sequelize.sync();
-            console.log(req.query);
-            let employees = [];
-            employees = await Role.findAll(
-                {
-                    include: {
-                        model: Account,
-                        where: {
-                            unit: req.query.unit,
-                        },
-                    },
-                    
-                }
-            );
-            // console.log(trans);
-            res.json(employees);
-        } catch (error) {
-            res.send(error);
-            console.log(error);
+        let unit = req.query.unit;
+        let validateUnitRs = Joi.string().regex(/^[gt]\d+$/).required().validate(unit);
+        if(validateUnitRs.error) {
+            console.log(validateUnitRs.error);
         }
-    }
+        else {
+            try {
+                await sequelize.authenticate();
+                await sequelize.sync();
+                console.log(req.query);
+                let employees = [];
+                employees = await Role.findAll(
+                    {
+                        include: {
+                            model: Account,
+                            where: {
+                                unit: unit,
+                            },
+                        },
+                        
+                    }
+                );
+                // console.log(trans);
+                res.json(employees);
+            } catch (error) {
+                res.send(error);
+                console.log(error);
+            }
+        }
+    };
 
 }
 

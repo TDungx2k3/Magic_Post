@@ -50,12 +50,40 @@ function ModifyTransaction() {
         }
     };
 
+    const transNameNormalize = (name) => {
+        
+        const tenChuanHoa = name.replace(/\s+/g, " ").trim();
+        
+        return tenChuanHoa.charAt(0).toUpperCase() + tenChuanHoa.slice(1);
+    };
+
     const checkTransName = () => {
-        let gName = document.querySelector("." + style.transNameContainer + " input").value;
+        let tName = document.querySelector("." + style.transNameContainer + " input").value;
         // console.log(gName);
-        if(gName === "") {
+        if(tName === "") {
             setTransNameErr("Please enter valid transaction name!")
         }
+        else {
+            document.querySelector("." + style.transNameContainer + " input").value = transNameNormalize(tName);
+        }
+    };
+
+    const managerNameNormalize = (name) => {
+        // Chia tách tên thành các từ
+        name = name.replace(/\s+/g, " ").trim();
+        const words = name.split(" ");
+
+        // Chuẩn hóa từng từ
+        const capitalizeWords = words.map((word) => {
+            // Loại bỏ dấu và viết hoa chữ cái đầu tiên của từ
+            const tuChuanHoa = word.replace(/[\u0300-\u036f\s]/g, "");
+            return tuChuanHoa.charAt(0).toUpperCase() + tuChuanHoa.slice(1);
+        });
+
+        // Kết hợp các từ đã chuẩn hóa để tạo tên mới
+        const rs = capitalizeWords.join(" ");
+
+        return rs;
     };
 
     const checkManagerName = () => {
@@ -64,14 +92,20 @@ function ModifyTransaction() {
         if(mName === "") {
             setManagerNameErr("Please enter valid manager name!")
         }
+        else {
+            document.querySelector("." + style.nameContainer + " input").value = managerNameNormalize(mName);
+        }
     };
 
     const checkManagerPhone = () => {
         let mPhone = document.querySelector("." + style.phoneContainer + " input").value;
         // console.log(gName);
-        let phoneRegex = /^\d{10}$/;
+        let phoneRegex = /^0\d+$/;
         if(!mPhone.match(phoneRegex)) {
             setManagerPhoneErr("Please enter valid manager phone!")
+        }
+        else if(mPhone.length !== 10) {
+            setManagerPhoneErr("Your phone number must have 10 numbers!")
         }
     };
 
@@ -80,6 +114,9 @@ function ModifyTransaction() {
         if(!(newPwd === "")) {
             if (newPwd.length < 6) {
                 setNewPasswordErr("Your password must be larger than 6 characters!")
+            }
+            else if (newPwd.length > 30) {
+                setNewPasswordErr("Your password must be smaller than 30 characters!")
             }
         }
     };
