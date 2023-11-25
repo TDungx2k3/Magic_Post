@@ -55,7 +55,7 @@ function ModifyGather() {
         const tenChuanHoa = name.replace(/\s+/g, " ").trim();
         
         return tenChuanHoa.charAt(0).toUpperCase() + tenChuanHoa.slice(1);
-    }
+    };
 
     const checkGatherName = () => {
         let gName = document.querySelector("." + style.gatherNameContainer + " input").value;

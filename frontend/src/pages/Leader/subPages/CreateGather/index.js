@@ -26,13 +26,41 @@ function CreateGather() {
         }
     );
 
+    const gatherNameNormalize = (name) => {
+        
+        const tenChuanHoa = name.replace(/\s+/g, " ").trim();
+        
+        return tenChuanHoa.charAt(0).toUpperCase() + tenChuanHoa.slice(1);
+    };
+
     const checkGatherName = () => {
         let gName = document.querySelector("." + style.gatherNameContainer + " input").value;
         // console.log(gName);
         if(gName === "") {
             setGatherNameErr("Please enter valid gather name!")
         }
+        else {
+            document.querySelector("." + style.gatherNameContainer + " input").value = gatherNameNormalize(gName);
+        }
     };
+
+    const managerNameNormalize = (name) => {
+        // Chia tách tên thành các từ
+        name = name.replace(/\s+/g, " ").trim();
+        const words = name.split(" ");
+
+        // Chuẩn hóa từng từ
+        const capitalizeWords = words.map((word) => {
+            // Loại bỏ dấu và viết hoa chữ cái đầu tiên của từ
+            const tuChuanHoa = word.replace(/[\u0300-\u036f\s]/g, "");
+            return tuChuanHoa.charAt(0).toUpperCase() + tuChuanHoa.slice(1);
+        });
+
+        // Kết hợp các từ đã chuẩn hóa để tạo tên mới
+        const rs = capitalizeWords.join(" ");
+
+        return rs;
+    }
 
     const checkManagerName = () => {
         let mName = document.querySelector("." + style.nameContainer + " input").value;
@@ -40,14 +68,20 @@ function CreateGather() {
         if(mName === "") {
             setManagerNameErr("Please enter valid manager name!")
         }
+        else {
+            document.querySelector("." + style.nameContainer + " input").value = managerNameNormalize(mName);
+        }
     };
 
     const checkManagerPhone = () => {
         let mPhone = document.querySelector("." + style.phoneContainer + " input").value;
         // console.log(gName);
-        let phoneRegex = /^\d{10}$/;
+        let phoneRegex = /^0\d+$/;
         if(!mPhone.match(phoneRegex)) {
             setManagerPhoneErr("Please enter valid manager phone!")
+        }
+        else if(mPhone.length !== 10) {
+            setManagerPhoneErr("Your phone number must have 10 numbers!")
         }
     };
 
@@ -56,6 +90,9 @@ function CreateGather() {
         if(!(newPwd === "")) {
             if (newPwd.length < 6) {
                 setNewPasswordErr("Your password must be larger than 6 characters!")
+            }
+            else if (newPwd.length > 30) {
+                setNewPasswordErr("Your password must be smaller than 30 characters!")
             }
         }
     };
@@ -76,7 +113,7 @@ function CreateGather() {
     };
 
     const createGatherManager = async(mName, mPhone) => {
-        console.log("cgm");
+        // console.log("cgm");
         try {
             await axios.post("http://localhost:8080/leader/createGatherManager",
             {
@@ -89,12 +126,12 @@ function CreateGather() {
         } catch (error) {
             console.log(error);
         }
-        console.log("cgme");
-    }
+        // console.log("cgme");
+    };
 
     const updateManagerPassword = async(newMId, newPwd) => {
-        console.log(newMId);
-        console.log(newPwd);
+        // console.log(newMId);
+        // console.log(newPwd);
         try {
             await axios.post("http://localhost:8080/leader/updateManagerPassword",
             {
@@ -105,7 +142,7 @@ function CreateGather() {
         } catch (error) {
             console.log(error);
         }
-    }
+    };
     
     const handleChange = (e) => {
         setGatherInfo((prev) => {
@@ -138,7 +175,7 @@ function CreateGather() {
         } catch (error) {
             console.log(error);
         }
-    }
+    };
 
     const getNewGatherId = async() => {
         try {
@@ -147,7 +184,7 @@ function CreateGather() {
         } catch (error) {
             console.log(error);
         }
-    }
+    };
 
     const handleSubmit = async(e) => {
         
@@ -201,7 +238,8 @@ function CreateGather() {
             navigate("/leader");
         }
         
-    }
+    };
+    
     let cnt = 0;
     useEffect(() => {
         if(!isLogin && cnt === 0) {
