@@ -50,7 +50,7 @@ class LeaderController {
         let validateRs = Joi.string().required().pattern(/g\d/).validate(req.query.gather_id);
         if(validateRs.error)
         {
-            console.log(error);
+            console.log(validateRs.error);
         }
         else {
             try {
