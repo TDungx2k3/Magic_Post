@@ -6,6 +6,8 @@ const { Delivery } = require("../models/deliveriesModel");
 const bcrypt = require('bcrypt');
 const Joi = require('joi');
 
+// Còn phải get được unit khi đăng nhập để làm điềU kiện where cho 2 cái thống kê hàng đi và đến
+
 // Order.hasMany(Delivery, {
 //     foreignKey: 'order_id'
 // })
@@ -58,7 +60,7 @@ class transactionManagerController {
                 account_phone: data.accountPhone,
                 account_password: data.accountPassword,
                 role_id: 3,
-                unit: "test",
+                unit: data.unit,
             });
         });
         res.send();
