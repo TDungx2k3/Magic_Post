@@ -13,13 +13,12 @@ import Leader from './pages/Leader';
 import TransactionManager from './pages/TransactionManager';
 import GatherManager from './pages/GatherManager';
 import PointsInfo from './pages/Leader/components/PointsInfo';
-import { createContext, useState } from 'react';
+import { createContext, useEffect, useState } from 'react';
 import ManageGather from './pages/Leader/subPages/ManageGather';
 import ModifyGather from './pages/Leader/subPages/ModifyGather';
 import ModifyTransaction from './pages/Leader/subPages/ModifyTransaction';
 import CreateGather from './pages/Leader/subPages/CreateGather';
 import CreateTransaction from './pages/Leader/subPages/CreateTransaction';
-
 export const LoginContext = createContext();
 
 function App() {
@@ -35,7 +34,40 @@ function App() {
     uRole: "",
     uUnit: ""
 });
-  
+
+  window.addEventListener('load', function () {
+    let nowTime = new Date();
+    const storedOutTime = new Date(JSON.parse(localStorage.getItem('outTime')));
+    console.log(typeof(storedOutTime));
+    console.log(nowTime - storedOutTime );
+    if(nowTime - storedOutTime >= 3600000) {
+      setIsLogin(false);
+      setUserInfo({
+        uId : "",
+        uName : "",
+        uPhone : "",
+        uPassword : "",
+        uRole: "",
+        uUnit: ""
+    });
+    }
+    else {
+      const storedIsLogin = JSON.parse(localStorage.getItem('isLogin'));
+      const storedUserInfo = JSON.parse(localStorage.getItem('userInfo'));
+      console.log(storedIsLogin);
+      console.log(storedUserInfo);
+      if (storedIsLogin) {
+        setIsLogin(storedIsLogin);
+      }
+      if (storedUserInfo.uId !== "") {
+        setUserInfo(storedUserInfo);
+      }
+    }
+  });
+
+  window.addEventListener('beforeunload', function (event) {
+    localStorage.setItem("outTime", JSON.stringify(new Date()));
+  });
   
   AOS.init();
 
@@ -49,6 +81,30 @@ function App() {
   });
 
   document.title = 'Magic Post';
+
+  useEffect(() => {
+    
+    const storedIsLogin = JSON.parse(localStorage.getItem('isLogin'));
+    const storedUserInfo = JSON.parse(localStorage.getItem('userInfo'));
+    console.log(storedIsLogin);
+    console.log(storedUserInfo);
+    if (storedIsLogin) {
+      setIsLogin(storedIsLogin);
+    }
+    if(storedUserInfo) {
+      if (storedUserInfo.uId !== "") {
+        setUserInfo(storedUserInfo);
+      }
+    } 
+  }, []);
+
+  useEffect(() => {
+    localStorage.setItem('isLogin', JSON.stringify(isLogin));
+    localStorage.setItem('userInfo', JSON.stringify(userInfo));
+    console.log(isLogin);
+    console.log(userInfo);
+  }, [isLogin, userInfo]);
+
   return (
     <LoginContext.Provider value={{isLogin, setIsLogin, userInfo, setUserInfo}}>
       <div className="App">

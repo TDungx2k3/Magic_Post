@@ -124,21 +124,23 @@ function Login() {
       await axios
         .post("http://localhost:8080/account/login", inputs)
         .then((response) => {
-          console.log(response);
+          // console.log(response);
           let checkResponseMessage = response.data.message;
           if(checkResponseMessage === 'Login successfully') {
-            console.log(response.data.accounts.account_id);
-            console.log(response.data.accounts.account_name);
-            userInfo.uId = response.data.accounts.account_id;
-            userInfo.uName = response.data.accounts.account_name;
-            userInfo.uPhone = inputs.phone; 
-            userInfo.uPassword = response.data.accounts.account_password;
-            userInfo.uRole = response.data.accounts.role_id;
-            userInfo.uUnit = response.data.accounts.unit;
+            // console.log(response.data.accounts.account_id);
+            // console.log(response.data.accounts.account_name);
+            setUserInfo({
+              uId: response.data.accounts.account_id,
+              uName: response.data.accounts.account_name,
+              uPhone: inputs.phone,
+              uPassword: response.data.accounts.account_password,
+              uRole: response.data.accounts.role_id,
+              uUnit: response.data.accounts.unit
+            });
             // alert("Login successfully");
           }
           setMessage(response.data.message);
-          console.log(message);
+          // console.log(message);
           //alert(message);
         })
         .catch((err) => {

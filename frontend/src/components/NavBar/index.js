@@ -9,7 +9,7 @@ import { LoginContext } from "../../App";
 
 
 function NavBar() {
-    const { isLogin, setIsLogin, userInfo } = useContext(LoginContext);
+    const { isLogin, setIsLogin, userInfo, setUserInfo } = useContext(LoginContext);
     // console.log(userInfo.uName);
     const navigate = useNavigate();
     const [isSmallSubNav, setIsSmallSubNav] = useState(false);
@@ -21,13 +21,17 @@ function NavBar() {
             onClick={() => {
                 navigate("/");
                 setTimeout(() => {
-                    console.log(2);
+                    // console.log(2);
                     scroll.scrollTo(document.getElementById('top').offsetTop, {
                         spy: true,
                         smooth: true,
                         duration: 500,
                     });
                 }, 10);
+                const storedIsLogin = JSON.parse(localStorage.getItem('isLogin'));
+                const storedUserInfo = JSON.parse(localStorage.getItem('userInfo'));
+                console.log(storedIsLogin);
+                console.log(storedUserInfo);
             }}
             >
                 <img src={logo} alt="Logo"/>
@@ -92,7 +96,19 @@ function NavBar() {
                 </div>
                 <div className={clsx(style.rolesBtns)}>    
                     <div className={clsx(style.forEmployees)}>
-                        <a href="/login"> Log Out</a>
+                        <a href="/login"
+                        onClick={() => {
+                            setIsLogin(false);
+                            setUserInfo({
+                                uId : "",
+                                uName : "",
+                                uPhone : "",
+                                uPassword : "",
+                                uRole: "",
+                                uUnit: ""
+                            })
+                        }}
+                        > Log Out</a>
                     </div>
                 </div>
             </section>   

@@ -14,6 +14,8 @@ function Leader() {
     let cnt = 0;
     useEffect(() => {
         if(!isLogin && cnt === 0) {
+            console.log(isLogin);
+            console.log(userInfo);
             cnt ++;
             alert("You have to login before access this page!");
             navigate("/login");
