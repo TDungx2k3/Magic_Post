@@ -1,78 +1,100 @@
 .container {
-    background-color: #D9D9D9;
-    // display: flex;
-    // flex-direction: column;
-    margin-left: auto;
-    margin-right: auto;
-    color: #FFFFFF;
-    font-size: 24px;
-    font-family: Roboto, sans-serif;
-    font-weight: bold;
-    width: 80%;
-    height: fit-content;
-    border-radius: 60px;
+  background-color: #D9D9D9;
+  margin-left: auto;
+  margin-right: auto;
+  color: #FFFFFF;
+  font-size: 24px;
+  font-family: Roboto, sans-serif;
+  font-weight: bold;
+  width: 80%;
+  border-radius: 60px;
+  display: flex;
 }
 
 .sub-container {
-    margin-top: 20px;
-    margin-bottom: 20px;
-    text-align: left;
-    background-color: #3D4FD2;
-    border-radius: 50px;
-    margin-left: auto;
-    margin-right: auto;
-    width: 85%;
+  margin-top: 20px;
+  margin-bottom: 20px;
+  text-align: left;
+  background-color: #3D4FD2;
+  border-radius: 50px;
+  margin-left: auto;
+  margin-right: auto;
+  width: 85%;
+  display: flex;
+  justify-content: space-around ;
 }
 
 .sub-container:hover {
-    /* background-color: #4b5de8; */
-    cursor: pointer;
-    animation: scaleUp 0.5s ease forwards;
+  cursor: pointer;
+  animation: scaleUp 0.5s ease forwards;
 }
 
 .sub-container:not(:hover) {
-    animation: scaleDown 0.5s ease forwards;
+  animation: scaleDown 0.5s ease forwards;
 }
 
+.account-container {
+  margin-top: 20px;
+  margin-bottom: 20px;
+  margin-left: 5%;
+}
 
-.container .sub-container div {
-  margin-left: 40px;
+.account-container div {
   margin-top: 10px;
-  margin-bottom: 12px;
+  margin-bottom: 10px;
+}
+
+.btns-container {
+  display: flex;
+  align-items: center;
+  margin-left: 53%;
+  margin-right: 1%;
+}
+
+#delete {
+  background-color: #FF0000;
+  padding: 24px;
+  border-radius: 24px;
+}
+
+#modify {
+  background-color: #57A4FF;
+  padding: 24px;
+  border-radius: 24px;
 }
 
 @keyframes scaleUp {
-    0% {
-      transform: scale(1);
-    }
-    100% {
-      transform: scale(1.1);
-    }
+  0% {
+    transform: scale(1);
+  }
+  100% {
+    transform: scale(1.1);
+  }
 }
 
 @keyframes scaleDown {
-    0% {
-      transform: scale(1.1);
-    }
-    100% {
-      transform: scale(1.0);
-    }
+  0% {
+    transform: scale(1.1);
+  }
+  100% {
+    transform: scale(1.0);
+  }
 }
 
 @media screen and (max-width: 768px) {
-  .container {
-    font-size: 20px;
-  }
+.container {
+  font-size: 20px;
+}
 }
 
 @media screen and (max-width: 678px) {
-  .container {
-    font-size: 18px;
-  }
+.container {
+  font-size: 18px;
+}
 }
 
 @media screen and (max-width: 562px) {
-  .container {
-    font-size: 16px;
-  }
+.container {
+  font-size: 16px;
+}
 }

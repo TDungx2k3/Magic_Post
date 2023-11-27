@@ -27,27 +27,48 @@ function StatisticOrdersReceived(props) {
 
     return (
         <div className={clsx(style.container, props.className)}>
-            {data.map((order, index) => (
+            {data.map((data, index) => (
                 <div className={clsx(style["sub-container"])} key={index}>
-                    <div>
-                        <div>
-                            <label htmlFor="Order ID">Order ID: </label>
-                            <span>{order.order_id}</span>
+                    <div className={style["customer-container"]}>
+                        <div className={style.sender}>
+                            <div>
+                                <label>Sender Name: </label>
+                                <span>{data.customer_name}</span>
+                            </div>
+
+                            <div>
+                                <label>Sender Phone: </label>
+                                <span>{data.customer_phone}</span>
+                            </div>
                         </div>
 
+                        <div className={clsx(style.receiver)}>
+                            <div>
+                                <label>Receiver Name: </label>
+                                <span>{data.receiver_name}</span>
+                            </div>
+
+                            <div>
+                                <label>Receiver Name: </label>
+                                <span>{data.receiver_phone}</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div className={clsx(style["order-container"])}>
                         <div>
                             <label htmlFor="Weight">Weight: </label>
-                            <span>{order.weight} kg</span>
+                            <span>{data.weight} kg</span>
                         </div>
 
                         <div>
                             <label htmlFor="Price">Price: </label>
-                            <span>{order.price} $</span>
+                            <span>{data.price} $</span>
                         </div>
 
                         <div>
                             <label htmlFor="Date">Date: </label>
-                            <span>{order.date}</span>
+                            <span>{data.date}</span>
                         </div>
                     </div>
                 </div>
