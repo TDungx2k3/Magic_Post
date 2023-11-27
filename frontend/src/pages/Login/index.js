@@ -137,6 +137,9 @@ function Login() {
               uRole: response.data.accounts.role_id,
               uUnit: response.data.accounts.unit
             });
+
+            localStorage.setItem('isLogin', JSON.stringify(isLogin));
+            localStorage.setItem('userInfo', JSON.stringify(userInfo));
             // alert("Login successfully");
           }
           setMessage(response.data.message);

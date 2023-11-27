@@ -52,6 +52,9 @@ function GatherManager() {
                 onClickStatisticOrdersSent={handleIsClickStatisticOrdersSent}
                 onClickStatisticOrdersReceived={handleIsClickStatisticOrdersReceived}
             />
+            <div>
+                
+            </div>
             <ManageAccountEmployee
                 className={clsx({[style["manage-account-employee"]] : isClickManageAccountEmployee === true}, {[style["manage-account-employee-hidden"]] : isClickManageAccountEmployee === false})}
             />

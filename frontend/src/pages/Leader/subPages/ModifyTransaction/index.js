@@ -9,7 +9,9 @@ function ModifyTransaction() {
 
     const navigate = useNavigate();
     const location = useLocation();
-    const { isLogin, setIsLogin, userInfo, setUserInfo} = useContext(LoginContext);
+    let nowTime = new Date();
+    const storedOutTime = new Date(JSON.parse(localStorage.getItem('outTime')));
+    const storedIsLogin = JSON.parse(localStorage.getItem('isLogin'));
     const transId = new URLSearchParams(location.search).get("trans_id");
     
     const [rerender] = useState(true);
@@ -209,7 +211,7 @@ function ModifyTransaction() {
     let cnt = 0;
     useEffect(() => {
         getTransData();
-        if(!isLogin && cnt === 0) {
+        if(!storedIsLogin && nowTime - storedOutTime < 3600000 && cnt === 0) {
             cnt ++;
             alert("You have to login before access this page!");
             navigate("/login");

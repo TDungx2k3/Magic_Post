@@ -1,9 +1,9 @@
 import clsx from "clsx";
 import style from "./ManageAccountEmployee.module.scss";
 
-function ManageAccountEmployee() {
+function ManageAccountEmployee(props) {
     return (
-        <div className={clsx(style.container)}>
+        <div className={clsx(style.container, props.className)}>
             <div className={clsx(style["sub-container"])}>
                 <div>
                     <div>

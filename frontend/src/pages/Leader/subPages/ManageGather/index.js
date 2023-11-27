@@ -8,14 +8,14 @@ import TransactionList from '../../components/TransactionList';
 import { useLocation, useNavigate } from "react-router-dom";
 import axios from "axios";
 import EmployeeList from "../../components/EmployeeList";
-import { LoginContext } from "../../../../App";
 
 function ManageGather() {
 
     const location = useLocation();
     const gatherId = new URLSearchParams(location.search).get("gather_id");
-    // console.log(gatherId);
-    const { isLogin, setIsLogin, userInfo, setUserInfo} = useContext(LoginContext);
+    let nowTime = new Date();
+    const storedOutTime = new Date(JSON.parse(localStorage.getItem('outTime')));
+    const storedIsLogin = JSON.parse(localStorage.getItem('isLogin'));
     const navigate = useNavigate();
     const [transactionsData, setTransactionsData] = useState([]);
     const [employeeList, setEmployeeList] = useState([]);
@@ -91,7 +91,7 @@ function ManageGather() {
         getGatherInfo();
         getAllTransactionsWithGatherId();
         getAllEmployees();
-        if(!isLogin && cnt === 0) {
+        if(!storedIsLogin && nowTime - storedOutTime < 3600000 && cnt === 0) {
             cnt ++;
             alert("You have to login before access this page!");
             navigate("/login");

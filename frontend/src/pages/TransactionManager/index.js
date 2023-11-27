@@ -12,10 +12,12 @@ import Footer from "../../components/Footer";
 
 function TransactionManager() {
     const navigate = useNavigate();
-    const { isLogin, setIsLogin, userInfo, setUserInfo} = useContext(LoginContext)
+    let nowTime = new Date();
+    const storedOutTime = new Date(JSON.parse(localStorage.getItem('outTime')));
+    const storedIsLogin = JSON.parse(localStorage.getItem('isLogin'));
     let cnt = 0;
     useEffect(() => {
-        if(!isLogin && cnt === 0) {
+        if(!storedIsLogin && nowTime - storedOutTime < 3600000 && cnt === 0) {
             cnt ++;
             alert("You have to login before access this page!");
             navigate("/login");

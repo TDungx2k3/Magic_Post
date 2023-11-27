@@ -40,7 +40,7 @@ function App() {
   window.addEventListener('load', function () {
     let nowTime = new Date();
     const storedOutTime = new Date(JSON.parse(localStorage.getItem('outTime')));
-    console.log(typeof(storedOutTime));
+    // console.log(typeof(storedOutTime));
     console.log(nowTime - storedOutTime );
     if(nowTime - storedOutTime >= 3600000) {
       setIsLogin(false);
@@ -100,12 +100,12 @@ function App() {
     } 
   }, []);
 
-  useEffect(() => {
-    localStorage.setItem('isLogin', JSON.stringify(isLogin));
-    localStorage.setItem('userInfo', JSON.stringify(userInfo));
-    console.log(isLogin);
-    console.log(userInfo);
-  }, [isLogin, userInfo]);
+  // useEffect(() => {
+  //   localStorage.setItem('isLogin', JSON.stringify(isLogin));
+  //   localStorage.setItem('userInfo', JSON.stringify(userInfo));
+  //   console.log(isLogin);
+  //   console.log(userInfo);
+  // }, [isLogin, userInfo]);
 
   return (
     <LoginContext.Provider value={{isLogin, setIsLogin, userInfo, setUserInfo}}>
