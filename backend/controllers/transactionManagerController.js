@@ -102,7 +102,7 @@ class transactionManagerController {
     showAllOrderReceived = async (req, res) => {
         try {
             const allOrdersReceived = await sequelize.query(
-                "SELECT `orders`.order_id, `orders`.weight, `orders`.price, `orders`.date FROM `orders` JOIN deliveries ON orders.order_id = deliveries.order_id JOIN transactions ON deliveries.to_id = transactions.trans_id",
+                "SELECT `orders`.order_id, `orders`.weight, `orders`.price, `orders`.date, `orders`.customer_name, `orders`.customer_phone, `orders`.receiver_name, `orders`.receiver_phone FROM `orders` JOIN deliveries ON orders.order_id = deliveries.order_id JOIN transactions ON deliveries.to_id = transactions.trans_id",
                 {raw: true,}
               );
             res.json(allOrdersReceived);
@@ -116,7 +116,7 @@ class transactionManagerController {
     showAllOrderSent = async (req, res) => {
         try {
             const allOrdersSent = await sequelize.query(
-                "SELECT `orders`.order_id, `orders`.weight, `orders`.price, `orders`.date FROM `orders` JOIN deliveries ON orders.order_id = deliveries.order_id JOIN transactions ON deliveries.from_id = transactions.trans_id",
+                "SELECT `orders`.order_id, `orders`.weight, `orders`.price, `orders`.date, `orders`.customer_name, `orders`.customer_phone, `orders`.receiver_name, `orders`.receiver_phone FROM `orders` JOIN deliveries ON orders.order_id = deliveries.order_id JOIN transactions ON deliveries.from_id = transactions.trans_id",
                 {raw: true,}
               );
             res.json(allOrdersSent);
