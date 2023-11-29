@@ -51,7 +51,16 @@ function App() {
         uPassword : "",
         uRole: "",
         uUnit: ""
-    });
+      });
+      localStorage.setItem('isLogin', JSON.stringify(false));
+      localStorage.setItem('userInfo', JSON.stringify({
+        uId : "",
+        uName : "",
+        uPhone : "",
+        uPassword : "",
+        uRole: "",
+        uUnit: ""
+      }));
     }
     else {
       const storedIsLogin = JSON.parse(localStorage.getItem('isLogin'));

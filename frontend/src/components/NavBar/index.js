@@ -109,7 +109,16 @@ function NavBar() {
                                 uPassword : "",
                                 uRole: "",
                                 uUnit: ""
-                            })
+                            });
+                            localStorage.setItem('isLogin', JSON.stringify(false));
+                            localStorage.setItem('userInfo', JSON.stringify({
+                                uId : "",
+                                uName : "",
+                                uPhone : "",
+                                uPassword : "",
+                                uRole: "",
+                                uUnit: ""
+                            }));
                         }}
                         > Log Out</a>
                     </div>

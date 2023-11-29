@@ -50,7 +50,7 @@ function GatherList() {
                             gatherName: gather.gather_name,
                             gatherManagerName: gather.account.account_name,
                             gatherManagerPhone: gather.account.account_phone
-                        }
+                        };
                         return(
                             <Gather key={index} data={gatherData}/>
                         );

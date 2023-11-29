@@ -7,93 +7,72 @@ import axios from "axios";
 function Order(props) {
 
     const navigate = useNavigate();
-    // console.log(props.data.transactionId);
-    const deleteAllAccountInTransaction = async() => {
-        try {
-            await axios.post("http://localhost:8080/account/deleteAllAccountInTransaction",
-            {
-                unit: props.data.transactionId,
-            }
-            );
-        } catch (error) {
-            console.log(error);
-        }
-    };
     return (
         <Fragment>
-            <div className= {clsx(style.transactionContainer)}
-            data-aos="zoom-in-up" data-aos-duration="1000">
-                <Link to = '/' className= {clsx(style.transactionInfo)}>
-                    <div>
-                        <label htmlFor="transactionName">Transaction Name: </label>
-                        <span id="transactionName">{props.data.transactionName}</span>
+            <div className={clsx(style.orderContainer)}
+            data-aos="zoom-in-up" data-aos-duration="1000"
+            >
+                <div className={clsx(style.customersInfo)}>
+                    <div className={clsx(style.senderInfo)}>
+                        <div className={clsx(style.senderName)}>
+                            <label>Sender Name: </label>
+                            <span>{props.data.sender_name}</span>
+                        </div>
+
+                        <div className={clsx(style.senderPhone)}>
+                            <label>Sender Phone: </label>
+                            <span>{props.data.sender_phone}</span>
+                        </div>
                     </div>
-                    
-                    <div className= {clsx(style.transactionManager)}>
-                        <div>
-                            <label>Transaction Manager Name: </label>
-                            <span className= {clsx(style.transactionManagerName)}>{props.data.transactionManagerName}</span>
+
+                    <div className={clsx(style.receiverInfo)}>
+                        <div className={clsx(style.receiverName)}>
+                            <label>Receiver Name: </label>
+                            <span>{props.data.receiver_name}</span>
                         </div>
-                        <div>
-                            <label>Transaction Manager Phone: </label>
-                            <span className= {clsx(style.transactionManagerPhone)}>{props.data.transactionManagerPhone}</span>
+
+                        <div className={clsx(style.receiverPhone)}>
+                            <label>Receiver Phone: </label>
+                            <span>{props.data.receiver_phone}</span>
                         </div>
+
                         
                     </div>
-                </Link>
+                </div>
 
-                <div className= {clsx(style.transactionBtns)}>
-                    <div className= {clsx(style.deleteBtn)} onClick={
-                        () => {
-                            setConfirmHidden(false);
-                            setIsHide(false);
-                        }
-                    }>
-                        <i className= "ti-trash" ></i>
+                <div>
+                    <div className={clsx(style.orderInfo)}>
+                        
+                        <div className={clsx(style.orderWeight)}>
+                            <label>Order Weight: </label>
+                            <span>{props.data.order_weight}</span>
+                        </div>
+                        
+                        <div className={clsx(style.orderPrice)}>
+                            <label>Order Price: </label>
+                            <span>{props.data.order_price}</span>
+                        </div>
+
+                        <div className={clsx(style.orderDescription)}>
+                            <label>Order Date: </label>
+                            <span>{props.data.order_date}</span>
+                        </div>
+
+                        <div className={clsx(style.receiverAddress)}>
+                            <label>Receiver Address: </label>
+                            <span>{props.data.receiver_address}</span>
+                        </div>
                     </div>
 
-                    <Link to = {`/modifyTransaction?trans_id=${props.data.transactionId}`} className= {clsx(style.modifyBtn)}>
-                        <i className= "ti-reload"></i>
-                    </Link>
-                </div>
-            </div>
+                    <div className={clsx(style.orderStatus)}>
+                        <div className={clsx(style.statusImg)}>
 
-            <div className={clsx(style.confirmDeleteTransactionContainer, {[style.hidden] : confirmHidden})} 
-            onClick={() => {
-                setConfirmHidden(true);
-            }}
-            data-aos="zoom-out-up" data-aos-duration="1000">
-                <div className={clsx(style.contentCF)}
-                onClick={(e) => {
-                    setConfirmHidden(false);
-                    e.stopPropagation();
-                }}>
-                    <h2>Are you sure to delete this transactioning?</h2>
-                    <p>This action is irreversible.</p>
-                    <div className={(style.confirmBtns)}>
-                        <div className={clsx(style.yesBtn)}
-                        onClick={async(e) => {
-                            
-                            if(window.confirm("Do you want to delete this transaction?")) {
-                                await deleteTransaction();
-                                await deleteAllAccountInTransaction();
-                                setConfirmHidden(true);
-                                navigate("/leader");
-                                setTimeout(() => {
-                                    navigate("/leaderManageGather?gather_id=" + props.data.gatherId)
-                                }, 0);
-                            }
-                        }}
-                        >Yes</div>
-                        <div className={clsx(style.noBtn)}
-                        onClick={(e) => {
-                            setConfirmHidden(true);
-                            e.stopPropagation();
-                        }}
-                        >No</div>
+                        </div>
+                        <div className={clsx(style.statusTxt)}>
+
+                        </div>
                     </div>
                 </div>
-                
             </div>
         </Fragment>
     );

@@ -10,6 +10,8 @@ function CreateTransaction() {
     let nowTime = new Date();
     const storedOutTime = new Date(JSON.parse(localStorage.getItem('outTime')));
     const storedIsLogin = JSON.parse(localStorage.getItem('isLogin'));
+    const storedUserInfo = JSON.parse(localStorage.getItem('userInfo'));
+    
     const location = useLocation();
     const gatherId = new URLSearchParams(location.search).get("gather_id");
     
@@ -246,10 +248,23 @@ function CreateTransaction() {
     
     let cnt = 0;
     useEffect(() => {
-        if(!storedIsLogin && nowTime - storedOutTime < 3600000 && cnt === 0) {
+        if((!storedIsLogin 
+            || nowTime - storedOutTime > 3600000 
+            || storedUserInfo.uRole != "1")
+            && cnt === 0
+            ) {
             cnt ++;
-            alert("You have to login before access this page!");
+            alert("You have to login with leader account before access this page!");
             navigate("/login");
+            localStorage.setItem('isLogin', JSON.stringify(false));
+            localStorage.setItem('userInfo', JSON.stringify({
+                uId : "",
+                uName : "",
+                uPhone : "",
+                uPassword : "",
+                uRole: "",
+                uUnit: ""
+            }));
         }
     }, [rerender]);
 
