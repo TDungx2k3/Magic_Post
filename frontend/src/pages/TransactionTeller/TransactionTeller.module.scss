@@ -1,0 +1,73 @@
+.content {
+    background-color: #a0a0a0;
+    width: 80%;
+    margin: 0px auto;
+    padding: 20px 20px;
+    border-radius: 40px;
+}
+
+.content > div {
+    background-color: #4b5de8;
+    margin: 12px;
+    border-radius: 24px;
+    padding: 4px;
+}
+
+.content > div:first-child {
+    margin-bottom: 24px;
+}
+
+.content > div:hover {
+    cursor: pointer;
+    opacity: 0.8;
+}
+
+.content  > div > h1 {
+    margin: 0;
+    text-align: left;
+    color: #fff;
+    margin-left: 24px;
+    padding: 12px 24px;
+}
+
+.content > div > div {
+    background-color: #333;
+    width: 80%;
+    margin: 0px auto;
+    margin-bottom: 24px;
+    border-radius: 24px;
+}
+
+.content > div > div:hover {
+    animation: scaleUp 0.5s ease forwards;
+}
+
+.content > div > div:not(:hover) {
+    animation: scaleDown 0.5s ease forwards;
+}
+
+.content > div > div > h2 {
+    margin: 0;
+    text-align: left;
+    margin-left: 24px;
+    padding: 12px 24px;
+    color: #fff;
+}
+
+@keyframes scaleUp {
+    0% {
+      transform: scale(1);
+    }
+    100% {
+      transform: scale(1.1);
+    }
+}
+
+@keyframes scaleDown {
+    0% {
+      transform: scale(1.1);
+    }
+    100% {
+      transform: scale(1.0);
+    }
+}

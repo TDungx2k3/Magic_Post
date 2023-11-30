@@ -1,8 +1,6 @@
 import clsx from "clsx"
 import style from "./OrderList.module.scss"
 import { Fragment, useEffect, useState } from "react";
-import Gather from "../Gather"
-import { Link } from "react-router-dom";
 import axios from "axios";
 import Order from "../Order";
 
@@ -33,7 +31,7 @@ function OrderList(props) {
 
     function formatDate(date) {
         const year = date.getFullYear();
-        const month = String(date.getMonth() + 1).padStart(2, '0'); 
+        const month = String(date.getMonth() + 1).padStart(2, '0');
         const day = String(date.getDate()).padStart(2, '0');
     
         return `${year}-${month}-${day}`;

@@ -1,12 +1,11 @@
 import clsx from "clsx"
 import { Fragment, useContext, useEffect } from "react";
 import Header from "../../components/Header";
-import GatherList from "./components/GatherList";
 import Footer from "../../components/Footer";
-import style from "./Leader.module.scss";
+import style from "./TransactionTeller.module.scss";
 import { useNavigate } from "react-router-dom";
 
-function Leader() {
+function TransactionTeller() {
 
     const navigate = useNavigate();
     let nowTime = new Date();
@@ -18,11 +17,11 @@ function Leader() {
     useEffect(() => {
         if((!storedIsLogin 
             || nowTime - storedOutTime > 3600000 
-            || storedUserInfo.uRole != "1")
+            || storedUserInfo.uRole != "1") // Sau do chuyen thanh 3
             && cnt === 0
             ) {
             cnt ++;
-            alert("You have to login with leader account before access this page!");
+            alert("You have to login with Transaction Teller account before access this page!");
             navigate("/login");
             localStorage.setItem('isLogin', JSON.stringify(false));
             localStorage.setItem('userInfo', JSON.stringify({
@@ -39,11 +38,25 @@ function Leader() {
         <Fragment>
             <Header />
             <div className={clsx(style.content)}>
-                <GatherList />
+                <div>
+                    <h1>Create Order</h1>
+                </div>
+
+                <div>
+                    <h1>Manage Orders</h1>
+
+                    <div>
+                        <h2>Orders From Customers</h2>
+                    </div>
+
+                    <div>
+                        <h2>Orders To Customers</h2>
+                    </div>
+                </div>
             </div>
             <Footer />
         </Fragment>
     );
 }
 
-export default Leader;
+export default TransactionTeller;

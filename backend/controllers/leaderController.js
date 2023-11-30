@@ -732,6 +732,72 @@ class LeaderController {
         }
     };
 
+    getToOrdersWithUnit = async(req, res) => {
+        let unit = req.query.unit;
+        let date = req.query.date;
+        console.log(unit);
+        console.log(date);
+        let validateUnitRs = Joi.string().regex(/^[gt]\d+$/).required().validate(unit);
+        let validateDateRs = Joi.date().required().validate(date);
+        if(validateUnitRs.error || validateDateRs.error) {
+            console.log(validateUnitRs.error);
+            console.log(validateDateRs.error);
+        }
+        else {
+            try {
+                const allOrdersToUnit = await sequelize.query(
+                    "SELECT * FROM `deliveries` JOIN `orders` ON `deliveries`.order_id = `orders`.order_id WHERE `deliveries`.date = :date AND `deliveries`.to_id = :unit",
+                    {
+                        raw: true,
+                        type: sequelize.QueryTypes.SELECT,
+                        replacements: {
+                            date: date,
+                            unit: unit,
+                        },
+                    }
+                  );
+                res.json(allOrdersToUnit);
+            }
+            catch(err) {
+                console.log(err);
+                res.send(err);
+            }
+        }
+    };
+
+    getFromOrdersWithUnit = async(req, res) => {
+        let unit = req.query.unit;
+        let date = req.query.date;
+        console.log(unit);
+        console.log(date);
+        let validateUnitRs = Joi.string().regex(/^[gt]\d+$/).required().validate(unit);
+        let validateDateRs = Joi.date().required().validate(date);
+        if(validateUnitRs.error || validateDateRs.error) {
+            console.log(validateUnitRs.error);
+            console.log(validateDateRs.error);
+        }
+        else {
+            try {
+                const allOrdersToUnit = await sequelize.query(
+                    "SELECT * FROM `deliveries` JOIN `orders` ON `deliveries`.order_id = `orders`.order_id WHERE `deliveries`.date = :date AND `deliveries`.from_id = :unit",
+                    {
+                        raw: true,
+                        type: sequelize.QueryTypes.SELECT,
+                        replacements: {
+                            date: date,
+                            unit: unit,
+                        },
+                    }
+                  );
+                res.json(allOrdersToUnit);
+            }
+            catch(err) {
+                console.log(err);
+                res.send(err);
+            }
+        }
+    };
+
 }
 
 module.exports = new LeaderController();

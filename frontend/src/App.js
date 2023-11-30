@@ -20,6 +20,7 @@ import ModifyTransaction from './pages/Leader/subPages/ModifyTransaction';
 import CreateGather from './pages/Leader/subPages/CreateGather';
 import CreateTransaction from './pages/Leader/subPages/CreateTransaction';
 import DeliveryReceiptPage from './pages/DeliveryReceiptPage/';
+import TransactionTeller from './pages/TransactionTeller';
 
 export const LoginContext = createContext();
 
@@ -51,7 +52,16 @@ function App() {
         uPassword : "",
         uRole: "",
         uUnit: ""
-    });
+      });
+      localStorage.setItem('isLogin', JSON.stringify(false));
+      localStorage.setItem('userInfo', JSON.stringify({
+        uId : "",
+        uName : "",
+        uPhone : "",
+        uPassword : "",
+        uRole: "",
+        uUnit: ""
+      }));
     }
     else {
       const storedIsLogin = JSON.parse(localStorage.getItem('isLogin'));
@@ -124,6 +134,8 @@ function App() {
             <Route path = '/createGather' element={<CreateGather/>} />
             <Route path = '/createTransaction' element={<CreateTransaction/>} />
             <Route path = '/deliveryReceipt' element={<DeliveryReceiptPage/>} />
+            <Route path = '/transactionTeller' element={<TransactionTeller/>} />
+
           </Routes>
         </Router>
       </div>
