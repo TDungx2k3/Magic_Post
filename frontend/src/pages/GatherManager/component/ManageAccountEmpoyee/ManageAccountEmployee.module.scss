@@ -21,7 +21,7 @@
   margin-right: auto;
   width: 85%;
   display: flex;
-  justify-content: space-around ;
+  justify-content: space-around;
 }
 
 .sub-container:hover {
@@ -86,13 +86,12 @@
   overflow-y: hidden;
 }
 
-.hideAll {
-  display: none;
+.hidden {
+  animation: outHidden 0.5s ease forwards;
 }
 
-.hidden {
-  
-  animation: outHidden 0.5s ease forwards;
+.hideAll {
+  display: none;
 }
 
 .contentCF {
@@ -103,7 +102,7 @@
 }
 
 .contentCF p {
-  color:  red;
+  color: red;
   margin-bottom: 60px;
 }
 
@@ -121,15 +120,38 @@
   color: #000;
 }
 
+.yesBtn:hover {
+  background-color: #0073ff;
+  cursor: pointer;
+  color: #fff;
+}
+
+.noBtn {
+  background-color: rgb(255, 81, 37);
+  padding: 12px 24px;
+  font-size: 18px;
+  border-radius: 24px;
+  min-width: 100px;
+  color: #000;
+}
+
+.noBtn:hover {
+  background-color: rgb(255, 51, 0);
+  cursor: pointer;
+  color: #fff;
+}
+
 @keyframes outHidden {
   0% {
-      opacity: 1;
+    opacity: 1;
   }
+
   99% {
-      opacity: 0;
+    opacity: 0;
   }
+
   100% {
-      display: none;
+    display: none;
   }
 }
 
@@ -137,6 +159,7 @@
   0% {
     transform: scale(1);
   }
+
   100% {
     transform: scale(1.1);
   }
@@ -146,25 +169,26 @@
   0% {
     transform: scale(1.1);
   }
+
   100% {
     transform: scale(1.0);
   }
 }
 
 @media screen and (max-width: 768px) {
-.container {
-  font-size: 20px;
-}
+  .container {
+    font-size: 20px;
+  }
 }
 
 @media screen and (max-width: 678px) {
-.container {
-  font-size: 18px;
-}
+  .container {
+    font-size: 18px;
+  }
 }
 
 @media screen and (max-width: 562px) {
-.container {
-  font-size: 16px;
-}
+  .container {
+    font-size: 16px;
+  }
 }
