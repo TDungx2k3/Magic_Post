@@ -91,6 +91,9 @@ function NavBar() {
                         if(userInfo.uRole === 2) {
                             navigate("/transaction-manager");
                         }
+                        if(userInfo.uRole === 5) {
+                            navigate("/gather-manager");
+                        }
                     }
                 }
                 >

@@ -57,10 +57,80 @@
   border-radius: 24px;
 }
 
+#delete:hover {
+  background-color: rgb(226, 0, 0);
+}
+
 #modify {
   background-color: #57A4FF;
   padding: 24px;
   border-radius: 24px;
+}
+
+#modify:hover {
+  background-color: #3C94FF;
+}
+
+.confirmDeleteGatherContainer {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: 100vh;
+  z-index: 100;
+  position: fixed;
+  background-color: rgba(56, 145, 255, 0.3);
+  top: 0;
+  left: 0;
+  overflow-y: hidden;
+}
+
+.hideAll {
+  display: none;
+}
+
+.hidden {
+  
+  animation: outHidden 0.5s ease forwards;
+}
+
+.contentCF {
+  background-color: #fff;
+  width: 50%;
+  padding: 60px;
+  border-radius: 60px;
+}
+
+.contentCF p {
+  color:  red;
+  margin-bottom: 60px;
+}
+
+.confirmBtns {
+  display: flex;
+  justify-content: space-around;
+}
+
+.yesBtn {
+  background-color: #57a4ff;
+  padding: 12px 24px;
+  font-size: 18px;
+  border-radius: 24px;
+  min-width: 100px;
+  color: #000;
+}
+
+@keyframes outHidden {
+  0% {
+      opacity: 1;
+  }
+  99% {
+      opacity: 0;
+  }
+  100% {
+      display: none;
+  }
 }
 
 @keyframes scaleUp {
