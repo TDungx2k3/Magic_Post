@@ -17,7 +17,7 @@ function TransactionTeller() {
     useEffect(() => {
         if((!storedIsLogin 
             || nowTime - storedOutTime > 3600000 
-            || storedUserInfo.uRole != "1") // Sau do chuyen thanh 3
+            || storedUserInfo.uRole != "3") // Sau do chuyen thanh 3
             && cnt === 0
             ) {
             cnt ++;
@@ -49,7 +49,9 @@ function TransactionTeller() {
                         <h2>Orders From Customers</h2>
                     </div>
 
-                    <div>
+                    <div onClick={() => {
+                        navigate("/transTellerToCus");
+                    }}>
                         <h2>Orders To Customers</h2>
                     </div>
                 </div>

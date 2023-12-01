@@ -21,6 +21,7 @@ import CreateGather from './pages/Leader/subPages/CreateGather';
 import CreateTransaction from './pages/Leader/subPages/CreateTransaction';
 import DeliveryReceiptPage from './pages/DeliveryReceiptPage/';
 import TransactionTeller from './pages/TransactionTeller';
+import ToCustomer from './pages/TransactionTeller/SubPage/ToCustomer';
 
 export const LoginContext = createContext();
 
@@ -42,7 +43,7 @@ function App() {
     let nowTime = new Date();
     const storedOutTime = new Date(JSON.parse(localStorage.getItem('outTime')));
     // console.log(typeof(storedOutTime));
-    console.log(nowTime - storedOutTime );
+    // console.log(nowTime - storedOutTime );
     if(nowTime - storedOutTime >= 3600000) {
       setIsLogin(false);
       setUserInfo({
@@ -66,6 +67,7 @@ function App() {
     else {
       const storedIsLogin = JSON.parse(localStorage.getItem('isLogin'));
       const storedUserInfo = JSON.parse(localStorage.getItem('userInfo'));
+      localStorage.setItem("outTime", JSON.stringify(new Date()));
       console.log(storedIsLogin);
       console.log(storedUserInfo);
       if (storedIsLogin) {
@@ -135,6 +137,7 @@ function App() {
             <Route path = '/createTransaction' element={<CreateTransaction/>} />
             <Route path = '/deliveryReceipt' element={<DeliveryReceiptPage/>} />
             <Route path = '/transactionTeller' element={<TransactionTeller/>} />
+            <Route path = '/transTellerToCus' element={<ToCustomer/>} />
 
           </Routes>
         </Router>

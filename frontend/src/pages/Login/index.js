@@ -137,7 +137,7 @@ function Login() {
               uRole: response.data.accounts.role_id,
               uUnit: response.data.accounts.unit
             });
-
+            localStorage.setItem("outTime", JSON.stringify(new Date()));
             localStorage.setItem('isLogin', JSON.stringify(true));
             localStorage.setItem('userInfo', JSON.stringify({
               uId: response.data.accounts.account_id,
