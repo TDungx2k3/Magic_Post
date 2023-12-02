@@ -9,7 +9,6 @@ function OrderList(props) {
 
     const [allOrdersList, setAllOrdersList] = useState([]);
     const [orderList, setOrderList] = useState([1]);
-    const [isReceive, setIsReceive] = useState(true);
     const [status, setStatus] = useState(0);
     const [rerender] = useState(true);
     const unit = props.data.unit;
@@ -55,7 +54,7 @@ function OrderList(props) {
     }
 
     const updateOrderList = async() => {
-        if(status) {
+        if(status === 0) {
             let tmpOrderList = [];
             for(let i = 0; i < allOrdersList.length; i++) {
                 if(allOrdersList[i].deliver_status === 1) {
@@ -67,7 +66,7 @@ function OrderList(props) {
             updatePages();
             setOrderList(tmpOrderList);
         }
-        else {
+        else if(status === 1) {
             let tmpOrderList = [];
             for(let i = 0; i < allOrdersList.length; i++) {
                 if(allOrdersList[i].deliver_status === 0) {
@@ -78,6 +77,9 @@ function OrderList(props) {
             numOfPages = Math.ceil(cnt / maxItemsInOnePage);
             updatePages();
             setOrderList(tmpOrderList);
+        }
+        else if(status === 2) {
+            
         }
         
         console.log(orderList);
@@ -91,7 +93,7 @@ function OrderList(props) {
         getAllOrders();
         updateOrderList();
         console.log(orderList);
-    }, [status, isReceive]);
+    }, [status]);
 
     return (
         <Fragment>
