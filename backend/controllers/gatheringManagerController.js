@@ -38,9 +38,13 @@ class GatheringManagerController {
   };
 
   showAllEmployee = async (req, res) => {
+    const data = req.query;
     try {
       const allEmployee = await Account.findAll({
-        where: {role_id: 6}
+        where: {
+          role_id: 6,
+          unit: data.unit
+        }
       });
       // return allEmployee;
       res.json(allEmployee);
