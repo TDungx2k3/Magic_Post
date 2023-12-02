@@ -83,10 +83,21 @@
     border-radius: 40px;
 }
 
-.inInventoryStatus {
+.confirmStatus {
     flex: 1;
     border-top-left-radius: 40px;
     border-bottom-left-radius: 40px;
+    padding: 12px 0px;
+}
+
+.confirmStatus:hover {
+    cursor: pointer;
+    background-color: #99a5ff;
+    color: #333;
+}
+
+.inInventoryStatus {
+    flex: 1;
     padding: 12px 0px;
 }
 

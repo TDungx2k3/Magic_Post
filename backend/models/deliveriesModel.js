@@ -38,7 +38,7 @@ const Delivery = sequelize.define(
             type: DataTypes.DATEONLY,
             allowNull: false,
         },
-        delver_status: {
+        deliver_status: {
             type: DataTypes.TINYINT(5),
             allowNull: false,
         }

@@ -7,13 +7,13 @@ import Order from "../Order";
 
 function OrderList(props) {
 
-    const [orderReceivedList, setOrderReceivedList] = useState([]);
-    const [orderSentList, setOrderSentList] = useState([]);
+    const [allOrdersList, setAllOrdersList] = useState([]);
     const [orderList, setOrderList] = useState([1]);
     const [isReceive, setIsReceive] = useState(true);
-    const [status, setStatus] = useState(true);
+    const [status, setStatus] = useState(0);
     const [rerender] = useState(true);
-    const unit = props.data;
+    const unit = props.data.unit;
+    const isTo = props.data.status;
 
     const maxItemsInOnePage = 5;
     let cnt = orderList.length;
@@ -37,107 +37,58 @@ function OrderList(props) {
         return `${year}-${month}-${day}`;
     };
 
-    const getOrderReceivedList = async() => {
+    const getAllOrders = async() => {
         try {
             await axios
-            .get("http://localhost:8080/leader/getOrderReceivedList",
+            .get("http://localhost:8080/transTeller/getToCustomerOrder",
             {
                 params: {
                     unit: unit,
-                    date: formatDate(new Date()),
                 }
             })
             .then((res) => {
                 console.log(res.data);
-                setOrderReceivedList(res.data);
             })
         } catch (error) {
             console.log(error);
         }
-    };
-
-    const getOrderSentList = async() => {
-        try {
-            await axios
-            .get("http://localhost:8080/leader/getOrderSentList",
-            {
-                params: {
-                    unit: unit,
-                    date: formatDate(new Date()),
-                }
-            })
-            .then((res) => {
-                console.log(res.data);
-                setOrderSentList(res.data);
-            })
-        } catch (error) {
-            console.log(error);
-        }
-    };
+    }
 
     const updateOrderList = async() => {
-        if (isReceive) {
-            if(status) {
-                let tmpOrderList = [];
-                for(let i = 0; i < orderReceivedList.length; i++) {
-                    if(orderReceivedList[i].deliver_status === 1) {
-                        tmpOrderList.push(orderReceivedList[i]);
-                    }
+        if(status) {
+            let tmpOrderList = [];
+            for(let i = 0; i < allOrdersList.length; i++) {
+                if(allOrdersList[i].deliver_status === 1) {
+                    tmpOrderList.push(allOrdersList[i]);
                 }
-                cnt = tmpOrderList.length;
-                numOfPages = Math.ceil(cnt / maxItemsInOnePage);
-                updatePages();
-                setOrderList(tmpOrderList);
             }
-            else {
-                let tmpOrderList = [];
-                for(let i = 0; i < orderReceivedList.length; i++) {
-                    if(orderReceivedList[i].deliver_status === 0) {
-                        tmpOrderList.push(orderReceivedList[i]);
-                    }
-                }
-                cnt = tmpOrderList.length;
-                numOfPages = Math.ceil(cnt / maxItemsInOnePage);
-                updatePages();
-                setOrderList(tmpOrderList);
-            }
-        } 
-        else {
-            if(status) {
-                let tmpOrderList = [];
-                for(let i = 0; i < orderSentList.length; i++) {
-                    if(orderSentList[i].deliver_status === 1) {
-                        tmpOrderList.push(orderSentList[i]);
-                    }
-                }
-                cnt = tmpOrderList.length;
-                numOfPages = Math.ceil(cnt / maxItemsInOnePage);
-                updatePages();
-                setOrderList(tmpOrderList);
-            }
-            else {
-                let tmpOrderList = [];
-                for(let i = 0; i < orderSentList.length; i++) {
-                    if(orderSentList[i].deliver_status === 0) {
-                        tmpOrderList.push(orderSentList[i]);
-                    }
-                }
-                cnt = tmpOrderList.length;
-                numOfPages = Math.ceil(cnt / maxItemsInOnePage);
-                updatePages();
-                setOrderList(tmpOrderList);
-            }
+            cnt = tmpOrderList.length;
+            numOfPages = Math.ceil(cnt / maxItemsInOnePage);
+            updatePages();
+            setOrderList(tmpOrderList);
         }
+        else {
+            let tmpOrderList = [];
+            for(let i = 0; i < allOrdersList.length; i++) {
+                if(allOrdersList[i].deliver_status === 0) {
+                    tmpOrderList.push(allOrdersList[i]);
+                }
+            }
+            cnt = tmpOrderList.length;
+            numOfPages = Math.ceil(cnt / maxItemsInOnePage);
+            updatePages();
+            setOrderList(tmpOrderList);
+        }
+        
         console.log(orderList);
     };
 
     useEffect(() => {
-        getOrderReceivedList();
-        getOrderSentList();
         updateOrderList();
     }, [rerender]);
 
     useEffect(() => {
+        getAllOrders();
         updateOrderList();
         console.log(orderList);
     }, [status, isReceive]);
@@ -145,47 +96,27 @@ function OrderList(props) {
     return (
         <Fragment>
             <div className={clsx(style.orderListContainer)}>
-                <div className={clsx(style.orderNav)}>
-                    <div className={clsx(style.orderReceivedNav, {[style.orderNavActive] : isReceive})}
-                    onClick={() => {
-                        setIsReceive(true);
-                        setStatus(true);
-                        updateOrderList();
-                    }}
-                    >
-                        Received Orders
-                    </div>
+                
 
-                    <div className={clsx(style.orderSentNav, {[style.orderNavActive] : !isReceive})}
-                    onClick={() => {
-                        setIsReceive(false);
-                        setStatus(true);
-                        updateOrderList();
-                    }}
-                    >
-                        Sent Orders
-                    </div>
-                </div>
-
-                <div className={clsx(style.content, {[style.contentWhenReceive] : isReceive, 
-                [style.contentWhenSent] : !isReceive})}>
+                <div className={clsx(style.content,)}>
                     <div className={clsx(style.functionContainer)}>
-                        <div className={clsx(style.dateFilter)}>
-                            <input type="date" className={clsx(style.dateFrom)}/>
-                            <input type="date" className={clsx(style.dateTo)}/>
-                            <div className={clsx(style.filterBtn)}>Filter</div>
-                        </div>
 
                         <div className={clsx(style.statusNav)}>
-                            <div className={clsx(style.inInventoryStatus, {[style.statusNavActive] : status === true})}
+                        <div className={clsx(style.confirmStatus, {[style.statusNavActive] : status === 0})}
                             onClick={() => {
-                                setStatus(true);
+                                setStatus(0);
+                                updateOrderList();
+                            }}
+                            >Comfirmation</div>
+                            <div className={clsx(style.inInventoryStatus, {[style.statusNavActive] : status === 1})}
+                            onClick={() => {
+                                setStatus(1);
                                 updateOrderList();
                             }}
                             >In inventory</div>
-                            <div className={clsx(style.shippingStatus, {[style.statusNavActive] : status === false})}
+                            <div className={clsx(style.shippingStatus, {[style.statusNavActive] : status === 2})}
                             onClick={() => {
-                                setStatus(false);
+                                setStatus(2);
                                 updateOrderList();
                             }}
                             >Shipping</div>
