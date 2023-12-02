@@ -47,7 +47,7 @@ function AccountList() {
                     };
                     return (
                         <ManageAccountEmployee key={index} data={accountData} />
-                    );
+                    );  
                 })
             }
         </Fragment>

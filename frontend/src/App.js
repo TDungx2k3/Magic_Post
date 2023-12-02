@@ -21,6 +21,7 @@ import CreateGather from './pages/Leader/subPages/CreateGather';
 import CreateTransaction from './pages/Leader/subPages/CreateTransaction';
 import DeliveryReceiptPage from './pages/DeliveryReceiptPage/';
 import TransactionTeller from './pages/TransactionTeller';
+import ToCustomer from './pages/TransactionTeller/SubPage/ToCustomer';
 
 export const LoginContext = createContext();
 
@@ -136,6 +137,7 @@ function App() {
             <Route path = '/createTransaction' element={<CreateTransaction/>} />
             <Route path = '/deliveryReceipt' element={<DeliveryReceiptPage/>} />
             <Route path = '/transactionTeller' element={<TransactionTeller/>} />
+            <Route path = '/transTellerToCus' element={<ToCustomer/>} />
 
           </Routes>
         </Router>
