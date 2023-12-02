@@ -1,32 +1,63 @@
 import clsx from "clsx";
 import style from "./ManageAccountEmployee.module.scss";
-import { Fragment, useState } from "react";
+import { Fragment, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import axios from "axios";
+import { useContext } from "react";
+import { LoginContext } from "../../../../App";
 
 function ManageAccountEmployee(props) {
-    const navigate = useNavigate(); // Fix: Add parentheses
+    const navigate = useNavigate();
     const [confirmHidden, setConfirmHidden] = useState(true);
     const [isHide, setIsHide] = useState(true);
+    const [hasFetchedData, setHasFetchedData] = useState(false);
+
+    const { userInfo } = useContext(LoginContext);
+    const [accountList, setAccountList] = useState([]);
+    const [rerender, setRerender] = useState(true);
+
+    const getAllAccounts = async () => {
+        try {
+            const response = await axios.get("http://localhost:8080/gathering-manager/get-all-employee", {
+                params: {
+                    unit: userInfo.uUnit
+                }
+            });
+            setAccountList(response.data);
+            console.log(response.data);
+            setHasFetchedData(true);
+        } catch (error) {
+            console.log(error);
+        }
+    }
+
+    useEffect(() => {
+        if (!hasFetchedData) {
+            getAllAccounts();
+            setRerender(false);
+        }
+    }, [rerender, hasFetchedData]);
+
+    console.log(props.data);
 
     return (
         <Fragment>
-
             <div className={clsx(style.container, props.className)}>
                 <div className={clsx(style["sub-container"])}>
                     <div className={clsx(style["account-container"])}>
                         <div>
                             <label htmlFor="Account ID">Account ID: </label>
-                            <span></span>
+                            <span>{props.data.accountId}</span>
                         </div>
 
                         <div>
                             <label htmlFor="Account Name">Account Name: </label>
-                            <span></span>
+                            <span>{props.data.accountName}</span>
                         </div>
 
                         <div>
                             <label htmlFor="Account Phone">Account Phone: </label>
-                            <span></span>
+                            <span>{props.data.accountPhone}</span>
                         </div>
                     </div>
 
@@ -48,7 +79,7 @@ function ManageAccountEmployee(props) {
                 </div>
             </div>
 
-            <div className={clsx(style.confirmDeleteGatherContainer, { [style.hidden]: confirmHidden, [style.hideAll]: isHide })}
+            <div className={clsx(style.confirmDeleteAccountContainer, { [style.hidden]: confirmHidden, [style.hideAll]: isHide })}
                 onClick={() => {
                     setConfirmHidden(true);
                 }}
