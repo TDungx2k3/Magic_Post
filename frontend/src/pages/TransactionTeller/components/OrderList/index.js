@@ -37,62 +37,119 @@ function OrderList(props) {
     };
 
     const getAllOrders = async() => {
-        try {
-            await axios
-            .get("http://localhost:8080/transTeller/getToCustomerOrder",
-            {
-                params: {
-                    unit: unit,
-                }
-            })
-            .then((res) => {
-                console.log(res.data);
-            })
-        } catch (error) {
-            console.log(error);
+        if(isTo) {
+            setStatus(0);
+            try {
+                await axios
+                .get("http://localhost:8080/transTeller/getToCustomerOrder",
+                {
+                    params: {
+                        unit: unit,
+                    }
+                })
+                .then((res) => {
+                    // console.log(res.data);
+                    setAllOrdersList(res.data);
+                })
+            } catch (error) {
+                console.log(error);
+            }
+        }   
+        else {
+            try {
+                setStatus(1);
+                await axios
+                .get("http://localhost:8080/transTeller/getFromCustomerOrder",
+                {
+                    params: {
+                        unit: unit,
+                    }
+                })
+                .then((res) => {
+                    console.log(res.data);
+                    setAllOrdersList(res.data);
+                })
+            } catch (error) {
+                console.log(error);
+            }
         }
     }
 
     const updateOrderList = async() => {
-        if(status === 0) {
-            let tmpOrderList = [];
-            for(let i = 0; i < allOrdersList.length; i++) {
-                if(allOrdersList[i].deliver_status === 1) {
-                    tmpOrderList.push(allOrdersList[i]);
+        if (isTo) {
+            if(status === 0) {
+                let tmpOrderList = [];
+                for(let i = 0; i < allOrdersList.length; i++) {
+                    if(allOrdersList[i].steps === 5) {
+                        tmpOrderList.push(allOrdersList[i]);
+                    }
                 }
+                cnt = tmpOrderList.length;
+                numOfPages = Math.ceil(cnt / maxItemsInOnePage);
+                updatePages();
+                setOrderList(tmpOrderList);
             }
-            cnt = tmpOrderList.length;
-            numOfPages = Math.ceil(cnt / maxItemsInOnePage);
-            updatePages();
-            setOrderList(tmpOrderList);
-        }
-        else if(status === 1) {
-            let tmpOrderList = [];
-            for(let i = 0; i < allOrdersList.length; i++) {
-                if(allOrdersList[i].deliver_status === 0) {
-                    tmpOrderList.push(allOrdersList[i]);
+            else if(status === 1) {
+                let tmpOrderList = [];
+                for(let i = 0; i < allOrdersList.length; i++) {
+                    if(allOrdersList[i].steps === 6) {
+                        tmpOrderList.push(allOrdersList[i]);
+                    }
                 }
+                cnt = tmpOrderList.length;
+                numOfPages = Math.ceil(cnt / maxItemsInOnePage);
+                updatePages();
+                setOrderList(tmpOrderList);
             }
-            cnt = tmpOrderList.length;
-            numOfPages = Math.ceil(cnt / maxItemsInOnePage);
-            updatePages();
-            setOrderList(tmpOrderList);
+            else if(status === 2) {
+                let tmpOrderList = [];
+                for(let i = 0; i < allOrdersList.length; i++) {
+                    if(allOrdersList[i].steps === 7) {
+                        tmpOrderList.push(allOrdersList[i]);
+                    }
+                }
+                cnt = tmpOrderList.length;
+                numOfPages = Math.ceil(cnt / maxItemsInOnePage);
+                updatePages();
+                setOrderList(tmpOrderList);
+            }
+        } else {
+            if(status === 1) {
+                let tmpOrderList = [];
+                for(let i = 0; i < allOrdersList.length; i++) {
+                    if(allOrdersList[i].steps === 0) {
+                        tmpOrderList.push(allOrdersList[i]);
+                    }
+                }
+                cnt = tmpOrderList.length;
+                numOfPages = Math.ceil(cnt / maxItemsInOnePage);
+                updatePages();
+                setOrderList(tmpOrderList);
+            }
+            else if(status === 2) {
+                let tmpOrderList = [];
+                for(let i = 0; i < allOrdersList.length; i++) {
+                    if(allOrdersList[i].steps === 1) {
+                        tmpOrderList.push(allOrdersList[i]);
+                    }
+                }
+                cnt = tmpOrderList.length;
+                numOfPages = Math.ceil(cnt / maxItemsInOnePage);
+                updatePages();
+                setOrderList(tmpOrderList);
+            }
         }
-        else if(status === 2) {
-            
-        }
-        
-        console.log(orderList);
+        // console.log(orderList);
     };
-
-    useEffect(() => {
-        updateOrderList();
-    }, [rerender]);
 
     useEffect(() => {
         getAllOrders();
         updateOrderList();
-        console.log(orderList);
+    }, [rerender]);
+
+    useEffect(() => {
+        
+        updateOrderList();
     }, [status]);
 
     return (
@@ -104,22 +161,22 @@ function OrderList(props) {
                     <div className={clsx(style.functionContainer)}>
 
                         <div className={clsx(style.statusNav)}>
-                        <div className={clsx(style.confirmStatus, {[style.statusNavActive] : status === 0})}
+                        <div className={clsx(style.confirmStatus, {[style.statusNavActive] : (isTo && status === 0)})}
                             onClick={() => {
                                 setStatus(0);
-                                updateOrderList();
+                                // updateOrderList();
                             }}
                             >Comfirmation</div>
                             <div className={clsx(style.inInventoryStatus, {[style.statusNavActive] : status === 1})}
                             onClick={() => {
                                 setStatus(1);
-                                updateOrderList();
+                                // updateOrderList();
                             }}
                             >In inventory</div>
                             <div className={clsx(style.shippingStatus, {[style.statusNavActive] : status === 2})}
                             onClick={() => {
                                 setStatus(2);
-                                updateOrderList();
+                                // updateOrderList();
                             }}
                             >Shipping</div>
                         </div>

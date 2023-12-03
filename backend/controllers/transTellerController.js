@@ -43,6 +43,36 @@ class transactionTellerController {
             };
         }
     };
+
+    getAllFromCustomerOrder = async(req, res) => {
+        let tId = req.query.unit;
+        let validateTIdRs = Joi.string().regex(/^t\d+$/).required().validate(tId);
+        if(validateTIdRs.error) {
+            console.log(validateTIdRs.error);
+        }
+        else {
+            try {
+                await sequelize.authenticate();
+                await sequelize.sync();
+                const ordersToCustomer = await Order.findAll({
+                    include: [{
+                        model: Delivery,
+                        where: {
+                            to_id: tId,
+                        }
+                    }],
+                    where: {
+                        steps: {
+                            [Op.between]: [0, 1]
+                        }
+                    }
+                });
+                res.json(ordersToCustomer);
+            } catch (error) {
+                console.log(error);
+            };
+        }
+    };
 };
 
 module.exports = new transactionTellerController();

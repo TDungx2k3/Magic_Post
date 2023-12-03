@@ -45,7 +45,9 @@ function TransactionTeller() {
                 <div>
                     <h1>Manage Orders</h1>
 
-                    <div>
+                    <div onClick={() => {
+                        navigate("/transTellerFromCus");
+                    }}>
                         <h2>Orders From Customers</h2>
                     </div>
 
