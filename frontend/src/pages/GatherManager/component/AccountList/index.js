@@ -34,22 +34,25 @@ function AccountList() {
     }, [rerender, hasFetchedData]);
 
     return (
+        // <Fragment>
+        //     {
+        //         accountList.map((accounts, index) => {
+        //             let accountData = {
+        //                 accountId: accounts.account_id,
+        //                 accountName: accounts.account_name,
+        //                 accountPhone: accounts.account_phone,
+        //                 accountPassword: accounts.account_password,
+        //                 roleId: accounts.role_id,
+        //                 unit: accounts.unit
+        //             };
+        //             return (
+        //                 <ManageAccountEmployee key={index} data={accountData} />
+        //             );  
+        //         })
+        //     }
+        // </Fragment>
         <Fragment>
-            {
-                accountList.map((accounts, index) => {
-                    let accountData = {
-                        accountId: accounts.account_id,
-                        accountName: accounts.account_name,
-                        accountPhone: accounts.account_phone,
-                        accountPassword: accounts.account_password,
-                        roleId: accounts.role_id,
-                        unit: accounts.unit
-                    };
-                    return (
-                        <ManageAccountEmployee key={index} data={accountData} />
-                    );  
-                })
-            }
+            <ManageAccountEmployee accountList={accountList} />
         </Fragment>
     );
 }

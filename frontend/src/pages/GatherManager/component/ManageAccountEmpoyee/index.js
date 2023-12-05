@@ -16,6 +16,8 @@ function ManageAccountEmployee(props) {
     const [accountList, setAccountList] = useState([]);
     const [rerender, setRerender] = useState(true);
 
+    const [accountId, setAccountId] = useState();
+
     const getAllAccounts = async () => {
         try {
             const response = await axios.get("http://localhost:8080/gathering-manager/get-all-employee", {
@@ -31,6 +33,17 @@ function ManageAccountEmployee(props) {
         }
     }
 
+    const deleteAccountById = async (accountId) => {
+        try {
+            await axios.post("http://localhost:8080/gathering-manager/delete-account-by-id", {
+                account_id: accountId
+            });
+            getAllAccounts();
+        } catch (err) {
+            console.log(err);
+        }
+    }    
+
     useEffect(() => {
         if (!hasFetchedData) {
             getAllAccounts();
@@ -38,45 +51,47 @@ function ManageAccountEmployee(props) {
         }
     }, [rerender, hasFetchedData]);
 
-    console.log(props.data);
-
     return (
         <Fragment>
             <div className={clsx(style.container, props.className)}>
-                <div className={clsx(style["sub-container"])}>
-                    <div className={clsx(style["account-container"])}>
-                        <div>
-                            <label htmlFor="Account ID">Account ID: </label>
-                            <span>{props.data.accountId}</span>
+                {accountList.map((account, index) => (
+                    <div className={clsx(style["sub-container"])} key={index}>
+                        <div className={clsx(style["account-container"])}>
+                            <div>
+                                <label htmlFor="Account ID">Account ID: </label>
+                                <span>{account.account_id}</span>
+                            </div>
+
+                            <div>
+                                <label htmlFor="Account Name">Account Name: </label>
+                                <span>{account.account_name}</span>
+                            </div>
+
+                            <div>
+                                <label htmlFor="Account Phone">Account Phone: </label>
+                                <span>{account.account_phone}</span>
+                            </div>
                         </div>
 
-                        <div>
-                            <label htmlFor="Account Name">Account Name: </label>
-                            <span>{props.data.accountName}</span>
-                        </div>
+                        <div className={clsx(style["btns-container"])}>
+                            <div
+                                id={clsx(style.delete)}
+                                onClick={() => {
+                                    setConfirmHidden(false);
+                                    setIsHide(false);
+                                    setAccountId(account.account_id);
+                                    console.log(accountId);
+                                }}
+                            >
+                                <i className="ti-trash"></i>
+                            </div>
 
-                        <div>
-                            <label htmlFor="Account Phone">Account Phone: </label>
-                            <span>{props.data.accountPhone}</span>
+                            <div id={clsx(style.modify)}>
+                                <i className="ti-reload"></i>
+                            </div>
                         </div>
                     </div>
-
-                    <div className={clsx(style["btns-container"])}>
-                        <div
-                            id={clsx(style.delete)}
-                            onClick={() => {
-                                setConfirmHidden(false);
-                                setIsHide(false);
-                            }}
-                        >
-                            <i className="ti-trash"></i>
-                        </div>
-
-                        <div id={clsx(style.modify)}>
-                            <i className="ti-reload"></i>
-                        </div>
-                    </div>
-                </div>
+                ))}
             </div>
 
             <div className={clsx(style.confirmDeleteAccountContainer, { [style.hidden]: confirmHidden, [style.hideAll]: isHide })}
@@ -95,8 +110,8 @@ function ManageAccountEmployee(props) {
                         <div className={clsx(style.yesBtn)}
                             onClick={async (e) => {
                                 if (window.confirm("Do you want to delete this account?")) {
-                                    // await deleteGather();
-                                    // await deleteAllAccountInGather();
+                                    console.log(accountId);
+                                    await deleteAccountById(accountId);
                                     setConfirmHidden(true);
                                     navigate("/");
                                     setTimeout(() => {
