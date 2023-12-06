@@ -137,9 +137,16 @@ function Login() {
               uRole: response.data.accounts.role_id,
               uUnit: response.data.accounts.unit
             });
-
-            localStorage.setItem('isLogin', JSON.stringify(isLogin));
-            localStorage.setItem('userInfo', JSON.stringify(userInfo));
+            localStorage.setItem("outTime", JSON.stringify(new Date()));
+            localStorage.setItem('isLogin', JSON.stringify(true));
+            localStorage.setItem('userInfo', JSON.stringify({
+              uId: response.data.accounts.account_id,
+              uName: response.data.accounts.account_name,
+              uPhone: inputs.phone,
+              uPassword: response.data.accounts.account_password,
+              uRole: response.data.accounts.role_id,
+              uUnit: response.data.accounts.unit
+            }));
             // alert("Login successfully");
           }
           setMessage(response.data.message);

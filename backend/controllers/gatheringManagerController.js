@@ -38,14 +38,18 @@ class GatheringManagerController {
   };
 
   showAllEmployee = async (req, res) => {
+    const data = req.query;
     try {
       const allEmployee = await Account.findAll({
-        where: {role_id: 6}
+        where: {
+          role_id: 6,
+          unit: data.unit
+        }
       });
       // return allEmployee;
       res.json(allEmployee);
     }
-    catch(err) {
+    catch (err) {
       console.log(err);
       res.send(err);
     }
@@ -54,14 +58,14 @@ class GatheringManagerController {
   // Chưa test
   deleteAccountEmployee = async (req, res) => {
     try {
-      const data = req.body;
-      Account.destroy({
-        where: {account_id: data.accountId}
-      })
-    }
-    catch(err) {
-      console.log(err);
-      res.send(err);
+      await Account.destroy({
+        where: {
+          account_id: req.body.account_id,
+        }
+      });
+      res.send();
+    } catch (error) {
+      console.error(error);
     }
   }
 
@@ -69,7 +73,7 @@ class GatheringManagerController {
     try {
 
     }
-    catch(err) {
+    catch (err) {
       console.log(err);
       res.send(err);
     }
@@ -78,7 +82,7 @@ class GatheringManagerController {
   test = async (req, res) => {
     const data = await sequelize.query(
       "SELECT * FROM accounts INNER JOIN gatherings ON accounts.account_id = gatherings.account_id",
-      {raw: true,}
+      { raw: true, }
     );
     // const data = await sequelize.query('SELECT orders.order_id FROM orders INNER JOIN deliveries ON orders.order_id = deliveries.order_id');
     console.log(data[0]);

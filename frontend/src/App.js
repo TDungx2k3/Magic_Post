@@ -1,8 +1,5 @@
 import './App.css';
 import './assets/icons/themify-icons/themify-icons.css';
-import Slider from './components/Slider';
-import NavBar from './components/NavBar';
-import Footer from './components/Footer';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import AOS from 'aos';
 import 'aos/dist/aos.css'; 
@@ -12,7 +9,6 @@ import AboutUs from "./pages/AboutUs"
 import Leader from './pages/Leader';
 import TransactionManager from './pages/TransactionManager';
 import GatherManager from './pages/GatherManager';
-import PointsInfo from './pages/Leader/components/PointsInfo';
 import { createContext, useEffect, useState } from 'react';
 import ManageGather from './pages/Leader/subPages/ManageGather';
 import ModifyGather from './pages/Leader/subPages/ModifyGather';
@@ -21,6 +17,9 @@ import CreateGather from './pages/Leader/subPages/CreateGather';
 import CreateTransaction from './pages/Leader/subPages/CreateTransaction';
 import DeliveryReceiptPage from './pages/DeliveryReceiptPage/';
 import CreateOrderPage from './pages/TransactionTeller/SubPage/CreateOrder';
+import TransactionTeller from './pages/TransactionTeller';
+import ToCustomer from './pages/TransactionTeller/SubPage/ToCustomer';
+import FromCustomer from './pages/TransactionTeller/SubPage/FromCustomer';
 
 export const LoginContext = createContext();
 
@@ -42,7 +41,7 @@ function App() {
     let nowTime = new Date();
     const storedOutTime = new Date(JSON.parse(localStorage.getItem('outTime')));
     // console.log(typeof(storedOutTime));
-    console.log(nowTime - storedOutTime );
+    // console.log(nowTime - storedOutTime );
     if(nowTime - storedOutTime >= 3600000) {
       setIsLogin(false);
       setUserInfo({
@@ -66,6 +65,7 @@ function App() {
     else {
       const storedIsLogin = JSON.parse(localStorage.getItem('isLogin'));
       const storedUserInfo = JSON.parse(localStorage.getItem('userInfo'));
+      localStorage.setItem("outTime", JSON.stringify(new Date()));
       console.log(storedIsLogin);
       console.log(storedUserInfo);
       if (storedIsLogin) {
@@ -135,6 +135,10 @@ function App() {
             <Route path = '/createTransaction' element={<CreateTransaction/>} />
             <Route path = '/deliveryReceipt' element={<DeliveryReceiptPage/>} />
             <Route path = '/createOrder' element={<CreateOrderPage/>} />
+            <Route path = '/transactionTeller' element={<TransactionTeller/>} />
+            <Route path = '/transTellerToCus' element={<ToCustomer/>} />
+            <Route path = '/transTellerFromCus' element={<FromCustomer/>} />
+
           </Routes>
         </Router>
       </div>

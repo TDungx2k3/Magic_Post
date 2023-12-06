@@ -12,6 +12,7 @@ function StatisticOrdersSent(props) {
                 "http://localhost:8080/transaction-manager/get-order-sent"
             );
             setData(response.data[0]);
+            console.log(response.data[0]);
         } catch (err) {
             console.error(err);
         }

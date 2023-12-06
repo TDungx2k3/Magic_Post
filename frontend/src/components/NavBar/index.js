@@ -88,8 +88,14 @@ function NavBar() {
                         if(userInfo.uRole === 1) {
                             navigate("/leader");
                         }
-                        if(userInfo.uRole === 2) {
+                        else if(userInfo.uRole === 2) {
                             navigate("/transaction-manager");
+                        }
+                        else if(userInfo.uRole === 3) {
+                            navigate("/transactionTeller");
+                        }
+                        else if(userInfo.uRole === 5) {
+                            navigate("/gather-manager");
                         }
                     }
                 }
