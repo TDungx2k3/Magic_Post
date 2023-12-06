@@ -1,0 +1,31 @@
+// .customer_name { font-size: medium;}
+// .customer_phone { font-size: medium;}
+// .receiver_name { font-size: medium;}
+// .receiver_phone { font-size: medium;}
+// .receiver_address { font-size: medium;}
+// .date { font-size: medium;}
+// .weight { font-size: medium;}
+// .price { font-size: medium;}
+
+.container {
+    float: left;
+    width: 100vw;
+    height: 100vh;
+    --tw-bg-opacity: 1;
+    background-color: rgb(235 243 255/var(--tw-bg-opacity));
+}
+
+input {
+    border: 3px solid #ced4da;
+    margin-top: 10px;
+    width: 62%;
+    height: 20px;
+    border-radius: 40px;
+    padding: 10px;
+    padding-left: 30px;
+}
+
+label {
+    font-size: large;
+
+}

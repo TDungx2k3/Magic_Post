@@ -20,6 +20,7 @@ import ModifyTransaction from './pages/Leader/subPages/ModifyTransaction';
 import CreateGather from './pages/Leader/subPages/CreateGather';
 import CreateTransaction from './pages/Leader/subPages/CreateTransaction';
 import DeliveryReceiptPage from './pages/DeliveryReceiptPage/';
+import CreateOrderPage from './pages/TransactionTeller/SubPage/CreateOrder';
 
 export const LoginContext = createContext();
 
@@ -133,6 +134,7 @@ function App() {
             <Route path = '/createGather' element={<CreateGather/>} />
             <Route path = '/createTransaction' element={<CreateTransaction/>} />
             <Route path = '/deliveryReceipt' element={<DeliveryReceiptPage/>} />
+            <Route path = '/createOrder' element={<CreateOrderPage/>} />
           </Routes>
         </Router>
       </div>
