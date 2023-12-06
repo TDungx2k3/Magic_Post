@@ -1,0 +1,49 @@
+.container {
+    font-size: 24px;
+    font-family: Roboto, sans-serif;
+    font-weight: 700;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.form-container div {
+    margin-top: 5%;
+}
+
+.form-container input {
+    width: 80%;
+    height: 40px;
+    margin-top: 5px;
+}
+
+.btns-container {
+    margin-top: 10%;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+    width: 50%;
+}
+
+#save-btn {
+    background-color: #00FF00;
+    padding: 12px 20px;
+    border-radius: 24px;
+    cursor: pointer;
+    color: #FFFFFF;
+    width: 200px;
+    height: 50px;
+    font-size: 20px;
+}
+
+#cancel-btn {
+    background-color: #FF0000;
+    padding: 12px 20px;
+    border-radius: 24px;
+    cursor: pointer;
+    color: #FFFFFF;
+    width: 200px;
+    height: 50px;
+    font-size: 20px;
+}
