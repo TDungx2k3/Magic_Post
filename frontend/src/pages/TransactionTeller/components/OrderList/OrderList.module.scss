@@ -101,6 +101,11 @@
     padding: 12px 0px;
 }
 
+.addBorderRadius {
+    border-top-left-radius: 40px;
+    border-bottom-left-radius: 40px;
+}
+
 .inInventoryStatus:hover {
     cursor: pointer;
     background-color: #99a5ff;
@@ -146,4 +151,8 @@
 .pageBtnActive {
     background-color: rgb(84, 84, 84);
     color: #fff;
+}
+
+.hidden {
+    display: none !important;
 }

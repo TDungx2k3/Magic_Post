@@ -40,7 +40,7 @@ function Order(props) {
                     </div>
                 </div>
 
-                <div>
+                <div className={clsx(style.orderInfoContainer)}>
                     <div className={clsx(style.orderInfo)}>
                         
                         <div className={clsx(style.orderWeight)}>
@@ -65,11 +65,18 @@ function Order(props) {
                     </div>
 
                     <div className={clsx(style.orderStatus)}>
-                        <div className={clsx(style.statusImg)}>
-
+                        <div className={clsx(style.cfStatus, {[style.hidden] : props.data.status !== 5})}>
+                            <div className={clsx(style.successStatus)}>Success</div>
+                            <div className={clsx(style.pendingStatus)}>Pending</div>
                         </div>
-                        <div className={clsx(style.statusTxt)}>
 
+                        <div className={clsx(style.inStatus, {[style.hidden] : props.data.status !== 0 && props.data.status !== 6})}>
+                            <div className={clsx(style.moveAct)}>Move</div>
+                        </div>
+
+                        <div className={clsx(style.shippingStatus, {[style.hidden] : props.data.status !== 1 && props.data.status !== 7})}>
+                            <div className={clsx(style.shLost)}>Lost</div>
+                            <div className={clsx(style.cusDenied)}>Denied</div>
                         </div>
                     </div>
                 </div>
