@@ -8,8 +8,8 @@ import Order from "../Order";
 function OrderList(props) {
 
     const [allOrdersList, setAllOrdersList] = useState([]);
-    const [orderList, setOrderList] = useState([1]);
-    const [status, setStatus] = useState(0);
+    const [orderList, setOrderList] = useState([]);
+    const [status, setStatus] = useState(-1);
     const [rerender] = useState(true);
     const unit = props.data.unit;
     const isTo = props.data.status;
@@ -38,7 +38,6 @@ function OrderList(props) {
 
     const getAllOrders = async() => {
         if(isTo) {
-            setStatus(0);
             try {
                 await axios
                 .get("http://localhost:8080/transTeller/getToCustomerOrder",
@@ -48,8 +47,9 @@ function OrderList(props) {
                     }
                 })
                 .then((res) => {
-                    // console.log(res.data);
+                    console.log(res.data);
                     setAllOrdersList(res.data);
+                    setStatus(0);
                 })
             } catch (error) {
                 console.log(error);
@@ -57,7 +57,7 @@ function OrderList(props) {
         }   
         else {
             try {
-                setStatus(1);
+                
                 await axios
                 .get("http://localhost:8080/transTeller/getFromCustomerOrder",
                 {
@@ -66,8 +66,9 @@ function OrderList(props) {
                     }
                 })
                 .then((res) => {
-                    console.log(res.data);
+                    // console.log(res.data);
                     setAllOrdersList(res.data);
+                    setStatus(1);
                 })
             } catch (error) {
                 console.log(error);
@@ -75,7 +76,7 @@ function OrderList(props) {
         }
     }
 
-    const updateOrderList = async() => {
+    const updateOrderList = () => {
         if (isTo) {
             if(status === 0) {
                 let tmpOrderList = [];
@@ -139,7 +140,6 @@ function OrderList(props) {
                 setOrderList(tmpOrderList);
             }
         }
-        // console.log(orderList);
     };
 
     useEffect(() => {
@@ -161,13 +161,13 @@ function OrderList(props) {
                     <div className={clsx(style.functionContainer)}>
 
                         <div className={clsx(style.statusNav)}>
-                        <div className={clsx(style.confirmStatus, {[style.statusNavActive] : (isTo && status === 0)})}
+                            <div className={clsx(style.confirmStatus, {[style.statusNavActive] : (status === 0), [style.hidden] : !isTo})}
                             onClick={() => {
                                 setStatus(0);
                                 // updateOrderList();
                             }}
                             >Comfirmation</div>
-                            <div className={clsx(style.inInventoryStatus, {[style.statusNavActive] : status === 1})}
+                            <div className={clsx(style.inInventoryStatus, {[style.statusNavActive] : status === 1, [style.addBorderRadius] : !isTo})}
                             onClick={() => {
                                 setStatus(1);
                                 // updateOrderList();
@@ -187,13 +187,14 @@ function OrderList(props) {
                             orderList.map((order, index) => {
                                 let orderData = {
                                     sender_name: order.customer_name,
-                                    sender_phone: order.custom_phone,
+                                    sender_phone: order.customer_phone,
                                     receiver_name: order.receiver_name,
                                     receiver_phone: order.receiver_phone,
                                     receiver_address: order.receiver_address,
                                     order_weight: order.weight,
                                     order_price: order.price,
-                                    order_date: order.date,
+                                    order_date: order.deliveries[0].date,
+                                    status: order.steps,
                                 };
                                 if(index >= (pageNum-1) * maxItemsInOnePage 
                                 && index < (pageNum * maxItemsInOnePage))
