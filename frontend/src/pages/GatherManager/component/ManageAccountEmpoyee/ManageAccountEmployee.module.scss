@@ -9,6 +9,7 @@
   width: 80%;
   border-radius: 60px;
   display: flex;
+  flex-direction: column;
 }
 
 .sub-container {
@@ -47,7 +48,7 @@
 .btns-container {
   display: flex;
   align-items: center;
-  margin-left: 53%;
+  // margin-left: 53%;
   margin-right: 1%;
 }
 

@@ -6,5 +6,6 @@ const gatheringManagerController = require('../controllers/gatheringManagerContr
 
 router.post('createAccount', gatheringManagerController.createAccountEmployee);
 router.get("/get-all-employee", gatheringManagerController.showAllEmployee);
+router.post("/delete-account-by-id", gatheringManagerController.deleteAccountEmployee);
 
 module.exports = router;
