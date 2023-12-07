@@ -76,7 +76,7 @@ function ModifyAccountEmployee() {
                 }
             });
             if (inputs.accountPhone === thisPhone.data[0].account_phone) {
-                if (inputs.accountName !== "" && inputs.accountPhone !== "" && inputs.accountPassword !== "") {
+                if (inputs.accountName !== "" && inputs.accountPhone !== "" && inputs.accountPassword !== "" && errorForName === false && errorForPhone === false && errorForPassword === false) {
                     axios.post("http://localhost:8080/gathering-manager/update-account-by-id", {
                         account_id: accountId,
                         account_name: inputs.accountName,
@@ -104,7 +104,7 @@ function ModifyAccountEmployee() {
                 });
                 console.log(checkDuplicate);
                 if (checkDuplicate.data.message === "Phone number does not exist") {
-                    if (inputs.accountName !== "" && inputs.accountPhone !== "" && inputs.accountPassword !== "") {
+                    if (inputs.accountName !== "" && inputs.accountPhone !== "" && inputs.accountPassword !== "" && errorForName === false && errorForPhone === false && errorForPassword === false) {
                         axios.post("http://localhost:8080/gathering-manager/update-account-by-id", {
                             account_id: accountId,
                             account_name: inputs.accountName,
