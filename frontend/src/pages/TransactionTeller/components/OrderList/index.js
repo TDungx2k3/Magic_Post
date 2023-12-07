@@ -1,9 +1,10 @@
 import clsx from "clsx"
 import style from "./OrderList.module.scss"
-import { Fragment, useEffect, useState } from "react";
+import { Fragment, createContext, useEffect, useState } from "react";
 import axios from "axios";
 import Order from "../Order";
 
+export const OrderListStatusContext = createContext();
 
 function OrderList(props) {
 
@@ -28,7 +29,7 @@ function OrderList(props) {
         setPages(tmpPages);
     }
 
-    function formatDate(date) {
+    function Date(date) {
         const year = date.getFullYear();
         const month = String(date.getMonth() + 1).padStart(2, '0');
         const day = String(date.getDate()).padStart(2, '0');
@@ -152,6 +153,21 @@ function OrderList(props) {
         updateOrderList();
     }, [status]);
 
+    const updateFr = (i) => {
+        console.log(i);
+        let tmp = allOrdersList;
+        tmp[i].steps = tmp[i].steps + 1;
+        setAllOrdersList(tmp);
+        setRe(!re);
+    }
+
+    const [re, setRe] = useState(true);
+
+    useEffect(() => {
+        console.log(1);
+        updateOrderList();
+    }, [re]);
+
     return (
         <Fragment>
             <div className={clsx(style.orderListContainer)}>
@@ -186,6 +202,8 @@ function OrderList(props) {
                         {
                             orderList.map((order, index) => {
                                 let orderData = {
+                                    order_id: order.order_id,
+                                    order_unit: order.order_status,
                                     sender_name: order.customer_name,
                                     sender_phone: order.customer_phone,
                                     receiver_name: order.receiver_name,
@@ -199,9 +217,12 @@ function OrderList(props) {
                                 if(index >= (pageNum-1) * maxItemsInOnePage 
                                 && index < (pageNum * maxItemsInOnePage))
                                 return(
-                                    <div className={clsx(style.orderContainer)} key={index}>
-                                        <Order data = {orderData} />
-                                    </div>
+                                    <OrderListStatusContext.Provider value={{updateFr, status}} key={index}>
+                                        <div className={clsx(style.orderContainer)}>
+                                            <Order data = {orderData} addition={index}/>
+                                        </div>
+                                    </OrderListStatusContext.Provider>
+                                    
                                 );
                             })
                         }
