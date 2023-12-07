@@ -5,6 +5,7 @@ const { Gathering } = require("../models/gatheringsModel");
 const { Delivery } = require("../models/deliveriesModel");
 const { Order } = require("../models/ordersModel");
 const { raw } = require("mysql2");
+const bcrypt = require('bcrypt');
 
 // Gathering.belongsTo(Account, {
 //     foreignKey: 'account_id',
@@ -66,6 +67,46 @@ class GatheringManagerController {
       res.send();
     } catch (error) {
       console.error(error);
+    }
+  }
+
+  updateAccountEmployee = async (req, res) => {
+    const data = req.body;
+    
+    try {
+        const saltRounds = 10;
+        const plaintextPassword = data.account_password;
+
+        const hash = await bcrypt.hash(plaintextPassword, saltRounds);
+
+        await Account.update({
+            account_name: data.account_name,
+            account_phone: data.account_phone,
+            account_password: hash
+        }, {
+            where: {
+                account_id: data.account_id,
+            }
+        });
+        res.status(200).send('Account updated successfully');
+    } catch (err) {
+        console.error(err);
+        res.status(500).send('Internal Server Error');
+    }
+};
+
+  getDefaultAccountById = async (req, res) => {
+    const data = req.query;
+    try {
+      const account = await Account.findAll({
+        where: {
+          account_id: data.account_id
+        }
+      });
+      res.json(account)
+    }
+    catch (err) {
+      console.error(err);
     }
   }
 
