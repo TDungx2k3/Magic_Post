@@ -17,6 +17,7 @@ import ModifyTransaction from './pages/Leader/subPages/ModifyTransaction';
 import CreateGather from './pages/Leader/subPages/CreateGather';
 import CreateTransaction from './pages/Leader/subPages/CreateTransaction';
 import DeliveryReceiptPage from './pages/DeliveryReceiptPage/';
+import CreateOrderPage from './pages/TransactionTeller/SubPage/CreateOrder';
 import TransactionTeller from './pages/TransactionTeller';
 import ToCustomer from './pages/TransactionTeller/SubPage/ToCustomer';
 import FromCustomer from './pages/TransactionTeller/SubPage/FromCustomer';
@@ -135,6 +136,7 @@ function App() {
             <Route path = '/createGather' element={<CreateGather/>} />
             <Route path = '/createTransaction' element={<CreateTransaction/>} />
             <Route path = '/deliveryReceipt' element={<DeliveryReceiptPage/>} />
+            <Route path = '/createOrder' element={<CreateOrderPage/>} />
             <Route path = '/transactionTeller' element={<TransactionTeller/>} />
             <Route path = '/transTellerToCus' element={<ToCustomer/>} />
             <Route path = '/transTellerFromCus' element={<FromCustomer/>} />

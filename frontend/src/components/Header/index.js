@@ -4,12 +4,12 @@ import Slider from "../Slider"
 import clsx from "clsx";
 import style from "./Header.module.scss"
 import { LoginContext } from "../../App";
-function Header() {
+function Header({showNavBar = true}) {
 
     return (
         <Fragment>
             <NavBar />
-            <Slider />
+            {showNavBar && <Slider />}
         </Fragment>
     );
 }
