@@ -6,6 +6,10 @@ const transactionTellerController = require('../controllers/transTellerControlle
 
 router.get("/getToCustomerOrder", transactionTellerController.getAllToCustomerOrder);
 router.get("/getFromCustomerOrder", transactionTellerController.getAllFromCustomerOrder);
+router.post("/createDeliveryStep1", transactionTellerController.transToGatherStep1);
+router.post("/transToCustomerStep7", transactionTellerController.transToCustomerStep7);
+router.post("/confirmSuccessStep5", transactionTellerController.confirmSuccessStep5);
+router.post("/customerAccept", transactionTellerController.customerAccept);
 router.get("/getPathStart", transactionTellerController.getPathStart);
 router.get("/getPathEnd", transactionTellerController.getPathEnd);
 router.post("/createOrder", transactionTellerController.createOrder);

@@ -1,15 +1,16 @@
 import clsx from "clsx"
 import style from "./OrderList.module.scss"
-import { Fragment, useEffect, useState } from "react";
+import { Fragment, createContext, useEffect, useState } from "react";
 import axios from "axios";
 import Order from "../Order";
 
+export const OrderListStatusContext = createContext();
 
 function OrderList(props) {
 
     const [allOrdersList, setAllOrdersList] = useState([]);
-    const [orderList, setOrderList] = useState([1]);
-    const [status, setStatus] = useState(0);
+    const [orderList, setOrderList] = useState([]);
+    const [status, setStatus] = useState(-1);
     const [rerender] = useState(true);
     const unit = props.data.unit;
     const isTo = props.data.status;
@@ -28,7 +29,7 @@ function OrderList(props) {
         setPages(tmpPages);
     }
 
-    function formatDate(date) {
+    function Date(date) {
         const year = date.getFullYear();
         const month = String(date.getMonth() + 1).padStart(2, '0');
         const day = String(date.getDate()).padStart(2, '0');
@@ -38,7 +39,6 @@ function OrderList(props) {
 
     const getAllOrders = async() => {
         if(isTo) {
-            setStatus(0);
             try {
                 await axios
                 .get("http://localhost:8080/transTeller/getToCustomerOrder",
@@ -48,8 +48,9 @@ function OrderList(props) {
                     }
                 })
                 .then((res) => {
-                    // console.log(res.data);
+                    console.log(res.data);
                     setAllOrdersList(res.data);
+                    setStatus(0);
                 })
             } catch (error) {
                 console.log(error);
@@ -57,7 +58,7 @@ function OrderList(props) {
         }   
         else {
             try {
-                setStatus(1);
+                
                 await axios
                 .get("http://localhost:8080/transTeller/getFromCustomerOrder",
                 {
@@ -66,8 +67,9 @@ function OrderList(props) {
                     }
                 })
                 .then((res) => {
-                    console.log(res.data);
+                    // console.log(res.data);
                     setAllOrdersList(res.data);
+                    setStatus(1);
                 })
             } catch (error) {
                 console.log(error);
@@ -75,7 +77,7 @@ function OrderList(props) {
         }
     }
 
-    const updateOrderList = async() => {
+    const updateOrderList = () => {
         if (isTo) {
             if(status === 0) {
                 let tmpOrderList = [];
@@ -139,7 +141,6 @@ function OrderList(props) {
                 setOrderList(tmpOrderList);
             }
         }
-        // console.log(orderList);
     };
 
     useEffect(() => {
@@ -152,6 +153,21 @@ function OrderList(props) {
         updateOrderList();
     }, [status]);
 
+    const updateFr = (i) => {
+        console.log(i);
+        let tmp = allOrdersList;
+        tmp[i].steps = tmp[i].steps + 1;
+        setAllOrdersList(tmp);
+        setRe(!re);
+    }
+
+    const [re, setRe] = useState(true);
+
+    useEffect(() => {
+        console.log(1);
+        updateOrderList();
+    }, [re]);
+
     return (
         <Fragment>
             <div className={clsx(style.orderListContainer)}>
@@ -161,13 +177,13 @@ function OrderList(props) {
                     <div className={clsx(style.functionContainer)}>
 
                         <div className={clsx(style.statusNav)}>
-                        <div className={clsx(style.confirmStatus, {[style.statusNavActive] : (isTo && status === 0)})}
+                            <div className={clsx(style.confirmStatus, {[style.statusNavActive] : (status === 0), [style.hidden] : !isTo})}
                             onClick={() => {
                                 setStatus(0);
                                 // updateOrderList();
                             }}
                             >Comfirmation</div>
-                            <div className={clsx(style.inInventoryStatus, {[style.statusNavActive] : status === 1})}
+                            <div className={clsx(style.inInventoryStatus, {[style.statusNavActive] : status === 1, [style.addBorderRadius] : !isTo})}
                             onClick={() => {
                                 setStatus(1);
                                 // updateOrderList();
@@ -186,21 +202,27 @@ function OrderList(props) {
                         {
                             orderList.map((order, index) => {
                                 let orderData = {
+                                    order_id: order.order_id,
+                                    order_unit: order.order_status,
                                     sender_name: order.customer_name,
-                                    sender_phone: order.custom_phone,
+                                    sender_phone: order.customer_phone,
                                     receiver_name: order.receiver_name,
                                     receiver_phone: order.receiver_phone,
                                     receiver_address: order.receiver_address,
                                     order_weight: order.weight,
                                     order_price: order.price,
-                                    order_date: order.date,
+                                    order_date: order.deliveries[0].date,
+                                    status: order.steps,
                                 };
                                 if(index >= (pageNum-1) * maxItemsInOnePage 
                                 && index < (pageNum * maxItemsInOnePage))
                                 return(
-                                    <div className={clsx(style.orderContainer)} key={index}>
-                                        <Order data = {orderData} />
-                                    </div>
+                                    <OrderListStatusContext.Provider value={{updateFr, status}} key={index}>
+                                        <div className={clsx(style.orderContainer)}>
+                                            <Order data = {orderData} addition={index}/>
+                                        </div>
+                                    </OrderListStatusContext.Provider>
+                                    
                                 );
                             })
                         }

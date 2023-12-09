@@ -5,6 +5,7 @@ import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { useContext } from "react";
 import { LoginContext } from "../../../../App";
+import { Link } from "react-router-dom";
 
 function ManageAccountEmployee(props) {
     const navigate = useNavigate();
@@ -42,7 +43,7 @@ function ManageAccountEmployee(props) {
         } catch (err) {
             console.log(err);
         }
-    }    
+    }
 
     useEffect(() => {
         if (!hasFetchedData) {
@@ -86,9 +87,11 @@ function ManageAccountEmployee(props) {
                                 <i className="ti-trash"></i>
                             </div>
 
-                            <div id={clsx(style.modify)}>
-                                <i className="ti-reload"></i>
-                            </div>
+                            <Link to={`/modify-account?account_id=${account.account_id}`}>
+                                <div id={clsx(style.modify)}>
+                                    <i className="ti-reload"></i>
+                                </div>
+                            </Link>
                         </div>
                     </div>
                 ))}

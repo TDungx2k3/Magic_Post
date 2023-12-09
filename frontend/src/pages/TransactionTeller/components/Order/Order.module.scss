@@ -12,7 +12,6 @@
 
 .orderContainer:hover {
     background-color: #4b5de8;
-    cursor: pointer;
     animation: scaleUp 0.5s ease forwards;
 }
 
@@ -20,7 +19,13 @@
     animation: scaleDown 0.5s ease forwards;
 }
 
+.orderInfoContainer {
+    display: flex;
+    flex-direction: row;
+}
+
 .orderInfo {
+    flex: 1;
     color: white;
     font-size: 16px;
     text-align: left;
@@ -59,6 +64,110 @@
 
 .receiverInfo > div {
     margin-bottom: 4px;
+}
+
+.orderStatus {
+    flex: 1;
+}
+
+.cfStatus {
+    margin: auto 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.successStatus {
+    cursor: pointer;
+    background-color: rgb(0, 255, 0);
+    padding: 8px 24px;
+    border-radius: 24px;
+    margin-top: 8px;
+}
+
+.successStatus:hover {
+    opacity: 0.8;
+}
+
+.pendingStatus {
+    cursor: pointer;
+    background-color: rgb(255, 85, 0);
+    padding: 8px 24px;
+    border-radius: 24px;
+    margin-top: 8px;
+}
+
+.pendingStatus:hover {
+    opacity: 0.8;
+}
+
+.inStatus {
+    margin-top: 24px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.moveAct {
+    background-color: rgb(0, 255, 0);
+    padding: 8px 36px;
+    border-radius: 24px;
+    margin-top: 8px;
+    cursor: pointer;
+    font-size: 24px;
+}
+
+.moveAct:hover {
+    opacity: 0.8;
+}
+
+.shippingStatus {
+    margin: auto 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.shLost {
+    cursor: pointer;
+    background-color: rgb(255, 0, 0);
+    padding: 8px 24px;
+    border-radius: 24px;
+    margin-top: 8px;
+}
+
+.shLost:hover {
+    opacity: 0.8;
+}
+
+.cusAcepted {
+    cursor: pointer;
+    background-color: rgb(26, 255, 0);
+    padding: 8px 24px;
+    border-radius: 24px;
+    margin-top: 8px;
+}
+
+.cusAcepted:hover {
+    opacity: 0.8;
+}
+
+.cusDenied {
+    cursor: pointer;
+    background-color: rgb(255, 85, 0);
+    padding: 8px 24px;
+    border-radius: 24px;
+    margin-top: 8px;
+}
+
+.cusDenied:hover {
+    opacity: 0.8;
+}
+
+.hidden {
+    display: none !important;
 }
 
 @keyframes scaleUp {
