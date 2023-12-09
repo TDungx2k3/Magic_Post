@@ -1,31 +1,92 @@
-// .customer_name { font-size: medium;}
-// .customer_phone { font-size: medium;}
-// .receiver_name { font-size: medium;}
-// .receiver_phone { font-size: medium;}
-// .receiver_address { font-size: medium;}
-// .date { font-size: medium;}
-// .weight { font-size: medium;}
-// .price { font-size: medium;}
-
 .container {
     float: left;
-    width: 100vw;
+    text-align: left;
+    width: 98.9vw;
     height: 100vh;
     --tw-bg-opacity: 1;
     background-color: rgb(235 243 255/var(--tw-bg-opacity));
 }
 
-input {
+.container header {
+    margin-bottom: 2%;
+}
+
+.content {
+    margin-left: 27%;
+}
+
+.container input {
     border: 3px solid #ced4da;
-    margin-top: 10px;
-    width: 62%;
-    height: 20px;
+    margin-bottom: 1.5%;
+    width: 40%;
+    height: 5%;
     border-radius: 40px;
     padding: 10px;
     padding-left: 30px;
 }
 
-label {
+.container label {
+    text-align: left;
     font-size: large;
+}
 
+.customer_name {
+    margin-left: 10%;
+}
+
+.customer_phone {
+    margin-left: 3%;
+}
+
+.receiver_name {
+    margin-left: 8.8%;
+}
+
+.receiver_phone {
+    margin-left: 2%;
+}
+
+.receiver_address {
+    margin-left: 6%;
+}
+
+.date {
+    margin-left: 14.4%;
+}
+
+.weight {
+    margin-left: 14%;
+}
+
+.container .description {
+    margin-left: 17%;
+}
+
+.price {
+    margin-left: 18.7%;
+}
+
+div .invalidBorder {
+    border: 3px solid red;
+}
+
+.errMessage {
+    // display: none;
+    visibility: hidden;
+}
+
+.message {
+    color: red;
+    font-size: 90%;
+}
+
+.container .createOrderBtn {
+    margin-left: 48%;
+    /* Các thuộc tính khác nếu cần thiết */
+    padding: 10px;
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
 }

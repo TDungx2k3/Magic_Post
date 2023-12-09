@@ -6,5 +6,8 @@ const transactionTellerController = require('../controllers/transTellerControlle
 
 router.get("/getToCustomerOrder", transactionTellerController.getAllToCustomerOrder);
 router.get("/getFromCustomerOrder", transactionTellerController.getAllFromCustomerOrder);
+router.get("/getPathStart", transactionTellerController.getPathStart);
+router.get("/getPathEnd", transactionTellerController.getPathEnd);
+router.post("/createOrder", transactionTellerController.createOrder);
 
 module.exports = router;

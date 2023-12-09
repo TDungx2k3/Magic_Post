@@ -39,7 +39,9 @@ function TransactionTeller() {
             <Header />
             <div className={clsx(style.content)}>
                 <div>
-                    <h1>Create Order</h1>
+                    <h1 onClick={() => {
+                        navigate("/createOrder");
+                    }}>Create Order</h1>
                 </div>
 
                 <div>
