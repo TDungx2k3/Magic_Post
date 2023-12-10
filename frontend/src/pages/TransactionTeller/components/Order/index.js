@@ -111,6 +111,11 @@ function Order(props) {
 
                 <div className={clsx(style.orderInfoContainer)}>
                     <div className={clsx(style.orderInfo)}>
+
+                    <div className={clsx(style.orderId)}>
+                            <label>Order ID: </label>
+                            <span>{props.data.order_id}</span>
+                        </div>
                         
                         <div className={clsx(style.orderWeight)}>
                             <label>Order Weight: </label>

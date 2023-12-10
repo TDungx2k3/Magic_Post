@@ -176,6 +176,20 @@ function OrderList(props) {
                 <div className={clsx(style.content,)}>
                     <div className={clsx(style.functionContainer)}>
 
+                        <div className={clsx(style.filterContainer)}>
+                            <div className={clsx(style.searchContainer)}>
+                                <input type="text" className={clsx(style.searchID)} placeholder="Order ID" />
+                                <input type="text" className={clsx(style.searchPhone)} placeholder="Phone Number" />
+                            </div>
+
+                            <div className={clsx(style.filterDate)}>
+                                <input type="date" className={clsx(style.dateFrom)} />
+                                <input type="date" className={clsx(style.dateTo)} />
+                            </div>
+
+                            <div className={clsx(style.searchBtn)}>Search</div>
+                        </div>
+
                         <div className={clsx(style.statusNav)}>
                             <div className={clsx(style.confirmStatus, {[style.statusNavActive] : (status === 0), [style.hidden] : !isTo})}
                             onClick={() => {
@@ -197,6 +211,8 @@ function OrderList(props) {
                             >Shipping</div>
                         </div>
                     </div>
+
+                    <div className={clsx({[style.hidden] : orderList.length !== 0})}>There are no valid orders</div>
 
                     <div className={clsx(style.orderList)}>
                         {
