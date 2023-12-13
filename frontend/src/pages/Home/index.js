@@ -15,6 +15,8 @@ import shippingService from "../../assets/icons/shipping_services_afa97d2a96.svg
 import fulfillmentService from "../../assets/icons/fulfillment_services_53d479b72c.svg";
 import ecomService from "../../assets/icons/magnum_48dfaa6c33.svg";
 import digitalService from "../../assets/icons/digital_services_b4b4505fa3.svg";
+import Chart from "../../components/Chart";
+
 function Home() {
     const { isLogin, setIsLogin, userInfo } = useContext(LoginContext);
 
@@ -140,7 +142,7 @@ function Home() {
                 
             </div>
 
-
+            <Chart />
             <Footer />
         </Fragment>
     );

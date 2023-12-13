@@ -103,11 +103,11 @@ class transactionManagerController {
         try {
             const allOrdersReceived = await sequelize.query(
                 "SELECT `orders`.order_id, `orders`.weight, `orders`.price, `orders`.date, `orders`.customer_name, `orders`.customer_phone, `orders`.receiver_name, `orders`.receiver_phone FROM `orders` JOIN deliveries ON orders.order_id = deliveries.order_id JOIN transactions ON deliveries.to_id = transactions.trans_id",
-                {raw: true,}
-              );
+                { raw: true, }
+            );
             res.json(allOrdersReceived);
         }
-        catch(err) {
+        catch (err) {
             console.log(err);
             res.send(err);
         }
@@ -117,15 +117,78 @@ class transactionManagerController {
         try {
             const allOrdersSent = await sequelize.query(
                 "SELECT `orders`.order_id, `orders`.weight, `orders`.price, `orders`.date, `orders`.customer_name, `orders`.customer_phone, `orders`.receiver_name, `orders`.receiver_phone FROM `orders` JOIN deliveries ON orders.order_id = deliveries.order_id JOIN transactions ON deliveries.from_id = transactions.trans_id",
-                {raw: true,}
-              );
+                { raw: true, }
+            );
             res.json(allOrdersSent);
         }
-        catch(err) {
+        catch (err) {
             console.log(err);
             res.send(err);
         }
     };
+
+    getMaxDateSent = async (req, res) => {
+        try {
+            const result = await Order.findOne({
+                attributes: [
+                    [sequelize.fn('MAX', sequelize.col('date')), 'maxDate']
+                ]
+            });
+            const maxDate = result.getDataValue('maxDate');
+            res.json(maxDate);
+        } catch (err) {
+            console.log(err);
+            res.json(err);
+        }
+    };
+
+    countOrderSentInADate = async (req, res) => {
+        try {
+            const data = req.query.date;
+    
+            const count = await sequelize.query(
+                `SELECT COUNT(*) 
+                FROM (
+                    SELECT orders.order_id
+                    FROM orders 
+                    JOIN deliveries ON orders.order_id = deliveries.order_id 
+                    JOIN transactions ON transactions.trans_id = deliveries.from_id
+                    WHERE orders.date = :date
+                ) AS subquery`, 
+                {
+                    replacements: { date : data}
+                }
+            );
+            console.log(count[0]);
+            res.json(count[0]);
+        } catch (err) {
+            res.json(err);
+        }
+    }
+
+    countOrderReceivedInADate = async (req, res) => {
+        try {
+            const data = req.query.date;
+    
+            const count = await sequelize.query(
+                `SELECT COUNT(*) 
+                FROM (
+                    SELECT orders.order_id
+                    FROM orders 
+                    JOIN deliveries ON orders.order_id = deliveries.order_id 
+                    JOIN transactions ON transactions.trans_id = deliveries.to_id
+                    WHERE orders.date = :date
+                ) AS subquery`, 
+                {
+                    replacements: { date : data}
+                }
+            );
+            console.log(count[0]);
+            res.json(count[0]);
+        } catch (err) {
+            res.json(err);
+        }
+    }
 };
 
 module.exports = new transactionManagerController();
