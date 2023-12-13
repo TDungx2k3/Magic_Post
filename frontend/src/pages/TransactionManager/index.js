@@ -9,6 +9,7 @@ import StatisticOrdersSent from "./component/StatisticOrdersSent";
 import StatisticOrdersReceived from "./component/StatisticOrdersReceived";
 import ManageTransactionNav from "./component/ManageTransactionNav";
 import Footer from "../../components/Footer";
+import { Link } from "react-router-dom";
 
 function TransactionManager() {
     const navigate = useNavigate();
@@ -61,6 +62,11 @@ function TransactionManager() {
     return (
         <Fragment>
             <Header />
+            <Link to="/transaction-manager/chart-sent">
+                <div className={clsx(style.statistic)}>
+                    <button>Statistic</button>
+                </div>
+            </Link>
             <ManageTransactionNav 
                 onClickCreateAccount={handleIsClickCreateAccount} 
                 onClickStatisticOrdersSent={handleIsClickStatisticOrdersSent}
