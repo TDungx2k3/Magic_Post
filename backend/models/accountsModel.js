@@ -25,10 +25,10 @@ const Account = sequelize.define(
     role_id: {
       type: DataTypes.INTEGER(11),
       allowNull: false,
-      references: {
-        model: 'roles',
-        key: 'role_id'
-      }
+      // references: {
+      //   model: 'roles',
+      //   key: 'role_id'
+      // }
     },
     unit: {
       type: DataTypes.STRING(5),

@@ -9,6 +9,7 @@ function TransactionList(props) {
     const navigate = useNavigate();
     const maxItemsInOnePage = 5;
     let transactionList = props.data;
+    // console.log(typeof(transactionList));
     // console.log(transactionList);
     transactionList.sort((a, b) => {
         const nameA = a.trans_name.toUpperCase();
@@ -55,8 +56,8 @@ function TransactionList(props) {
                             gatherId: transaction.gather_id,
                             transactionId: transaction.trans_id,
                             transactionName: transaction.trans_name,
-                            transactionManagerName: transaction.account.account_name,
-                            transactionManagerPhone: transaction.account.account_phone
+                            transactionManagerName: transaction.account_name,
+                            transactionManagerPhone: transaction.account_phone
                         }
                         if(index >= (pageNum-1) * maxItemsInOnePage 
                         && index < (pageNum * maxItemsInOnePage)) {

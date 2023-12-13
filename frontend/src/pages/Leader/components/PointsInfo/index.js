@@ -14,12 +14,12 @@ function PointsInfo(props) {
                 <div className = {clsx(style.managerInfoContainer)}>
                     <div className = {clsx(style.nameContainer)}>
                         <label>Manager Name: </label>
-                        <span className = {clsx(style.managerName)}>{props.data.account.account_name}</span>
+                        <span className = {clsx(style.managerName)}>{props.data.account_name}</span>
                     </div>
 
                     <div className = {clsx(style.phoneContainer)}>
                         <label>Manager Phone: </label>
-                        <span className = {clsx(style.managerPhone)}>{props.data.account.account_phone}</span>
+                        <span className = {clsx(style.managerPhone)}>{props.data.account_phone}</span>
                     </div>
                 </div>
             </div>

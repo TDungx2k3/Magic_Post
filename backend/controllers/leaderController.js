@@ -7,23 +7,26 @@ const { Role } = require("../models/rolesModel");
 const bcrypt = require('bcrypt');
 const Joi = require('joi');
 
-Gathering.belongsTo(Account, {
-    foreignKey: 'account_id',
-});
-Account.hasMany(Gathering, {
-    foreignKey: 'account_id',
-});
+// Gathering.belongsTo(Account, {
+//     foreignKey: 'account_id',
+// });
+// Account.hasMany(Gathering, {
+//     foreignKey: 'account_id',
+// });
 
-Transaction.belongsTo(Account, {
-    foreignKey: 'account_id',
-});
-Account.hasMany(Transaction, {
-    foreignKey: 'account_id',
-});
+// Transaction.hasMany(Account, {
+//     foreignKey: 'account_id',
+// });
+// Account.belongsTo(Transaction, {
+//     foreignKey: 'account_id',
+// });
 
-Role.hasOne(Account, {
-    foreignKey: "role_id"
-})
+// Role.belongsTo(Account, {
+//     foreignKey: 'role_id',
+// });
+// Account.hasMany(Role, {
+//     foreignKey: 'role_id',
+// });
 class LeaderController {
     gatherNameNormalize = (name) => {
         
@@ -55,13 +58,11 @@ class LeaderController {
             await sequelize.authenticate();
             await sequelize.sync();
             let gathers = [];
-            gathers = await Gathering.findAll(
+            gathers = await sequelize.query(
+                "SELECT * FROM `gatherings` JOIN `accounts` ON `gatherings`.account_id = `accounts`.account_id",
                 {
-                    include: [
-                        {
-                            model: Account,
-                        }
-                    ]
+                    raw: true,
+                    type: sequelize.QueryTypes.SELECT,
                 }
             );
             res.json(gathers);
@@ -82,20 +83,17 @@ class LeaderController {
                 await sequelize.authenticate();
                 await sequelize.sync();
                 let gather = [];
-                gather = await Gathering.findAll(
+                gather = await sequelize.query(
+                    "SELECT * FROM `gatherings` JOIN `accounts` ON `gatherings`.account_id = `accounts`.account_id WHERE `gatherings`.gather_id = :gId",
                     {
-                        include: {
-                            model: Account,
-                            attributes: [
-                                "account_name",
-                                "account_phone"
-                            ]
-                        },
-                        where: {
-                            gather_id: req.query.gather_id
+                        raw: true,
+                        type: sequelize.QueryTypes.SELECT,
+                        replacements: {
+                            gId: req.query.gather_id,
                         },
                     }
                 );
+                
                 res.json(gather);
             } catch (error) {
                 res.send(error);
@@ -223,8 +221,6 @@ class LeaderController {
     };
 
     countPhoneNumber = async(req, res) => {
-        // console.log(1111);
-        // console.log(req);
         let aPhone = req.query.account_phone;
         let validateAPhoneRs = Joi.string().required().pattern(/^0\d+$/).length(10).validate(aPhone);
         if(validateAPhoneRs.error) {
@@ -250,8 +246,6 @@ class LeaderController {
     };
 
     getNewestAId = async(req, res) => {
-        // console.log(1111);
-        // console.log(req);
         try {
             await sequelize.authenticate();
             await sequelize.sync();
@@ -418,16 +412,13 @@ class LeaderController {
             await sequelize.authenticate();
             await sequelize.sync();
             let gatherManagers = [];
-            gatherManagers = await Gathering.findAll({
-                include: [
-                    {
-                        model: Account,
-                        attributes: ["account_id", 
-                        "account_name",
-                        "account_phone"],
-                    }
-                ]
-            });
+            gatherManagers = await sequelize.query(
+                "SELECT * FROM `gatherings` JOIN `accounts` ON `gatherings`.account_id = `accounts`.account_id",
+                {
+                    raw: true,
+                    type: sequelize.QueryTypes.SELECT,
+                }
+            );
             console.log(gatherManagers);
             res.json(gatherManagers);
         } catch (error) {
@@ -444,19 +435,18 @@ class LeaderController {
         }
         else {
             try {
+                console.log(123);
                 await sequelize.authenticate();
                 await sequelize.sync();
                 let trans = [];
-                trans = await Transaction.findAll(
+                trans = await sequelize.query(
+                    "SELECT * FROM `transactions` JOIN `accounts` ON `transactions`.account_id = `accounts`.account_id WHERE `transactions`.gather_id = :gId",
                     {
-                        where: {
-                            gather_id: gId
+                        raw: true,
+                        type: sequelize.QueryTypes.SELECT,
+                        replacements: {
+                            gId: gId,
                         },
-                        include: [{
-                            model: Account,
-                            attributes: ['account_name',
-                        'account_phone']
-                        }]
                     }
                 );
                 res.json(trans);
@@ -512,18 +502,15 @@ class LeaderController {
             await sequelize.authenticate();
             await sequelize.sync();
             let tranManagers = [];
-            tranManagers = await Transaction.findAll({
-                include: [
-                    {
-                        model: Account,
-                        attributes: ["account_id", 
-                        "account_name",
-                        "account_phone"],
-                    }
-                ]
-            });
-            console.log(gatherManagers);
-            res.json(gatherManagers);
+            tranManagers = await sequelize.query(
+                "SELECT * FROM `transactions` JOIN `accounts` ON `transactions`.account_id = `accounts`.account_id",
+                {
+                    raw: true,
+                    type: sequelize.QueryTypes.SELECT,
+                }
+            );
+            console.log(tranManagers);
+            res.json(tranManagers);
         } catch (error) {
             res.send(error);
             console.log(error);
@@ -541,21 +528,16 @@ class LeaderController {
                 await sequelize.authenticate();
                 await sequelize.sync();
                 let trans = [];
-                trans = await Transaction.findAll(
+                trans = await sequelize.query(
+                    "SELECT * FROM `transactions` JOIN `accounts` ON `transactions`.account_id = `accounts`.account_id WHERE `transactions`.trans_id = :tId",
                     {
-                        include: {
-                            model: Account,
-                            attributes: [
-                                "account_name",
-                                "account_phone"
-                            ]
-                        },
-                        where: {
-                            trans_id: req.query.trans_id
+                        raw: true,
+                        type: sequelize.QueryTypes.SELECT,
+                        replacements: {
+                            tId: tId,
                         },
                     }
                 );
-                // console.log(trans);
                 res.json(trans);
             } catch (error) {
                 res.send(error);
@@ -712,18 +694,16 @@ class LeaderController {
                 await sequelize.sync();
                 console.log(req.query);
                 let employees = [];
-                employees = await Role.findAll(
+                employees = await sequelize.query(
+                    "SELECT * FROM `roles` JOIN `accounts` ON `roles`.role_id = `accounts`.role_id WHERE `accounts`.unit = :unit",
                     {
-                        include: {
-                            model: Account,
-                            where: {
-                                unit: unit,
-                            },
+                        raw: true,
+                        type: sequelize.QueryTypes.SELECT,
+                        replacements: {
+                            unit: unit,
                         },
-                        
                     }
                 );
-                // console.log(trans);
                 res.json(employees);
             } catch (error) {
                 res.send(error);

@@ -45,11 +45,12 @@ function GatherList() {
 
                 {
                     gatherList.map((gather, index) => {
+                        console.log(gather);
                         let gatherData = {
                             gatherId: gather.gather_id,
                             gatherName: gather.gather_name,
-                            gatherManagerName: gather.account.account_name,
-                            gatherManagerPhone: gather.account.account_phone
+                            gatherManagerName: gather.account_name,
+                            gatherManagerPhone: gather.account_phone
                         };
                         return(
                             <Gather key={index} data={gatherData}/>

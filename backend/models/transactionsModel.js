@@ -15,11 +15,11 @@ const Transaction = sequelize.define(
         },
         account_id: {
             type: DataTypes.INTEGER(11),
-            references: { model: 'accounts', key: 'account_id' },
+            // references: { model: 'accounts', key: 'account_id' },
         },
         gather_id: {
             type: DataTypes.STRING(5),
-            references: { model: 'gatherings', key: 'gather_id' },
+            // references: { model: 'gatherings', key: 'gather_id' },
         }
     },
     {

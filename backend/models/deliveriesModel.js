@@ -13,10 +13,10 @@ const Delivery = sequelize.define(
         order_id: {
             type: DataTypes.INTEGER,
             allowNull: false,
-            references: {
-                model: 'orders', // name of Target model
-                key: 'order_id'  // key in Target model
-            }
+            // references: {
+            //     model: 'orders', // name of Target model
+            //     key: 'order_id'  // key in Target model
+            // }
         },
         from_id: {
             type: DataTypes.STRING(5),

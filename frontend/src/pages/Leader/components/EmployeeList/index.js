@@ -23,9 +23,9 @@ function EmployeeList(props) {
                 {
                     employeeList.map((employee, index) => {
                         let employeeData = {
-                            employeeId: employee.account.account_id,
-                            employeeName: employee.account.account_name,
-                            employeePhone: employee.account.account_phone,
+                            employeeId: employee.account_id,
+                            employeeName: employee.account_name,
+                            employeePhone: employee.account_phone,
                             employeeRole: employee.role_name,
                         }
                         return(

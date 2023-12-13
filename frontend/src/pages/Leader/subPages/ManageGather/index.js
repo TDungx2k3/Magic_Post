@@ -63,7 +63,7 @@ function ManageGather() {
             }
             )
             .then((res) => {
-                // console.log(res.data);
+                console.log(res.data);
                 setTransactionsData(res.data)
             })
         } catch (error) {
