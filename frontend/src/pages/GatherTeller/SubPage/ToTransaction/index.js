@@ -1,12 +1,12 @@
-import clsx from "clsx"
-import { Fragment, useContext, useEffect } from "react";
-import Header from "../../components/Header";
-import Footer from "../../components/Footer";
-import style from "./GatherTeller.module.scss";
+import { Fragment, useEffect } from "react";
+import Footer from "../../../../components/Footer";
+import Header from "../../../../components/Header";
+import OrderList from "../../components/OrderList";
 import { useNavigate } from "react-router-dom";
+import clsx from "clsx";
+import style from "./ToTransaction.module.scss";
 
-function GatherTeller() {
-
+function ToCustomer() {
     const navigate = useNavigate();
     let nowTime = new Date();
     const storedOutTime = new Date(JSON.parse(localStorage.getItem('outTime')));
@@ -38,26 +38,14 @@ function GatherTeller() {
         <Fragment>
             <Header />
             <div className={clsx(style.content)}>
-
-                <div>
-                    <h1>Manage Orders</h1>
-
-                    <div onClick={() => {
-                        navigate("/gatherTellerFromTran");
-                    }}>
-                        <h2>Orders From Transaction</h2>
-                    </div>
-
-                    <div onClick={() => {
-                        navigate("/gatherTellerToTran");
-                    }}>
-                        <h2>Orders To Transaction</h2>
-                    </div>
-                </div>
+                <OrderList data = {{
+                    status: true,
+                    unit: storedUserInfo.uUnit,
+                }}/>
             </div>
             <Footer />
         </Fragment>
     );
 }
 
-export default GatherTeller;
+export default ToCustomer;

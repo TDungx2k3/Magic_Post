@@ -39,7 +39,7 @@ function Transaction(props) {
         <Fragment>
             <div className= {clsx(style.transactionContainer)}
             data-aos="zoom-in-up" data-aos-duration="1000">
-                <Link to = '/' className= {clsx(style.transactionInfo)}>
+                <Link to = {`/leaderManageTransaction?trans_id=${props.data.transactionId}`} className= {clsx(style.transactionInfo)}>
                     <div>
                         <label htmlFor="transactionName">Transaction Name: </label>
                         <span id="transactionName">{props.data.transactionName}</span>

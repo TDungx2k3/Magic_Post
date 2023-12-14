@@ -97,6 +97,9 @@ function NavBar() {
                         else if(userInfo.uRole === 5) {
                             navigate("/gather-manager");
                         }
+                        else if(userInfo.uRole === 6) {
+                            navigate("/gatherTeller")
+                        }
                     }
                 }
                 >

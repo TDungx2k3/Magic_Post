@@ -3,12 +3,13 @@ import { Fragment } from "react";
 import style from "./PointsInfo.module.scss";
 
 function PointsInfo(props) {
+    // console.log(props.data);
     return (
         <Fragment>
             <div className = {clsx(style.infoContainer)}>
                 <div className = {clsx(style.pointInfoContainer)}>
                     <label>Name: </label>
-                    <span className = {clsx(style.pointName)}>{props.data.gather_name}</span>
+                    <span className = {clsx(style.pointName)}>{props.data.gather_name || props.data.trans_name}</span>
                 </div>
 
                 <div className = {clsx(style.managerInfoContainer)}>

@@ -1,0 +1,57 @@
+.content {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+
+.manageTransactionNav {
+    width: 90%;
+    background-color: #4b5de8;
+    margin-bottom: 40px;
+    font-size: 24px;
+    display: flex;
+    flex-direction: row;
+    border-radius: 40px;
+    color: #fff;
+}
+
+.ordersManage {
+    flex: 1;
+    padding: 12px;
+    border-top-left-radius: 40px;
+    border-bottom-left-radius: 40px;
+}
+
+.ordersManage:hover {
+    cursor: pointer;
+    background-color: #99a5ff;
+    color: #333;
+}
+
+.employeesManage {
+    flex: 1;
+    padding: 12px;
+    border-top-right-radius: 40px;
+    border-bottom-right-radius: 40px;
+}
+
+.employeesManage:hover {
+    cursor: pointer;
+    background-color: #99a5ff;
+    color: #333;
+    border-top-right-radius: 40px;
+    border-bottom-right-radius: 40px;
+}
+
+.active {
+    background-color: #001eff;
+}
+
+.subPage {
+    width: 80%;
+}
+
+.hidden {
+    display: none;
+}

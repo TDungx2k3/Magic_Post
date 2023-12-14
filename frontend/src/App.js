@@ -22,6 +22,10 @@ import CreateOrderPage from './pages/TransactionTeller/SubPage/CreateOrder';
 import TransactionTeller from './pages/TransactionTeller';
 import ToCustomer from './pages/TransactionTeller/SubPage/ToCustomer';
 import FromCustomer from './pages/TransactionTeller/SubPage/FromCustomer';
+import ManageTransaction from './pages/Leader/subPages/ManageTransaction';
+import FromTransaction from './pages/GatherTeller/SubPage/FromTransaction';
+import ToTransaction from './pages/GatherTeller/SubPage/ToTransaction';
+import GatherTeller from './pages/GatherTeller';
 
 export const LoginContext = createContext();
 
@@ -133,6 +137,7 @@ function App() {
             <Route path='/gather-manager' element={<GatherManager />}/>
             <Route path='/modify-account' element={<ModifyAccountEmployee />}/>
             <Route path = '/leaderManageGather' element={<ManageGather/>} />
+            <Route path = '/leaderManageTransaction' element={<ManageTransaction/>} />
             <Route path = '/modifyGather' element={<ModifyGather/>} />
             <Route path = '/modifyTransaction' element={<ModifyTransaction/>} />
             <Route path = '/createGather' element={<CreateGather/>} />
@@ -142,6 +147,9 @@ function App() {
             <Route path = '/transactionTeller' element={<TransactionTeller/>} />
             <Route path = '/transTellerToCus' element={<ToCustomer/>} />
             <Route path = '/transTellerFromCus' element={<FromCustomer/>} />
+            <Route path = '/gatherTeller' element={<GatherTeller/>} />
+            <Route path = '/gatherTellerFromTran' element={<FromTransaction/>} />
+            <Route path = '/gatherTellerToTran' element={<ToTransaction/>} />
           </Routes>
         </Router>
       </div>
