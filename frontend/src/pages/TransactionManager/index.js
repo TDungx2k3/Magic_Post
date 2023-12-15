@@ -62,6 +62,15 @@ function TransactionManager() {
     return (
         <Fragment>
             <Header />
+            <div className={clsx(style.exception)}>
+                <div className={clsx(style["customer-deny"])}>
+                    <button>Customers Deny Order</button>
+                </div>
+
+                <div className={clsx(style["lost-orders"])}>
+                    <button>Lost Orders</button>
+                </div>
+            </div>
             <Link to="/transaction-manager/chart-sent">
                 <div className={clsx(style.statistic)}>
                     <button>Statistic</button>

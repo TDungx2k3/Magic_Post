@@ -141,8 +141,6 @@ function Home() {
                 </div>
                 
             </div>
-
-            <Chart />
             <Footer />
         </Fragment>
     );
