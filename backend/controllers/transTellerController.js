@@ -289,8 +289,8 @@ class transactionTellerController {
             });
             //res.json(pathStart);
             res.json({
-                transactionStart: pathStart.trans_name,
-                gatherStart: pathStart.gathering.gather_name,
+                transactionStart: pathStart.trans_id,
+                gatherStart: pathStart.gathering.gather_id,
             });
         } catch (error) {
             console.log(error);
@@ -298,13 +298,13 @@ class transactionTellerController {
     }
 
     getPathEnd = async (req, res) => {
-        let receiverAddress = req.query.address;
+        let receiverTransId = req.query.trans_id;
         try {
             await sequelize.authenticate();
             await sequelize.sync();
             const pathEnd = await Transaction.findOne({
                 where: {
-                    trans_name: receiverAddress,
+                    trans_id: receiverTransId,
                 },
                 include: [{
                     model: Gathering,
@@ -354,6 +354,39 @@ class transactionTellerController {
             console.log(error);
         };
     }
+
+
+    showAllGathers = async (req, res) => {
+        try {
+            await sequelize.authenticate();
+            await sequelize.sync();
+            let gathers = [];
+            gathers = await Gathering.findAll();
+            res.json(gathers);
+        } catch (error) {
+            res.send(error);
+            console.log(error);
+        }
+    };
+
+    showAllTransactionsByGather = async (req, res) => {
+        const data = req.query.gather_id;
+        try {
+            await sequelize.authenticate();
+            await sequelize.sync();
+            let transactions = [];
+            transactions = await Transaction.findAll({
+                where: {
+                    gather_id: data,
+                }
+            });
+            res.json(transactions);
+        } catch (error) {
+            res.send(error);
+            console.log(error);
+        }
+    };
+
 };
 
 module.exports = new transactionTellerController();

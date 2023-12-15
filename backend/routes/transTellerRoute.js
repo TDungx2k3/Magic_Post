@@ -14,4 +14,7 @@ router.get("/getPathStart", transactionTellerController.getPathStart);
 router.get("/getPathEnd", transactionTellerController.getPathEnd);
 router.post("/createOrder", transactionTellerController.createOrder);
 
+router.get("/showAllGathers", transactionTellerController.showAllGathers);
+router.get("/showAllTransactionsByGather", transactionTellerController.showAllTransactionsByGather);
+
 module.exports = router;
