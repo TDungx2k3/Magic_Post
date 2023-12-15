@@ -1,13 +1,16 @@
 import clsx from "clsx";
 import React from "react";
 import style from "./CreateOrder.module.scss";
-import { Fragment, useState, useContext } from "react";
+import { Fragment, useState, useContext, useEffect } from "react";
 import axios from "axios";
 import Header from "../../../../components/Header";
 import Footer from "../../../../components/Footer";
 import { LoginContext } from "../../../../App";
 
 function CreateOrderPage() {
+
+  // Giá, địa chỉ chọn mốc, bỏ ngày gửi
+  // 
 
   // Chưa có đoạn dẫn đến page này nên chưa có userInfo
   // Chỉ cần thay userInfo.uUnit vào unit handlePath
@@ -50,21 +53,106 @@ function CreateOrderPage() {
     }
   }
 
-  // Xử lý địa chỉ
-  const[isReceiverAddress, setIsReceiverAddress] = useState(true);
+  // Xử lý đường đi kho hàng
+  useEffect(() => {
+    const handlePath = async (e) => {
+      try {
+        await axios.get("http://localhost:8080/transTeller/getPathStart", {params : {
+          unit : "t01",
+        }})
+        .then((response) => {
+          paths.transaction_start = response.data.transactionStart;
+          paths.gathering_start = response.data.gatherStart;
+        }).catch((error) => {
+          console.log(error);
+        });
   
-  let checkAddress;
+        // await axios.get("http://localhost:8080/transTeller/getPathEnd", {params : {
+        //   trans_id: selectedProvince,
+        // }}).then((response) => {
+        //   if(response.data.message === "Hợp lệ"){
+        //     paths.transaction_end = response.data.transactionEnd;
+        //     paths.gathering_end = response.data.gatherEnd;
+        //   } else {
+        //     alert(response.data.message);
+        //   }
+        // }).catch((error) => {
+        //   console.log(error);
+        // });
+      } catch (err) {
+        console.log(err.respone.data);
+      }
+    };
+    handlePath();
+  }, []);
 
-  function handleReceiverAddress() {
-    checkAddress = inputs.receiver_address.split(', ').pop();
-    //console.log(checkAddress);
-    if(!checkAddress || !inputs.receiver_address.includes(', ')) {
-      setIsReceiverAddress(false);
-    } else {
-      setIsReceiverAddress(true);
-      //inputs.receiver_address = checkAddress;
-    }
-  }
+  // Xử lý địa chỉ
+  // const[isReceiverAddress, setIsReceiverAddress] = useState(true);
+  
+  // let checkAddress;
+
+  // function handleReceiverAddress() {
+  //   checkAddress = inputs.receiver_address.split(', ').pop();
+  //   //console.log(checkAddress);
+  //   if(!checkAddress || !inputs.receiver_address.includes(', ')) {
+  //     setIsReceiverAddress(false);
+  //   } else {
+  //     setIsReceiverAddress(true);
+  //     //inputs.receiver_address = checkAddress;
+  //   }
+  // }
+
+  const [gathers, setGather] = useState([]);
+  const [selectedGather, setSelectedGather] = useState('');
+  const [provinces, setProvinces] = useState([]);
+  const [selectedProvince, setSelectedProvince] = useState('');
+
+  useEffect(() => {
+    const fetchGatherData = async () => {
+      try {
+        const response = await axios.get('http://localhost:8080/transTeller/showAllGathers');
+        setGather(response.data);
+        //console.log(response.data);
+      } catch (error) {
+        console.error('Error fetching regions:', error);
+      }
+    };
+
+    fetchGatherData();
+  }, []);
+
+
+  useEffect(() => {
+    const fetchTransactionData = async () => {
+      //console.log(selectedGather);
+      try {
+        if (selectedGather && selectedGather !== '') {
+          await axios.get('http://localhost:8080/transTeller/showAllTransactionsByGather', {params: {
+            gather_id: selectedGather,
+          }})
+            .then(response => {
+              //console.log(response.data);
+              setProvinces(response.data);
+            })
+            .catch(error => {
+              console.error('Error fetching provinces:', error);
+            });
+        }
+      } catch (error) {
+        console.log(error);
+      }
+    };
+
+    fetchTransactionData();
+  }, [selectedGather]);
+
+  const handleGatherChange = (e) => {
+    setSelectedGather(e.target.value);
+  };
+
+  const handleProvinceChange = (e) => {
+    setSelectedProvince(e.target.value);
+  };
   
   // Lưu thông tin order
   const [inputs, setInputs] = useState({
@@ -74,10 +162,29 @@ function CreateOrderPage() {
     receiver_phone: "",
     receiver_address: "",
     date: "",
-    weight: "",
+    weight: 0,
     description: "",
-    price: "",
+    price: '',
   });
+
+  // Xử lý về giá
+  const [finalPrice, setFinalPrice] = useState(0);
+  useEffect(() => {
+    const checkGatherPath = () => {
+      if(selectedGather === '') {
+        setFinalPrice(inputs.weight * 2000);
+      } else if(selectedGather === paths.gathering_start && selectedGather !== "") {
+        setFinalPrice(inputs.weight * 2000 + 20000);
+      } else if(selectedGather !== 'g3' && paths.gathering_start !== 'g3' && selectedGather !== "") {
+        setFinalPrice(inputs.weight * 2000 + 30000);
+      } else if(selectedGather !== 'g2' && paths.gathering_start !== 'g2' && selectedGather !== "") {
+        setFinalPrice(inputs.weight * 2000 + 60000);
+      } else if(selectedGather !== 'g1' && paths.gathering_start !== 'g1' && selectedGather !== "") {
+        setFinalPrice(inputs.weight * 2000 + 40000);
+      }
+    };
+    checkGatherPath();
+  }, [selectedGather, inputs.weight]);
 
   // Lưu trạng thái đường đi
   const [paths, setPaths] = useState({
@@ -100,46 +207,20 @@ function CreateOrderPage() {
   function handleErrorBeforeSubmit() {
     handleCustomerPhoneBlur();
     handleReceiverPhoneBlur();
-    handleReceiverAddress();
-    if(isCustomerPhone && isReceiverPhone && isReceiverAddress 
-      && inputs.customer_phone !== "" && inputs.receiver_phone !== "" && inputs.receiver_address !== "") {
+
+    if(isCustomerPhone && isReceiverPhone && inputs.customer_phone !== "" 
+    && inputs.receiver_phone !== "" && inputs.receiver_address !== "") {
+      inputs.date = new Date().toString();
+      inputs.receiver_address += "#" + selectedProvince;
+      inputs.price = finalPrice;
       handleSubmit();
     }
   }
 
-  // Xử lý đường đi kho hàng
-  const handlePath = async (e) => {
-    try {
-      await axios.get("http://localhost:8080/transTeller/getPathStart", {params : {
-        unit : "t01",
-      }})
-      .then((response) => {
-        paths.transaction_start = response.data.transactionStart;
-        paths.gathering_start = response.data.gatherStart;
-      }).catch((error) => {
-        console.log(error);
-      });
-
-      await axios.get("http://localhost:8080/transTeller/getPathEnd", {params : {
-        address: checkAddress,
-      }}).then((response) => {
-        if(response.data.message === "Hợp lệ"){
-          paths.transaction_end = checkAddress;
-          paths.gathering_end = response.data.gatherEnd;
-        } else {
-          alert(response.data.message);
-        }
-      }).catch((error) => {
-        console.log(error);
-      });
-    } catch (err) {
-      console.log(err.respone.data);
-    }
-  };
 
   const handleSubmit = async (e) => {
-    await handlePath();
-    console.log(paths);
+    //await handlePath();
+    // console.log(paths);
     console.log(inputs);
     try {
       await axios.post("http://localhost:8080/transTeller/createOrder", inputs)
@@ -159,11 +240,11 @@ function CreateOrderPage() {
       <Header showNavBar={false} />
       <div className={style.container}>
         <header className={style.header}>
-          <h1>Tạo đơn hàng chuyển phát</h1>
+          <h1>Create new order</h1>
         </header>
         <div className={style.content}>
           <div>
-            <label htmlFor={style.customer_name}>Tên Người Gửi:</label>
+            <label htmlFor={style.customer_name}>Customer name:</label>
             <input
               className={clsx(style.customer_name)}
               type="text"
@@ -174,7 +255,7 @@ function CreateOrderPage() {
 
           <div>
             <label htmlFor={style.customer_phone}>
-              Số điện thoại người gửi:
+              Customer phone:
             </label>
             <input
               className={clsx(style.customer_phone, {[style.invalidBorder]: !isCustomerPhone,})}
@@ -186,11 +267,11 @@ function CreateOrderPage() {
               }}
               onChange={handleChange}
             />
-            <i className= {clsx({[style.errMessage] : isCustomerPhone}, style.message)}>  Invalid phone number</i>
+            {/*<i className= {clsx({[style.errMessage] : isCustomerPhone}, style.message)}>  Invalid phone number</i>*/}
           </div>
 
           <div>
-            <label htmlFor={style.receiver_name}>Tên Người Nhận:</label>
+            <label htmlFor={style.receiver_name}>Receiver name:</label>
             <input
               className={style.receiver_name}
               type="text"
@@ -201,7 +282,7 @@ function CreateOrderPage() {
 
           <div>
             <label htmlFor={style.receiver_phone}>
-              Số điện thoại người nhận:
+              Receiver phone:
             </label>
             <input
               className={clsx(style.receiver_phone, {[style.invalidBorder]: !isReceiverPhone,})}
@@ -213,43 +294,64 @@ function CreateOrderPage() {
               }}
               onChange={handleChange}
             />
-            <i className= {clsx({[style.errMessage] : isReceiverPhone}, style.message)}>  Invalid phone number</i>
+            {/*<i className= {clsx({[style.errMessage] : isReceiverPhone}, style.message)}>  Invalid phone number</i>*/}
           </div>
 
           <div>
-            <label htmlFor={style.receiver_address}>Địa Chỉ Người Nhận:</label>
+            <label htmlFor={style.receiver_city}>Select City:</label>
+            <select className={style.selectedGatherName} id="gather" value={selectedGather} onChange={handleGatherChange}>
+            {gathers.length === 0 && (
+              <option value="" disabled>-- Loading Regions --</option>
+            )}
+            {gathers.length > 0 && (
+              <>
+                <option value="">-- Select Region --</option>
+                {gathers.map((gather) => (
+                  <option key={gather.gather_id} value={gather.gather_id}>
+                    {gather.gather_name}
+                  </option>
+                ))}
+              </>
+            )}
+            </select>
+            <select className={style.selectedProvinceName} id="province" value={selectedProvince} onChange={handleProvinceChange}>
+            {selectedGather && provinces.length > 0 && (
+              <>
+                <option value="">-- Select City --</option>
+                {provinces.map((province) => (
+                  <option key={province.trans_id} value={province.trans_id}>
+                    {province.trans_name}
+                  </option>
+                ))}
+              </>
+            )}  
+            </select>
+          </div>
+
+          <div>
+            <label htmlFor={style.receiver_address}>Receiver address:</label>
             <input
-              className={clsx(style.receiver_address, {[style.invalidBorder]: !isReceiverAddress})}
+              className={clsx(style.receiver_address)}
               type="text"
               name="receiver_address"
-              placeholder="VD: 18 Xuân Thủy, Cầu Giấy, Hà Nội (Bắt buộc có tỉnh thành)"
-              onBlur={handleReceiverAddress}
-              onFocus={() => {
-                setIsReceiverAddress(true);
-              }}
+              placeholder="VD: 18 Xuân Thủy, Cầu Giấy"
               onChange={handleChange}
             />
-            <i className= {clsx({[style.errMessage] : isReceiverAddress}, style.message)}>  Invalid address</i>
-          </div>
-  
-          <div>
-            <label htmlFor={style.date}>Ngày gửi:</label>
-            <input className={style.date} type="date" name="date" onChange={handleChange}/>
           </div>
 
           <div>
-            <label htmlFor={style.weight}>Cân nặng:</label>
+            <label htmlFor={style.weight}>Weight:</label>
             <input className={style.weight} type="text" name="weight" onChange={handleChange}/>
           </div>
 
           <div>
-            <label htmlFor={style.description}>Mô tả:</label>
+            <label htmlFor={style.description}>Description:</label>
             <input className={style.description} type="text" name="description" onChange={handleChange}/>
           </div>
 
           <div>
-            <label htmlFor={style.price}>Giá:</label>
-            <input className={style.price} type="text" name="price" onChange={handleChange}/>
+            <label htmlFor={style.price}>Price:</label>
+            <strong>${finalPrice} VND</strong>
           </div>
 
         </div>
