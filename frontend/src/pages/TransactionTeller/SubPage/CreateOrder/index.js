@@ -208,7 +208,10 @@ function CreateOrderPage() {
     handleCustomerPhoneBlur();
     handleReceiverPhoneBlur();
 
-    if(isCustomerPhone && isReceiverPhone && inputs.customer_phone !== "" 
+    if(inputs.customer_name === '' || inputs.description === '' 
+    || inputs.receiver_name === '' || selectedProvince === '' || inputs.receiver_address === "") {
+      alert("Please fill all fields");
+    } else if (isCustomerPhone && isReceiverPhone && inputs.customer_phone !== "" 
     && inputs.receiver_phone !== "" && inputs.receiver_address !== "") {
       inputs.date = new Date().toString();
       inputs.receiver_address += "#" + selectedProvince;
@@ -216,7 +219,6 @@ function CreateOrderPage() {
       handleSubmit();
     }
   }
-
 
   const handleSubmit = async (e) => {
     //await handlePath();
