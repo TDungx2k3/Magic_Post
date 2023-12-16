@@ -1,44 +1,61 @@
-.transaction-manager-form-create-account {
-    
-}
+.transaction-manager-form-create-account {}
 
 .transaction-manager-form-create-account-hidden {
-    display: none;
+  display: none;
 }
 
-.statistic-orders-sent {
-
-}
+.statistic-orders-sent {}
 
 .statistic-orders-sent-hidden {
-    display: none !important;
+  display: none !important;
 }
 
-.statistic-orders-received {
-
-}
+.statistic-orders-received {}
 
 .statistic-orders-received-hidden {
-    display: none !important;
+  display: none !important;
+}
+
+.exception {
+  margin-top: 20px;
+  display: flex;
+  justify-content: space-around;
+}
+
+.exception div button{
+  height: 80px;
+  width: 200px;
+  border-radius: 12px;
+  background-color: #4CAF50;
+  color: white;
+  font-size: 18px;
+  padding: 10px 20px;
+  border: none;
+  transition: background-color 0.3s ease;
+  cursor: pointer;
+}
+
+.exception div button:hover {
+  background-color: #45a049;
 }
 
 .statistic {
-    text-align: center;
-    margin-top: 20px;
-    margin-bottom: 20px;
-  }
-  
-  .statistic button {
-    background-color: #4CAF50;
-    color: white;
-    padding: 10px 20px;
-    font-size: 18px;
-    border: none;
-    border-radius: 8px;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
-  }
-  
-  .statistic button:hover {
-    background-color: #45a049;
-  }
+  text-align: center;
+  margin-top: 20px;
+  margin-bottom: 20px;
+}
+
+.statistic button {
+  background-color: #4CAF50;
+  color: white;
+  padding: 10px 20px;
+  font-size: 18px;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.statistic button:hover {
+  background-color: #45a049;
+}
