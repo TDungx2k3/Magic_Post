@@ -105,7 +105,6 @@ class gatherTellerController {
         }
     };
 
-    // chua lam
     getToGatherStep3 = async(tId) => {
         try {
             await sequelize.authenticate();
@@ -123,28 +122,37 @@ class gatherTellerController {
         };
     }
 
+    //
     gatherToGatherStep3 = async(req, res) => {
-        let tId = req.body.unit;
+        let gId = req.body.unit;
         let oId = req.body.order_id;
-        let validateTIdRs = Joi.string().regex(/^t\d+$/).required().validate(tId);
+        let validateGIdRs = Joi.string().regex(/^g\d+$/).required().validate(gId);
         let validateOIdRs = Joi.number().positive().required().validate(oId);
-        if(validateTIdRs.error || validateOIdRs.error) {
-            console.log(validateTIdRs.error);
+        if(validateGIdRs.error || validateOIdRs.error) {
+            console.log(validateGIdRs.error);
             console.log(validateOIdRs.error);
         }
         else {
-            let toGather = await this.getToGatherStep1(tId);
+            let toTrans = await Order.findAll({
+                attributes: ["receiver_address"],
+                where: {
+                    order_id: oId,
+                }
+            });
+            toTrans = toTrans[0].receiver_address.split("#")[1];
+            // console.log(toTrans[0].receiver_address.split("#")[1]);
+            let toGather = await this.getToGatherStep3(toTrans);
             try {
                 await Delivery.create({
                     order_id: oId,
-                    from_id: tId,
+                    from_id: gId,
                     to_id: toGather[0].gather_id,
                     date: this.formatDate(new Date()),
                     deliver_status: 0,
                 });
                 await Order.update(
                     {
-                        steps: 1
+                        steps: 3
                     },
                     {
                         where: {
@@ -159,69 +167,34 @@ class gatherTellerController {
         }
     };
 
-    confirmSuccessStep5 = async(req, res) => {
-        let tId = req.body.unit;
+    gatherToTransStep5 = async(req, res) => {
+        let gId = req.body.unit;
         let oId = req.body.order_id;
-        let validateTIdRs = Joi.string().regex(/^t\d+$/).required().validate(tId);
+        let validateGIdRs = Joi.string().regex(/^g\d+$/).required().validate(gId);
         let validateOIdRs = Joi.number().positive().required().validate(oId);
-        if(validateTIdRs.error || validateOIdRs.error) {
-            console.log(validateTIdRs.error);
+        if(validateGIdRs.error || validateOIdRs.error) {
+            console.log(validateGIdRs.error);
             console.log(validateOIdRs.error);
         }
         else {
-            
-            try {
-                await Delivery.update(
-                    {
-                        deliver_status: 1,
-                    },
-                    {
-                        where: {
-                            order_id: oId,
-                            to_id: tId,
-                        }
-                    }
-                );
-                await Order.update(
-                    {
-                        steps: 6,
-                        order_status: tId,
-                    },
-                    {
-                        where: {
-                            order_id: oId,
-                        }
-                    }
-                );
-                res.send();
-            } catch (error) {
-                console.log(error);
-            }
-        }
-    }
-
-    transToCustomerStep7 = async(req, res) => {
-        let tId = req.body.unit;
-        let oId = req.body.order_id;
-        let validateTIdRs = Joi.string().regex(/^t\d+$/).required().validate(tId);
-        let validateOIdRs = Joi.number().positive().required().validate(oId);
-        if(validateTIdRs.error || validateOIdRs.error) {
-            console.log(validateTIdRs.error);
-            console.log(validateOIdRs.error);
-        }
-        else {
-            
+            let toTrans = await Order.findAll({
+                attributes: ["receiver_address"],
+                where: {
+                    order_id: oId,
+                }
+            });
+            toTrans = toTrans[0].receiver_address.split("#")[1];
             try {
                 await Delivery.create({
                     order_id: oId,
-                    from_id: tId,
-                    to_id: "r",
+                    from_id: gId,
+                    to_id: toTrans,
                     date: this.formatDate(new Date()),
                     deliver_status: 0,
                 });
                 await Order.update(
                     {
-                        steps: 7,
+                        steps: 5
                     },
                     {
                         where: {
@@ -236,10 +209,13 @@ class gatherTellerController {
         }
     };
 
-    customerAccept = async(req, res) => {
+    confirmSuccessStep1 = async(req, res) => {
+        let gId = req.body.to_unit;
         let oId = req.body.order_id;
+        let validateGIdRs = Joi.string().regex(/^g\d+$/).required().validate(gId);
         let validateOIdRs = Joi.number().positive().required().validate(oId);
-        if(validateOIdRs.error) {
+        if(validateGIdRs.error || validateOIdRs.error) {
+            console.log(validateGIdRs.error);
             console.log(validateOIdRs.error);
         }
         else {
@@ -252,13 +228,14 @@ class gatherTellerController {
                     {
                         where: {
                             order_id: oId,
+                            to_id: gId,
                         }
                     }
                 );
                 await Order.update(
                     {
-                        steps: 8,
-                        order_status: "done",
+                        steps: 2,
+                        order_status: gId,
                     },
                     {
                         where: {
@@ -271,7 +248,48 @@ class gatherTellerController {
                 console.log(error);
             }
         }
-    }
+    };
+
+    confirmSuccessStep3 = async(req, res) => {
+        let gId = req.body.to_unit;
+        let oId = req.body.order_id;
+        let validateGIdRs = Joi.string().regex(/^g\d+$/).required().validate(gId);
+        let validateOIdRs = Joi.number().positive().required().validate(oId);
+        if(validateGIdRs.error || validateOIdRs.error) {
+            console.log(validateGIdRs.error);
+            console.log(validateOIdRs.error);
+        }
+        else {
+            
+            try {
+                await Delivery.update(
+                    {
+                        deliver_status: 1,
+                    },
+                    {
+                        where: {
+                            order_id: oId,
+                            to_id: gId,
+                        }
+                    }
+                );
+                await Order.update(
+                    {
+                        steps: 4,
+                        order_status: gId,
+                    },
+                    {
+                        where: {
+                            order_id: oId,
+                        }
+                    }
+                );
+                res.send();
+            } catch (error) {
+                console.log(error);
+            }
+        }
+    };
 
 
     getPathStart = async (req, res) => {

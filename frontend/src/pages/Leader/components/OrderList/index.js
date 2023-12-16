@@ -152,6 +152,7 @@ function OrderList(props) {
                     onClick={() => {
                         setIsReceive(true);
                         setStatus(true);
+                        setPageNum(1);
                         updateOrderList();
                     }}
                     >
@@ -162,6 +163,7 @@ function OrderList(props) {
                     onClick={() => {
                         setIsReceive(false);
                         setStatus(true);
+                        setPageNum(1);
                         updateOrderList();
                     }}
                     >
@@ -182,12 +184,14 @@ function OrderList(props) {
                             <div className={clsx(style.inInventoryStatus, {[style.statusNavActive] : status === true})}
                             onClick={() => {
                                 setStatus(true);
+                                setPageNum(1);
                                 updateOrderList();
                             }}
                             >In inventory</div>
                             <div className={clsx(style.shippingStatus, {[style.statusNavActive] : status === false})}
                             onClick={() => {
                                 setStatus(false);
+                                setPageNum(1);
                                 updateOrderList();
                             }}
                             >Shipping</div>

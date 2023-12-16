@@ -9,6 +9,8 @@ import { LoginContext } from "../../../../App";
 
 function CreateOrderPage() {
 
+  const storedUserInfo = JSON.parse(localStorage.getItem('userInfo'));
+
   // Giá, địa chỉ chọn mốc, bỏ ngày gửi
   // 
 
@@ -156,6 +158,7 @@ function CreateOrderPage() {
   
   // Lưu thông tin order
   const [inputs, setInputs] = useState({
+    create_unit: storedUserInfo.uUnit,
     customer_name: "",
     customer_phone: "",
     receiver_name: "",

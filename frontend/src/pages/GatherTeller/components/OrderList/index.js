@@ -70,7 +70,7 @@ function OrderList(props) {
                 .then((res) => {
                     // console.log(res.data);
                     setAllOrdersList(res.data);
-                    setStatus(1);
+                    setStatus(0);
                 })
             } catch (error) {
                 console.log(error);
@@ -82,8 +82,9 @@ function OrderList(props) {
         if (isTo) {
             if(status === 0) {
                 let tmpOrderList = [];
+                const storedUserInfo = JSON.parse(localStorage.getItem('userInfo'));
                 for(let i = 0; i < allOrdersList.length; i++) {
-                    if(allOrdersList[i].steps === 5) {
+                    if(allOrdersList[i].steps === 3 && allOrdersList[i].order_status !== storedUserInfo.uUnit) {
                         tmpOrderList.push(allOrdersList[i]);
                     }
                 }
@@ -95,7 +96,7 @@ function OrderList(props) {
             else if(status === 1) {
                 let tmpOrderList = [];
                 for(let i = 0; i < allOrdersList.length; i++) {
-                    if(allOrdersList[i].steps === 6) {
+                    if(allOrdersList[i].steps === 4) {
                         tmpOrderList.push(allOrdersList[i]);
                     }
                 }
@@ -107,7 +108,7 @@ function OrderList(props) {
             else if(status === 2) {
                 let tmpOrderList = [];
                 for(let i = 0; i < allOrdersList.length; i++) {
-                    if(allOrdersList[i].steps === 7) {
+                    if(allOrdersList[i].steps === 5) {
                         tmpOrderList.push(allOrdersList[i]);
                     }
                 }
@@ -117,10 +118,22 @@ function OrderList(props) {
                 setOrderList(tmpOrderList);
             }
         } else {
-            if(status === 1) {
+            if(status === 0) {
                 let tmpOrderList = [];
                 for(let i = 0; i < allOrdersList.length; i++) {
-                    if(allOrdersList[i].steps === 0) {
+                    if(allOrdersList[i].steps === 1) {
+                        tmpOrderList.push(allOrdersList[i]);
+                    }
+                }
+                cnt = tmpOrderList.length;
+                numOfPages = Math.ceil(cnt / maxItemsInOnePage);
+                updatePages();
+                setOrderList(tmpOrderList);
+            }
+            else if(status === 1) {
+                let tmpOrderList = [];
+                for(let i = 0; i < allOrdersList.length; i++) {
+                    if(allOrdersList[i].steps === 2) {
                         tmpOrderList.push(allOrdersList[i]);
                     }
                 }
@@ -131,8 +144,9 @@ function OrderList(props) {
             }
             else if(status === 2) {
                 let tmpOrderList = [];
+                const storedUserInfo = JSON.parse(localStorage.getItem('userInfo'));
                 for(let i = 0; i < allOrdersList.length; i++) {
-                    if(allOrdersList[i].steps === 1) {
+                    if(allOrdersList[i].steps === 3 && allOrdersList[i].order_status === storedUserInfo.uUnit) {
                         tmpOrderList.push(allOrdersList[i]);
                     }
                 }
@@ -149,7 +163,7 @@ function OrderList(props) {
         let phoneInp = document.querySelector("." + style.searchPhone).value;
         let tmpOrderList = [];
         if(oIdInp !== "") {
-        console.log(12);
+        // console.log(12);
             for(let i = 0; i < allOrdersList.length; i++) {
                 // console.log(allOrdersList[i].order_id == oIdInp);
                 if(allOrdersList[i].order_id == oIdInp) {
@@ -188,10 +202,18 @@ function OrderList(props) {
         updateOrderList();
     }, [status]);
 
-    const updateFr = (i) => {
-        // console.log(i);
+    const updateFr = (id) => {
+        console.log(id);
         let tmp = allOrdersList;
-        tmp[i].steps = tmp[i].steps + 1;
+        const storedUserInfo = JSON.parse(localStorage.getItem('userInfo'));
+        for(let i = 0; i < tmp.length; i++) {
+            if(tmp[i].order_id === id) {
+                tmp[i].steps = tmp[i].steps + 1;
+                tmp[i].order_status = storedUserInfo.uUnit;
+                break;
+            }
+        }
+        console.log(tmp);
         setAllOrdersList(tmp);
         setRe(!re);
     }
@@ -221,17 +243,19 @@ function OrderList(props) {
                         </div>
 
                         <div className={clsx(style.statusNav)}>
-                            <div className={clsx(style.confirmStatus, {[style.statusNavActive] : (status === 0), [style.hidden] : !isTo})}
+                            <div className={clsx(style.confirmStatus, {[style.statusNavActive] : (status === 0)})}
                             onClick={() => {
                                 setStatus(0);
+                                setPageNum(1);
                                 document.querySelector("." + style.searchID).value = "";
                                 document.querySelector("." + style.searchPhone).value = "";
                                 // updateOrderList();
                             }}
                             >Comfirmation</div>
-                            <div className={clsx(style.inInventoryStatus, {[style.statusNavActive] : status === 1, [style.addBorderRadius] : !isTo})}
+                            <div className={clsx(style.inInventoryStatus, {[style.statusNavActive] : status === 1})}
                             onClick={() => {
                                 setStatus(1);
+                                setPageNum(1);
                                 document.querySelector("." + style.searchID).value = "";
                                 document.querySelector("." + style.searchPhone).value = "";
                                 // updateOrderList();
@@ -240,6 +264,7 @@ function OrderList(props) {
                             <div className={clsx(style.shippingStatus, {[style.statusNavActive] : status === 2})}
                             onClick={() => {
                                 setStatus(2);
+                                setPageNum(1);
                                 document.querySelector("." + style.searchID).value = "";
                                 document.querySelector("." + style.searchPhone).value = "";
                                 // updateOrderList();
@@ -253,6 +278,8 @@ function OrderList(props) {
                     <div className={clsx(style.orderList)}>
                         {
                             orderList.map((order, index) => {
+                                let rAddress = order.receiver_address.split('#')[0];
+                                
                                 let orderData = {
                                     order_id: order.order_id,
                                     order_unit: order.order_status,
@@ -260,7 +287,7 @@ function OrderList(props) {
                                     sender_phone: order.customer_phone,
                                     receiver_name: order.receiver_name,
                                     receiver_phone: order.receiver_phone,
-                                    receiver_address: order.receiver_address,
+                                    receiver_address: rAddress,
                                     order_weight: order.weight,
                                     order_price: order.price,
                                     order_date: order.deliveries[0].date,
@@ -271,7 +298,7 @@ function OrderList(props) {
                                 return(
                                     <OrderListStatusContext.Provider value={{updateFr, status}} key={index}>
                                         <div className={clsx(style.orderContainer)}>
-                                            <Order data = {orderData} addition={index}/>
+                                            <Order data = {orderData} addition={order.order_id} isTo={isTo}/>
                                         </div>
                                     </OrderListStatusContext.Provider>
                                     

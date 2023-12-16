@@ -17,7 +17,8 @@ function Order(props) {
                 .post("http://localhost:8080/transTeller/createDeliveryStep1",
                 {
                     unit: props.data.order_unit,
-                    order_id: props.data.order_id
+                    order_id: props.data.order_id,
+                    
                 })
                 .then(() => {
                     updateFr(props.addition);
@@ -31,7 +32,7 @@ function Order(props) {
                 .post("http://localhost:8080/transTeller/transToCustomerStep7",
                 {
                     unit: props.data.order_unit,
-                    order_id: props.data.order_id
+                    order_id: props.data.order_id,
                 })
                 .then(() => {
                     updateFr(props.addition);
@@ -44,11 +45,12 @@ function Order(props) {
 
     const cfSuccess = async() => {
         try {
+            const storedUserInfo = JSON.parse(localStorage.getItem('userInfo'));
             await axios
             .post("http://localhost:8080/transTeller/confirmSuccessStep5",
             {
-                unit: props.data.order_unit,
-                order_id: props.data.order_id
+                order_id: props.data.order_id,
+                to_unit: storedUserInfo.uUnit,
             })
             .then(() => {
                 updateFr(props.addition);

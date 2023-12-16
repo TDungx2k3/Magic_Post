@@ -11,10 +11,10 @@ function Order(props) {
     const navigate = useNavigate();
 
     const moveAction = async() => {
-        if(props.data.status === 0) {
+        if(props.data.status === 2) {
             try {
                 await axios
-                .post("http://localhost:8080/transTeller/createDeliveryStep1",
+                .post("http://localhost:8080/gatherTeller/createDeliveryStep3",
                 {
                     unit: props.data.order_unit,
                     order_id: props.data.order_id
@@ -25,10 +25,10 @@ function Order(props) {
             } catch (error) {
                 console.log(error);
             }
-        } else if(props.data.status === 6) {
+        } else if(props.data.status === 4) {
             try {
                 await axios
-                .post("http://localhost:8080/transTeller/transToCustomerStep7",
+                .post("http://localhost:8080/gatherTeller/createDeliveryStep5",
                 {
                     unit: props.data.order_unit,
                     order_id: props.data.order_id
@@ -43,38 +43,42 @@ function Order(props) {
     }
 
     const cfSuccess = async() => {
-        try {
-            await axios
-            .post("http://localhost:8080/transTeller/confirmSuccessStep5",
-            {
-                unit: props.data.order_unit,
-                order_id: props.data.order_id
-            })
-            .then(() => {
-                updateFr(props.addition);
-                
-            })
-        } catch (error) {
-            console.log(error);
-        }
-    };
-
-    const customerAccept = async() => {
-        try {
-            await axios
-            .post("http://localhost:8080/transTeller/customerAccept",
-            {
-                order_id: props.data.order_id
-            })
-            .then(() => {
-                setTimeout(() => {
+        if(props.data.status === 1) {
+            try {
+                const storedUserInfo = JSON.parse(localStorage.getItem('userInfo'));
+                await axios
+                .post("http://localhost:8080/gatherTeller/confirmSuccessStep1",
+                {
+                    to_unit: storedUserInfo.uUnit,
+                    order_id: props.data.order_id,
+                })
+                .then(() => {
                     updateFr(props.addition);
-                }, 10);
-            })
-        } catch (error) {
-            console.log(error);
+                    
+                })
+            } catch (error) {
+                console.log(error);
+            }
         }
-    }
+        else if(props.data.status === 3) {
+            try {
+                const storedUserInfo = JSON.parse(localStorage.getItem('userInfo'));
+                await axios
+                .post("http://localhost:8080/gatherTeller/confirmSuccessStep3",
+                {
+                    to_unit: storedUserInfo.uUnit,
+                    order_id: props.data.order_id,
+                })
+                .then(() => {
+                    updateFr(props.addition);
+                    
+                })
+            } catch (error) {
+                console.log(error);
+            }
+        }
+        
+    };
 
     return (
         <Fragment>
@@ -139,24 +143,17 @@ function Order(props) {
                     </div>
 
                     <div className={clsx(style.orderStatus)}>
-                        <div className={clsx(style.cfStatus, {[style.hidden] : props.data.status !== 5})}>
+                        <div className={clsx(style.cfStatus, {[style.hidden] : props.data.status !== 1 && (props.data.status !== 3 || !props.isTo)})}>
                             <div className={clsx(style.successStatus)}
                             onClick={cfSuccess}
                             >Success</div>
                             <div className={clsx(style.pendingStatus)}>Lost order</div>
                         </div>
 
-                        <div className={clsx(style.inStatus, {[style.hidden] : props.data.status !== 0 && props.data.status !== 6})}>
+                        <div className={clsx(style.inStatus, {[style.hidden] : props.data.status !== 2 && props.data.status !== 4})}>
                             <div className={clsx(style.moveAct)}
                             onClick={moveAction}
                             >Move</div>
-                        </div>
-
-                        <div className={clsx(style.shippingStatus, {[style.hidden] : props.data.status !== 7})}>
-                            <div className={clsx(style.cusAcepted, )}
-                            onClick={customerAccept}
-                            >Success</div>
-                            <div className={clsx(style.cusDenied, )}>Denied</div>
                         </div>
                     </div>
                 </div>

@@ -188,10 +188,18 @@ function OrderList(props) {
         updateOrderList();
     }, [status]);
 
-    const updateFr = (i) => {
-        // console.log(i);
+    const updateFr = (id) => {
+        console.log(id);
         let tmp = allOrdersList;
-        tmp[i].steps = tmp[i].steps + 1;
+        const storedUserInfo = JSON.parse(localStorage.getItem('userInfo'));
+        for(let i = 0; i < tmp.length; i++) {
+            if(tmp[i].order_id === id) {
+                tmp[i].steps = tmp[i].steps + 1;
+                tmp[i].order_status = storedUserInfo.uUnit;
+                break;
+            }
+        }
+        console.log(tmp);
         setAllOrdersList(tmp);
         setRe(!re);
     }
@@ -224,6 +232,7 @@ function OrderList(props) {
                             <div className={clsx(style.confirmStatus, {[style.statusNavActive] : (status === 0), [style.hidden] : !isTo})}
                             onClick={() => {
                                 setStatus(0);
+                                setPageNum(1);
                                 document.querySelector("." + style.searchID).value = "";
                                 document.querySelector("." + style.searchPhone).value = "";
                                 // updateOrderList();
@@ -232,6 +241,7 @@ function OrderList(props) {
                             <div className={clsx(style.inInventoryStatus, {[style.statusNavActive] : status === 1, [style.addBorderRadius] : !isTo})}
                             onClick={() => {
                                 setStatus(1);
+                                setPageNum(1);
                                 document.querySelector("." + style.searchID).value = "";
                                 document.querySelector("." + style.searchPhone).value = "";
                                 // updateOrderList();
@@ -240,6 +250,7 @@ function OrderList(props) {
                             <div className={clsx(style.shippingStatus, {[style.statusNavActive] : status === 2})}
                             onClick={() => {
                                 setStatus(2);
+                                setPageNum(1);
                                 document.querySelector("." + style.searchID).value = "";
                                 document.querySelector("." + style.searchPhone).value = "";
                                 // updateOrderList();
@@ -271,7 +282,7 @@ function OrderList(props) {
                                 return(
                                     <OrderListStatusContext.Provider value={{updateFr, status}} key={index}>
                                         <div className={clsx(style.orderContainer)}>
-                                            <Order data = {orderData} addition={index}/>
+                                            <Order data = {orderData} addition={order.order_id}/>
                                         </div>
                                     </OrderListStatusContext.Provider>
                                     

@@ -159,13 +159,13 @@ class transactionTellerController {
     };
 
     confirmSuccessStep5 = async(req, res) => {
-        let tId = req.body.unit;
+        let tId = req.body.to_unit;
         let oId = req.body.order_id;
         let validateTIdRs = Joi.string().regex(/^t\d+$/).required().validate(tId);
         let validateOIdRs = Joi.number().positive().required().validate(oId);
-        if(validateTIdRs.error || validateOIdRs.error) {
-            console.log(validateTIdRs.error);
+        if(validateOIdRs.error || validateTIdRs.error) {
             console.log(validateOIdRs.error);
+            console.log(validateTIdRs.error);
         }
         else {
             
@@ -324,6 +324,15 @@ class transactionTellerController {
         } catch (error) {
             console.log(error);
         };
+    };
+
+    getMaxOrderID = async() => {
+        try {
+            const maxOID = await Order.max("order_id");
+            return maxOID;
+        } catch (error) {
+            console.log(error);
+        }
     }
 
     createOrder = async (req, res) => {
@@ -341,7 +350,7 @@ class transactionTellerController {
                 weight: orderData.weight,
                 price: orderData.price,
                 description: orderData.description,
-                order_status: "1",
+                order_status: orderData.create_unit,
                 steps: 0,
             })
             .then(() => {
@@ -349,6 +358,15 @@ class transactionTellerController {
             })
             .catch(error => {
                 res.json("Lỗi khi tạo đơn hàng" + error.message);
+            });
+            const newOID = await this.getMaxOrderID();
+            // console.log(newOID);
+            await Delivery.create({
+                order_id: newOID,
+                from_id: "s",
+                to_id: orderData.create_unit,
+                date: orderData.date,
+                deliver_status: 1
             })
         } catch (error) {
             console.log(error);
