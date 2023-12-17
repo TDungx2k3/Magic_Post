@@ -25,7 +25,7 @@ function StatisticOrdersSent(props) {
             console.error(err);
         }
     };
-    
+
 
     useEffect(() => {
         handleGetData();
@@ -36,30 +36,77 @@ function StatisticOrdersSent(props) {
     return (
         <Fragment>
             <div className={clsx(style.container, props.className)}>
-                {data && data.length > 0 && data.map((data, index) => (
-                    <div className={clsx(style["sub-container"])} key={index}>
+                {data && data.length > 0 ? (
+                    data.map((data, index) => (
+                        <div className={clsx(style["sub-container"])} key={index}>
+                            <div className={style["customer-container"]}>
+                                <div className={style.sender}>
+                                    <div>
+                                        <label>Sender Name: </label>
+                                        <span>{data.customer_name || "N/A"}</span>
+                                    </div>
+
+                                    <div>
+                                        <label>Sender Phone: </label>
+                                        <span>{data.customer_phone || "N/A"}</span>
+                                    </div>
+                                </div>
+
+                                <div className={clsx(style.receiver)}>
+                                    <div>
+                                        <label>Receiver Name: </label>
+                                        <span>{data.receiver_name || "N/A"}</span>
+                                    </div>
+
+                                    <div>
+                                        <label>Receiver Phone: </label>
+                                        <span>{data.receiver_phone || "N/A"}</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div className={clsx(style["order-container"])}>
+                                <div>
+                                    <label htmlFor="Weight">Weight: </label>
+                                    <span>{data.weight || "N/A"} kg</span>
+                                </div>
+
+                                <div>
+                                    <label htmlFor="Price">Price: </label>
+                                    <span>{data.price || "N/A"} $</span>
+                                </div>
+
+                                <div>
+                                    <label htmlFor="Date">Date: </label>
+                                    <span>{data.date || "N/A"}</span>
+                                </div>
+                            </div>
+                        </div>
+                    ))
+                ) : (
+                    <div className={clsx(style["sub-container"])}>
                         <div className={style["customer-container"]}>
                             <div className={style.sender}>
                                 <div>
                                     <label>Sender Name: </label>
-                                    <span>{data.customer_name || "N/A"}</span>
+                                    <span>{"N/A"}</span>
                                 </div>
 
                                 <div>
                                     <label>Sender Phone: </label>
-                                    <span>{data.customer_phone || "N/A"}</span>
+                                    <span>{"N/A"}</span>
                                 </div>
                             </div>
 
                             <div className={clsx(style.receiver)}>
                                 <div>
                                     <label>Receiver Name: </label>
-                                    <span>{data.receiver_name || "N/A"}</span>
+                                    <span>{"N/A"}</span>
                                 </div>
 
                                 <div>
                                     <label>Receiver Phone: </label>
-                                    <span>{data.receiver_phone || "N/A"}</span>
+                                    <span>{"N/A"}</span>
                                 </div>
                             </div>
                         </div>
@@ -67,21 +114,21 @@ function StatisticOrdersSent(props) {
                         <div className={clsx(style["order-container"])}>
                             <div>
                                 <label htmlFor="Weight">Weight: </label>
-                                <span>{data.weight || "N/A"} kg</span>
+                                <span>{"N/A"} kg</span>
                             </div>
 
                             <div>
                                 <label htmlFor="Price">Price: </label>
-                                <span>{data.price || "N/A"} $</span>
+                                <span>{"N/A"} $</span>
                             </div>
 
                             <div>
                                 <label htmlFor="Date">Date: </label>
-                                <span>{data.date || "N/A"}</span>
+                                <span>{"N/A"}</span>
                             </div>
                         </div>
                     </div>
-                ))}
+                )}
             </div>
         </Fragment>
     );
