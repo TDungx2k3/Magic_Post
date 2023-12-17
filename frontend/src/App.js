@@ -8,7 +8,9 @@ import Login from './pages/Login';
 import AboutUs from "./pages/AboutUs"
 import Leader from './pages/Leader';
 import TransactionManager from './pages/TransactionManager';
-import ChartSent from './pages/TransactionManager/subpages/ChartSent';
+import Chart from './pages/TransactionManager/subpages/Chart';
+import DenyList from './pages/TransactionManager/subpages/DenyList';
+import LostOrderList from './pages/TransactionManager/subpages/LostOrderList';
 import GatherManager from './pages/GatherManager';
 import ModifyAccountEmployee from './pages/GatherManager/subpage/ModifyAccountEmployee';
 import { createContext, useEffect, useState } from 'react';
@@ -133,7 +135,9 @@ function App() {
             <Route path="/login" element={<Login />} />
             <Route path="/about-us" element={<AboutUs />} />
             <Route path='/transaction-manager' element={<TransactionManager />}/>
-            <Route path='/transaction-manager/chart-sent' element={<ChartSent />}/>
+            <Route path='/transaction-manager/statistic' element={<Chart />}/>
+            <Route path='/transaction-manager/deny-list' element={<DenyList />}/>
+            <Route path='/transaction-manager/lost-order-list' element={<LostOrderList />}/>
             <Route path='/gather-manager' element={<GatherManager />}/>
             <Route path='/modify-account' element={<ModifyAccountEmployee />}/>
             <Route path = '/leaderManageGather' element={<ManageGather/>} />

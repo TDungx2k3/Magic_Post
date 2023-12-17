@@ -1,11 +1,17 @@
 import React, { useState, useEffect } from "react";
 import ReactApexCharts from "react-apexcharts";
 import clsx from "clsx";
-import style from "./ChartSent.module.scss";
+import style from "./Chart.module.scss";
 import axios from "axios";
 import { format, subDays } from "date-fns";
+import { useContext } from "react";
+import { LoginContext } from "../../../../App";
+import { Link } from "react-router-dom";
 
-const ChartSent = (props) => {
+const Chart = () => {
+    const userInfo = useContext(LoginContext);
+    console.log(userInfo.userInfo.uUnit);
+
     const [isFetchedDateData, setIsFetchedDateData] = useState(false);
     const [dates, setDates] = useState([]);
 
@@ -38,9 +44,12 @@ const ChartSent = (props) => {
     const fetchDataSentForDate = async (date) => {
         try {
             const response = await axios.get("http://localhost:8080/transaction-manager/count-order-sent-by-date"
-            , {
-                params: { date }
-            }
+                , {
+                    params: {
+                        date,
+                        unit: userInfo.userInfo.uUnit
+                    }
+                }
             );
             return response.data[0]['COUNT(*)'];
         } catch (err) {
@@ -52,9 +61,12 @@ const ChartSent = (props) => {
     const fetchDataReceivedForDate = async (date) => {
         try {
             const response = await axios.get("http://localhost:8080/transaction-manager/count-order-received-by-date"
-            , {
-                params: { date }
-            }
+                , {
+                    params: {
+                        date,
+                        unit: userInfo.userInfo.uUnit
+                    }
+                }
             );
             return response.data[0]['COUNT(*)'];
         } catch (err) {
@@ -202,4 +214,4 @@ const ChartSent = (props) => {
     );
 }
 
-export default ChartSent;
+export default Chart;

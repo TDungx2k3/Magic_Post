@@ -11,5 +11,7 @@ router.get("/get-order-received", transactionManagerController.showAllOrderRecei
 router.get("/get-max-date", transactionManagerController.getMaxDateSent);
 router.get("/count-order-sent-by-date", transactionManagerController.countOrderSentInADate);
 router.get("/count-order-received-by-date", transactionManagerController.countOrderReceivedInADate);
+router.get("/get-deny-list", transactionManagerController.showDenyList);
+router.get("/get-lost-order-list", transactionManagerController.showLostOrderList);
 
 module.exports = router;

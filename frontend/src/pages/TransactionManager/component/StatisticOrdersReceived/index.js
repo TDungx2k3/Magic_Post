@@ -57,7 +57,7 @@ function StatisticOrdersReceived(props) {
                             </div>
 
                             <div>
-                                <label>Receiver Name: </label>
+                                <label>Receiver Phone: </label>
                                 <span>{data.receiver_phone || "N/A"}</span>
                             </div>
                         </div>

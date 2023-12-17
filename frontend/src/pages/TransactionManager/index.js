@@ -18,8 +18,8 @@ function TransactionManager() {
     const storedIsLogin = JSON.parse(localStorage.getItem('isLogin'));
     let cnt = 0;
     useEffect(() => {
-        if(!storedIsLogin && nowTime - storedOutTime < 3600000 && cnt === 0) {
-            cnt ++;
+        if (!storedIsLogin && nowTime - storedOutTime < 3600000 && cnt === 0) {
+            cnt++;
             alert("You have to login before access this page!");
             navigate("/login");
         }
@@ -64,31 +64,37 @@ function TransactionManager() {
             <Header />
             <div className={clsx(style.exception)}>
                 <div className={clsx(style["customer-deny"])}>
-                    <button>Customers Deny Order</button>
+                    <Link to={"/transaction-manager/deny-list"}>
+                        <button>Customers Deny Order</button>
+                    </Link>
                 </div>
 
                 <div className={clsx(style["lost-orders"])}>
-                    <button>Lost Orders</button>
+                    <Link to={"/transaction-manager/lost-order-list"}>
+                        <button>Lost Orders</button>
+                    </Link>
                 </div>
             </div>
-            <Link to="/transaction-manager/chart-sent">
+
+            <Link to="/transaction-manager/statistic">
                 <div className={clsx(style.statistic)}>
                     <button>Statistic</button>
                 </div>
             </Link>
-            <ManageTransactionNav 
-                onClickCreateAccount={handleIsClickCreateAccount} 
+
+            <ManageTransactionNav
+                onClickCreateAccount={handleIsClickCreateAccount}
                 onClickStatisticOrdersSent={handleIsClickStatisticOrdersSent}
                 onClickStatisticOrdersReceived={handleIsClickStatisticOrdersReceived}
             />
-            <TransactionManagerFormCreateAccount 
-                className={clsx({[style["transaction-manager-form-create-account"]] : isClickCreateAccount === true}, {[style["transaction-manager-form-create-account-hidden"]] : isClickCreateAccount === false})}
+            <TransactionManagerFormCreateAccount
+                className={clsx({ [style["transaction-manager-form-create-account"]]: isClickCreateAccount === true }, { [style["transaction-manager-form-create-account-hidden"]]: isClickCreateAccount === false })}
             />
-            <StatisticOrdersSent 
-                className={clsx({[style["statistic-orders-sent"]] : isClickStatisticOrdersSent === true}, {[style["statistic-orders-sent-hidden"]] : isClickStatisticOrdersSent === false})}
+            <StatisticOrdersSent
+                className={clsx({ [style["statistic-orders-sent"]]: isClickStatisticOrdersSent === true }, { [style["statistic-orders-sent-hidden"]]: isClickStatisticOrdersSent === false })}
             />
-            <StatisticOrdersReceived 
-                className={clsx({[style["statistic-orders-received"]] : isClickStatisticOrdersReceived === true}, {[style["statistic-orders-sent-hidden"]] : isClickStatisticOrdersReceived === false})}   
+            <StatisticOrdersReceived
+                className={clsx({ [style["statistic-orders-received"]]: isClickStatisticOrdersReceived === true }, { [style["statistic-orders-sent-hidden"]]: isClickStatisticOrdersReceived === false })}
             />
             <Footer />
         </Fragment>

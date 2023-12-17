@@ -150,7 +150,8 @@ class transactionManagerController {
 
     countOrderSentInADate = async (req, res) => {
         try {
-            const data = req.query.date;
+            const date = req.query.date;
+            const unit = req.query.unit;
     
             const count = await sequelize.query(
                 `SELECT COUNT(*) 
@@ -159,10 +160,13 @@ class transactionManagerController {
                     FROM orders 
                     JOIN deliveries ON orders.order_id = deliveries.order_id 
                     JOIN transactions ON transactions.trans_id = deliveries.from_id
-                    WHERE orders.date = :date
+                    WHERE orders.date = :date AND transactions.trans_id = :unit
                 ) AS subquery`, 
                 {
-                    replacements: { date : data}
+                    replacements: { 
+                        date : date ,
+                        unit: unit
+                    }
                 }
             );
             console.log(count[0]);
@@ -174,7 +178,8 @@ class transactionManagerController {
 
     countOrderReceivedInADate = async (req, res) => {
         try {
-            const data = req.query.date;
+            const date = req.query.date;
+            const unit = req.query.unit;
     
             const count = await sequelize.query(
                 `SELECT COUNT(*) 
@@ -183,15 +188,49 @@ class transactionManagerController {
                     FROM orders 
                     JOIN deliveries ON orders.order_id = deliveries.order_id 
                     JOIN transactions ON transactions.trans_id = deliveries.to_id
-                    WHERE orders.date = :date
+                    WHERE orders.date = :date AND transactions.trans_id = :unit
                 ) AS subquery`, 
                 {
-                    replacements: { date : data}
+                    replacements: { 
+                        date : date,
+                        unit: unit
+                    }
                 }
             );
             console.log(count[0]);
             res.json(count[0]);
         } catch (err) {
+            res.json(err);
+        }
+    }
+
+    showDenyList = async (req, res) => {
+        try {
+            const unit = req.query.unit;
+
+            const denyList = await sequelize.query("SELECT `orders`.order_id, `orders`.weight, `orders`.price, `orders`.date, `orders`.customer_name, `orders`.customer_phone, `orders`.receiver_name, `orders`.receiver_phone FROM `orders` JOIN deliveries ON orders.order_id = deliveries.order_id JOIN transactions ON deliveries.from_id = transactions.trans_id WHERE deliveries.from_id = :unit AND deliveries.deliver_status = 0 ORDER BY orders.date DESC",
+            {
+                replacements: { unit: unit }
+            });
+            res.json(denyList);
+        }
+        catch(err) {
+            console.log(err);
+            res.json(err);
+        }
+    }
+
+    showLostOrderList = async (req, res) => {
+        try {
+            const unit = req.query.unit;
+
+            const lostOrderList = await sequelize.query("SELECT `orders`.order_id, `orders`.weight, `orders`.price, `orders`.date, `orders`.customer_name, `orders`.customer_phone, `orders`.receiver_name, `orders`.receiver_phone FROM `orders` JOIN deliveries ON orders.order_id = deliveries.order_id JOIN transactions ON deliveries.to_id = transactions.trans_id WHERE deliveries.from_id = :unit AND deliveries.deliver_status = -1 ORDER BY orders.date DESC", 
+                { replacements: { unit: unit } 
+            });
+            res.json(lostOrderList);
+        }
+        catch(err) {
+            console.log(err);
             res.json(err);
         }
     }

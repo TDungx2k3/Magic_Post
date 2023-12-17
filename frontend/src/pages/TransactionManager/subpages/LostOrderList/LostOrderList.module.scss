@@ -1,0 +1,118 @@
+.container {
+    background-color: #D9D9D9;
+    display: flex;
+    flex-direction: column;
+    margin-left: auto;
+    margin-right: auto;
+    color: #FFFFFF;
+    font-size: 24px;
+    font-family: Roboto, sans-serif;
+    font-weight: bold;
+    width: 80%;
+    height: fit-content;
+    border-radius: 60px;
+  }
+  
+  .sub-container {
+    margin-top: 20px;
+    margin-bottom: 20px;
+    text-align: left;
+    background-color: #3D4FD2;
+    border-radius: 50px;
+    margin-left: auto;
+    margin-right: auto;
+    width: 85%;
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .sub-container:hover {
+    cursor: pointer;
+    animation: scaleUp 0.5s ease forwards;
+  }
+  
+  .sub-container:not(:hover) {
+    animation: scaleDown 0.5s ease forwards;
+  }
+  
+  
+  .customer-container {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 12px;
+    margin-bottom: 10px;
+    margin-left: 40px;
+    margin-right: 40px;
+    background-color: #ADD8E6;
+    border-radius: 20px;
+    color: #4E4E4E;
+  }
+  
+  .customer-container > div {
+    margin-left: 5px;
+    margin-right: 5px;
+  }
+  
+  .order-container {
+    margin-left: 40px;
+    margin-top: 10px;
+    margin-bottom: 12px;
+  }
+  
+  .statistic {
+    text-align: center;
+    margin-top: 20px;
+  }
+  
+  .statistic button {
+    background-color: #4CAF50;
+    color: white;
+    padding: 10px 20px;
+    font-size: 18px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
+  
+  .statistic button:hover {
+    background-color: #45a049;
+  }
+  
+  @keyframes scaleUp {
+    0% {
+      transform: scale(1);
+    }
+  
+    100% {
+      transform: scale(1.1);
+    }
+  }
+  
+  @keyframes scaleDown {
+    0% {
+      transform: scale(1.1);
+    }
+  
+    100% {
+      transform: scale(1.0);
+    }
+  }
+  
+  @media screen and (max-width: 768px) {
+    .container {
+      font-size: 20px;
+    }
+  }
+  
+  @media screen and (max-width: 678px) {
+    .container {
+      font-size: 18px;
+    }
+  }
+  
+  @media screen and (max-width: 562px) {
+    .container {
+      font-size: 16px;
+    }
+  }
