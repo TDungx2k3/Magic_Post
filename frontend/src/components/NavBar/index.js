@@ -72,7 +72,7 @@ function NavBar() {
             <section className={clsx({[style.invalid] : (isLogin)})}>
                 <div className={clsx(style.rolesBtns)}>
                     <div className={clsx(style.forCustomers)}>
-                        <Link to ="#">For Customers</Link>
+                        <Link to ="/customerQR">For Customers</Link>
                     </div>
             
                     <div className={clsx(style.forEmployees)}>

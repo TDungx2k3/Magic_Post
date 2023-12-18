@@ -26,6 +26,7 @@ import ManageTransaction from './pages/Leader/subPages/ManageTransaction';
 import FromTransaction from './pages/GatherTeller/SubPage/FromTransaction';
 import ToTransaction from './pages/GatherTeller/SubPage/ToTransaction';
 import GatherTeller from './pages/GatherTeller';
+import CustomerQR from './pages/Customer';
 
 export const LoginContext = createContext();
 
@@ -150,6 +151,7 @@ function App() {
             <Route path = '/gatherTeller' element={<GatherTeller/>} />
             <Route path = '/gatherTellerFromTran' element={<FromTransaction/>} />
             <Route path = '/gatherTellerToTran' element={<ToTransaction/>} />
+            <Route path = '/customerQR' element={<CustomerQR/>} />
           </Routes>
         </Router>
       </div>
