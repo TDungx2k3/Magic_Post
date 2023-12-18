@@ -6,10 +6,13 @@ import axios from "axios";
 import Header from "../../../../components/Header";
 import Footer from "../../../../components/Footer";
 import { LoginContext } from "../../../../App";
+import { useNavigate } from "react-router-dom";
 
 function CreateOrderPage() {
 
   const storedUserInfo = JSON.parse(localStorage.getItem('userInfo'));
+
+  const navigate = useNavigate();
 
   // Giá, địa chỉ chọn mốc, bỏ ngày gửi
   // 
@@ -60,7 +63,7 @@ function CreateOrderPage() {
     const handlePath = async (e) => {
       try {
         await axios.get("http://localhost:8080/transTeller/getPathStart", {params : {
-          unit : "t01",
+          unit : storedUserInfo.uUnit,
         }})
         .then((response) => {
           paths.transaction_start = response.data.transactionStart;
@@ -230,8 +233,24 @@ function CreateOrderPage() {
     try {
       await axios.post("http://localhost:8080/transTeller/createOrder", inputs)
       .then((response) => {
-        alert(response.data);
+        alert(response.data.returnMessage);
+        if(response.data.returnMessage === "Tạo thành công 1 đơn hàng") {
+          navigate('/deliveryReceipt', {state: { 
+            customerName: inputs.customer_name, 
+            customerPhone: inputs.customer_phone,
+            customerAddress: paths.transaction_start + ', ' +  paths.gathering_start,
+            weight: inputs.weight,
+            price: inputs.price,
+            receiverName: inputs.receiver_name,
+            receiverAddress: inputs.receiver_address,
+            receiverPhone: inputs.receiver_phone,
+            date: inputs.date,
+            adminName: storedUserInfo.uName,
+            orderId: response.data.orderId,
+          }});
+        }
       })
+
       .catch((error) => {
         console.log(error);
       });
@@ -360,6 +379,7 @@ function CreateOrderPage() {
           </div>
 
         </div>
+
         <button className={style.createOrderBtn} onClick={handleErrorBeforeSubmit}>Create Order</button>
       </div>
       <Footer />

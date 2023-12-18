@@ -1,26 +1,120 @@
 import style from "../DeliveryReceiptPage/DeliveryReceiptPage.module.scss";
 import clsx from "clsx";
 import dauChuyenPhat from "../../assets/icons/dauChuyenPhat.png";
+import { Link, useLocation , useNavigate} from "react-router-dom";
+import { animateScroll as scroll } from "react-scroll"
+import { format } from 'date-fns';
+import axios from "axios";
+import { useEffect, useState } from "react";
+import QRCode from 'qrcode.react';
+import logo from '../../assets/icons/logo.png'
 
 function DeliveryReceiptPage() {
+  const navigate = useNavigate();
+  const location = useLocation();
+  const {customerName, customerPhone, customerAddress, 
+    weight, price, receiverName, receiverAddress, 
+    receiverPhone, date, adminName, orderId} = location.state || {};
+
+  let part = receiverAddress.split('#');
+
+  const [receiverAddressFormat, setReceiverAddressFormat] = useState('');
+  const[orderObject, setOrderObject] = useState([]);
+
+  useEffect(() => {
+    const fetchTransData = async () => {
+      try {
+        await axios.get('http://localhost:8080/transTeller/getTransactionById', {params: {
+          transaction_id: part[1],
+        }})
+        .then((response) => {
+          part[1] = response.data.trans_name;
+          setReceiverAddressFormat(part[0] + ', ' + part[1]);
+        }).catch((error) => {
+          console.log(error);
+        });
+        //console.log(response.data);
+      } catch (error) {
+        console.error('Error fetching regions:', error);
+      }
+    };
+
+    fetchTransData();
+  }, [receiverAddress]);
+
+
+  // Lay doi tuong order
+  useEffect(() => {
+    const fetchOrderData = async () => {
+      try {
+        await axios.get('http://localhost:8080/transTeller/getOrderById', {params: {
+          order_id: orderId,
+        }})
+        .then((response) => {
+          if(response.data.message === 'Successful') {
+            setOrderObject(response.data.orderObject);
+          } else {
+            console.log(response.data.message);
+          }
+        }).catch((error) => {
+          console.log(error);
+        });
+        //console.log(response.data);
+      } catch (error) {
+        console.error('Error fetching regions:', error);
+      }
+    };
+
+    fetchOrderData();
+  }, [orderId]);
+
+  const handleDownloadQRCode = () => {
+    const canvas = document.getElementById('qrcode-canvas');
+    const url = canvas.toDataURL('image/png');
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = 'qrcode.png';
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  };
+
   return (
     <div className={style.container}>
       <div className={style.header}>
-        <p className={style.logoEMS}>Phiếu gửi EMS</p>
-        <p className={style.qrCode}>Số phiếu: EU103280832VN</p>
+        <Link to ="/" className={clsx(style.logo)}
+        onClick={() => {
+            navigate("/");
+            setTimeout(() => {
+                // console.log(2);
+                scroll.scrollTo(document.getElementById('top').offsetTop, {
+                    spy: true,
+                    smooth: true,
+                    duration: 500,
+                });
+            }, 10);
+            const storedIsLogin = JSON.parse(localStorage.getItem('isLogin'));
+            const storedUserInfo = JSON.parse(localStorage.getItem('userInfo'));
+            console.log(storedIsLogin);
+            console.log(storedUserInfo);
+        }}
+        >
+            <img src={logo} alt="Logo" style={{ width: '100px', height: 'auto' }}/>
+        </Link>
+        <p className={style.orderID}>Số phiếu: {orderId}</p>
+        {orderObject && <QRCode className={style.qrCode} onClick={handleDownloadQRCode} value={JSON.stringify(orderObject)} />}
       </div>
       <div className={style.body}>
         <div className={style.content1}>
           <strong>1. Họ tên địa chỉ người gửi:</strong>
           <br />
-          Trương Quang Đạt <br /> địa chỉ - Phường Dịch Vọng Hậu - Quận Cầu Giấy
-          - TP Hà Nội
+          {customerName} <br /> {customerAddress}
           <br />
           <br />
           <br />
-          Điện Thoại:
+          Điện Thoại: {customerPhone}
           <div className={style.maNguoiGui}>
-            <p>Mã Khách Hàng: </p>
+            <p>Mã Khách Hàng: 10179</p>
             <p>Mã Bưu Chính: 10179</p>
           </div>
         </div>
@@ -28,14 +122,13 @@ function DeliveryReceiptPage() {
         <div className={style.content2}>
           <strong>2. Họ tên địa chỉ người nhận</strong>
           <br />
-          Trương Quang Đạt <br /> địa chỉ - Phường Dịch Vọng Hậu - Quận Cầu Giấy
-          - TP Hà Nội
+          {receiverName} <br /> {receiverAddressFormat}
           <br />
           <br />
           <br />
-          Mã ĐH:
+          Mã ĐH: {orderId}
           <div className={style.maNguoiNhan}>
-            <p>Điện Thoại: </p>
+            <p>Điện Thoại: {receiverPhone}</p>
             <p>Mã Bưu Chính: 10189</p>
           </div>
         </div>
@@ -47,7 +140,7 @@ function DeliveryReceiptPage() {
             <label for="taiLieu" className={style.inline_checkbox}>
               Tài liệu
             </label>
-            <input type="checkbox" id="hangHoa" />
+            <input type="checkbox" id="hangHoa" checked/>
             <label for="hangHoa" className={style.inline_checkbox}>
               Hàng Hóa
             </label>
@@ -59,15 +152,15 @@ function DeliveryReceiptPage() {
           <table>
             <tr>
               <th>Nội dung</th>
-              <th>Số lượng</th>
+              <th>Khối lượng</th>
               <th>Trị giá</th>
               <th>Giấy tờ đính kèm</th>
             </tr>
             <tr>
               <td>Tổng</td>
+              <td>{weight}kg</td>
+              <td>{price}</td>
               <td>0</td>
-              <td></td>
-              <td></td>
             </tr>
           </table>
         </div>
@@ -120,22 +213,22 @@ function DeliveryReceiptPage() {
           <strong>8. Ngày giờ gửi:</strong>
           <strong>Chữ kí người gửi</strong>
           <br />
-          <p>07h52/18/10/2023</p>
+          <p>{format(new Date(date), 'hh:mm:ss dd/MM/yyyy')}</p>
         </div>
 
         <div className={style.content9}>
           <strong>9. Cước:</strong>
           <p>
-            Cước chính: <b>9.500</b>
+            Cước chính: <b>{price}</b>
           </p>
           <p>
-            Phụ phí: <b>1.900</b>
+            Phụ phí: <b>0</b>
           </p>
           <p>
             Cước GTGT: <b>0</b>
           </p>
           <p>
-            Tổng cước (gồm VAT): <b>12.312</b>
+            Tổng cước (gồm VAT): <b>{price}</b>
           </p>
           <p>
             Thu khác: <b>0</b>
@@ -144,15 +237,15 @@ function DeliveryReceiptPage() {
 
         <div className={style.content10}>
           <strong>10. Khối lượng (kg):</strong>
-          <br /> Khối lượng thực tế <b>30</b>
-          <br /> Khối lượng quy đổi <b>0</b>
+          <br /> Khối lượng thực tế <b>{weight}</b>
+          <br /> Khối lượng quy đổi <b>{weight}</b>
         </div>
 
         <div className={style.content11}>
           <strong>11. Thu của người nhận:</strong>
-          <br /> COD:
-          <br /> Thu khác:
-          <br /> Tổng thu:
+          <br /> COD: <b>0</b>
+          <br /> Thu khác: <b>0</b>
+          <br /> Tổng thu: <b>0</b>
         </div>
 
         <div className={style.content12}>
@@ -169,7 +262,7 @@ function DeliveryReceiptPage() {
             src={dauChuyenPhat}
             alt=""
           ></img>
-          <br /> <i>GDV: Truong Quang Dat</i>
+          <br /> <i>GDV: {adminName}</i>
         </div>
 
         <div className={style.content14}>

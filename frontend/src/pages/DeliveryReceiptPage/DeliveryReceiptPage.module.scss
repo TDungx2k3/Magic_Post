@@ -1,3 +1,13 @@
+.container {
+    --tw-bg-opacity: 1;
+    background-color: rgb(235 243 255/var(--tw-bg-opacity));
+}
+
+.header {
+    padding-top: 1%;
+    margin-bottom: 1%;
+}
+
 .body > div {
     border: 1px solid black;
 }
@@ -98,14 +108,18 @@
     display: flex;
 }
 
-.logoEMS {
+.logo {
+    cursor: pointer;
     margin-left: 10%;
-    font-size: 150%;
+}
+
+.orderID {
+    margin-left: 35%;
+    font-size: 120%;
 }
 
 .qrCode {
-    margin-left: 30%;
-    font-size: 120%;
+    margin-left: 5%;
 }
 
 .maNguoiGui {
@@ -178,6 +192,11 @@ th, td {
 }
 
 .content10 b {
+    float: right;
+    margin-right: 2%;
+}
+
+.content11 b {
     float: right;
     margin-right: 2%;
 }
