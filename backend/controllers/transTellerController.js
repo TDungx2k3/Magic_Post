@@ -289,8 +289,8 @@ class transactionTellerController {
             });
             //res.json(pathStart);
             res.json({
-                transactionStart: pathStart.trans_id,
-                gatherStart: pathStart.gathering.gather_id,
+                transactionStart: pathStart.trans_name,
+                gatherStart: pathStart.gathering.gather_name,
             });
         } catch (error) {
             console.log(error);
@@ -353,11 +353,18 @@ class transactionTellerController {
                 order_status: orderData.create_unit,
                 steps: 0,
             })
-            .then(() => {
-                res.json("Tạo thành công 1 đơn hàng");
+            .then(async () => {
+                const newOrderId = await this.getMaxOrderID();
+                res.json({
+                    returnMessage: "Tạo thành công 1 đơn hàng",
+                    orderId: newOrderId,
+                });
             })
             .catch(error => {
-                res.json("Lỗi khi tạo đơn hàng" + error.message);
+                res.json({
+                    returnMessage: "Lỗi khi tạo đơn hàng" + error.message,
+                    orderId: '',
+                });
             });
             const newOID = await this.getMaxOrderID();
             // console.log(newOID);
@@ -405,6 +412,51 @@ class transactionTellerController {
         }
     };
 
+    getTransactionById = async (req, res) => {
+        const data = req.query.transaction_id;
+        try {
+            await sequelize.authenticate();
+            await sequelize.sync();
+            let transactions = [];
+            transactions = await Transaction.findOne({
+                where: {
+                    trans_id: data,
+                }
+            });
+            res.json(transactions);
+        } catch (error) {
+            res.send(error);
+            console.log(error);
+        }
+    }
+
+    getOrderById = async (req, res) => {
+        const data = req.query.order_id;
+        try {
+            await sequelize.authenticate();
+            await sequelize.sync();
+            let order = [];
+            order = await Order.findOne({
+                where: {
+                    order_id: data,
+                }
+            });
+            if(order) {
+                res.json({
+                    message: 'Successful',
+                    orderObject: order,
+                });
+            } else {
+                res.json({
+                    message: 'Order not found',
+                    orderObject: '',
+                })
+            }
+        } catch (error) {
+            res.send(error);
+            console.log(error);
+        }
+    }
 };
 
 module.exports = new transactionTellerController();
