@@ -12,6 +12,7 @@ import Chart from './pages/TransactionManager/subpages/Chart';
 import DenyList from './pages/TransactionManager/subpages/DenyList';
 import LostOrderList from './pages/TransactionManager/subpages/LostOrderList';
 import GatherManager from './pages/GatherManager';
+import Statistic from './pages/GatherManager/subpage/Statistic';
 import ModifyAccountEmployee from './pages/GatherManager/subpage/ModifyAccountEmployee';
 import { createContext, useEffect, useState } from 'react';
 import ManageGather from './pages/Leader/subPages/ManageGather';
@@ -139,6 +140,7 @@ function App() {
             <Route path='/transaction-manager/deny-list' element={<DenyList />}/>
             <Route path='/transaction-manager/lost-order-list' element={<LostOrderList />}/>
             <Route path='/gather-manager' element={<GatherManager />}/>
+            <Route path='/gather-manager/statistic' element={<Statistic />}/>
             <Route path='/modify-account' element={<ModifyAccountEmployee />}/>
             <Route path = '/leaderManageGather' element={<ManageGather/>} />
             <Route path = '/leaderManageTransaction' element={<ManageTransaction/>} />

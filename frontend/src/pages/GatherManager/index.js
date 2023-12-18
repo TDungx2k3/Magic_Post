@@ -8,6 +8,7 @@ import StatisticOrdersReceived from "./component/StatisticOrdersReceived";
 import Footer from "../../components/Footer";
 import { Fragment } from "react";
 import { useState } from "react";
+import { Link } from "react-router-dom";
 
 function GatherManager() {
     const [isClickManageAccountEmployee, setIsClickManageAccountEmployee] = useState(true);
@@ -47,6 +48,27 @@ function GatherManager() {
     return (
         <Fragment>
             <Header />
+
+            <div className={clsx(style.exception)}>
+                <div className={clsx(style["customer-deny"])}>
+                    <Link to={"/gather-manager/deny-list"}>
+                        <button>Customers Deny Order</button>
+                    </Link>
+                </div>
+
+                <div className={clsx(style["lost-orders"])}>
+                    <Link to={"/gather-manager/lost-order-list"}>
+                        <button>Lost Orders</button>
+                    </Link>
+                </div>
+            </div>
+
+            <Link to="/gather-manager/statistic">
+                <div className={clsx(style.statistic)}>
+                    <button>Statistic</button>
+                </div>
+            </Link>
+
             <ManageGatherNav 
                 onClickManageAccountEmployee={handleIsClickManageAccountEmployee} 
                 onClickStatisticOrdersSent={handleIsClickStatisticOrdersSent}

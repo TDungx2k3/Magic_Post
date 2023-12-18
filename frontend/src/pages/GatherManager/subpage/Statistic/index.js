@@ -1,15 +1,14 @@
 import React, { useState, useEffect } from "react";
 import ReactApexCharts from "react-apexcharts";
 import clsx from "clsx";
-import style from "./Chart.module.scss";
+import style from "./Statistic.module.scss";
 import axios from "axios";
 import { format, subDays } from "date-fns";
 import { useContext } from "react";
 import { LoginContext } from "../../../../App";
 
-const Chart = () => {
+const Statistic = () => {
     const userInfo = useContext(LoginContext);
-    console.log(userInfo.userInfo.uUnit);
 
     const [isFetchedDateData, setIsFetchedDateData] = useState(false);
     const [dates, setDates] = useState([]);
@@ -18,7 +17,7 @@ const Chart = () => {
 
     const handleDateData = async () => {
         try {
-            let maxDate = await axios.get("http://localhost:8080/transaction-manager/get-max-date");
+            let maxDate = await axios.get("http://localhost:8080/gathering-manager/get-max-date-gather");
             maxDate = new Date(maxDate.data);
             setIsFetchedDateData(true);
 
@@ -42,7 +41,7 @@ const Chart = () => {
 
     const fetchDataSentForDate = async (date) => {
         try {
-            const response = await axios.get("http://localhost:8080/transaction-manager/count-order-sent-by-date"
+            const response = await axios.get("http://localhost:8080/gathering-manager/get-quantity-orders-sent-in-a-date"
                 , {
                     params: {
                         date,
@@ -59,7 +58,7 @@ const Chart = () => {
 
     const fetchDataReceivedForDate = async (date) => {
         try {
-            const response = await axios.get("http://localhost:8080/transaction-manager/count-order-received-by-date"
+            const response = await axios.get("http://localhost:8080/gathering-manager/get-quantity-orders-received-in-a-date"
                 , {
                     params: {
                         date,
@@ -102,7 +101,6 @@ const Chart = () => {
     const [dataReceived, setDataReceived] = useState([]);
 
     const [allDataReady, setAllDataReady] = useState(false);
-    console.log(dataReceived);
 
     const [chartData, setChartData] = useState({
         series: [
@@ -213,4 +211,4 @@ const Chart = () => {
     );
 }
 
-export default Chart;
+export default Statistic;

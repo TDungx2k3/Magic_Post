@@ -72,28 +72,28 @@ class GatheringManagerController {
 
   updateAccountEmployee = async (req, res) => {
     const data = req.body;
-    
+
     try {
-        const saltRounds = 10;
-        const plaintextPassword = data.account_password;
+      const saltRounds = 10;
+      const plaintextPassword = data.account_password;
 
-        const hash = await bcrypt.hash(plaintextPassword, saltRounds);
+      const hash = await bcrypt.hash(plaintextPassword, saltRounds);
 
-        await Account.update({
-            account_name: data.account_name,
-            account_phone: data.account_phone,
-            account_password: hash
-        }, {
-            where: {
-                account_id: data.account_id,
-            }
-        });
-        res.status(200).send('Account updated successfully');
+      await Account.update({
+        account_name: data.account_name,
+        account_phone: data.account_phone,
+        account_password: hash
+      }, {
+        where: {
+          account_id: data.account_id,
+        }
+      });
+      res.status(200).send('Account updated successfully');
     } catch (err) {
-        console.error(err);
-        res.status(500).send('Internal Server Error');
+      console.error(err);
+      res.status(500).send('Internal Server Error');
     }
-};
+  };
 
   getDefaultAccountById = async (req, res) => {
     const data = req.query;
@@ -111,8 +111,14 @@ class GatheringManagerController {
   }
 
   showAllOrdersSent = async (req, res) => {
+    const unit = req.query.unit;
     try {
-
+      const allOrdersSent = await sequelize.query("SELECT `orders`.order_id, `orders`.weight, `orders`.price, `orders`.date, `orders`.customer_name, `orders`.customer_phone, `orders`.receiver_name, `orders`.receiver_phone FROM `orders` JOIN deliveries ON orders.order_id = deliveries.order_id JOIN gatherings ON deliveries.from_id = gatherings.gather_id WHERE deliveries.from_id = :unit AND deliveries.deliver_status = 1 ORDER BY orders.date DESC",
+        {
+          replacements: { unit: unit }
+        }
+      );
+      res.json(allOrdersSent);
     }
     catch (err) {
       console.log(err);
@@ -120,14 +126,90 @@ class GatheringManagerController {
     }
   }
 
-  test = async (req, res) => {
-    const data = await sequelize.query(
-      "SELECT * FROM accounts INNER JOIN gatherings ON accounts.account_id = gatherings.account_id",
-      { raw: true, }
-    );
-    // const data = await sequelize.query('SELECT orders.order_id FROM orders INNER JOIN deliveries ON orders.order_id = deliveries.order_id');
-    console.log(data[0]);
-  };
+  showAllOrdersReceived = async (req, res) => {
+    const unit = req.query.unit;
+    try {
+      const allOrdersReceived = await sequelize.query("SELECT `orders`.order_id, `orders`.weight, `orders`.price, `orders`.date, `orders`.customer_name, `orders`.customer_phone, `orders`.receiver_name, `orders`.receiver_phone FROM `orders` JOIN deliveries ON orders.order_id = deliveries.order_id JOIN gatherings ON deliveries.to_id = gatherings.gather_id WHERE deliveries.to_id = :unit AND deliveries.deliver_status = 1 ORDER BY orders.date DESC",
+        {
+          replacements: { unit: unit }
+        }
+      );
+      res.json(allOrdersReceived);
+    }
+    catch (err) {
+      console.log(err);
+      res.send(err);
+    }
+  }
+
+  getMaxDate = async (req, res) => {
+    try {
+      const result = await Order.findOne({
+        attributes: [
+          [sequelize.fn('MAX', sequelize.col('date')), 'maxDate']
+        ]
+      });
+      const maxDate = result.getDataValue('maxDate');
+      res.json(maxDate);
+    } catch (err) {
+      console.log(err);
+      res.json(err);
+    }
+  }
+
+  countOrderSentInADate = async (req, res) => {
+    try {
+      const date = req.query.date;
+      const unit = req.query.unit;
+
+      const quantityOrderSentInADate = await sequelize.query(
+        `SELECT COUNT(*) 
+            FROM (
+                SELECT orders.order_id
+                FROM orders 
+                JOIN deliveries ON orders.order_id = deliveries.order_id 
+                JOIN gatherings ON gatherings.gather_id = deliveries.from_id
+                WHERE orders.date = :date AND gatherings.trans_id = :unit
+            ) AS subquery`,
+        {
+          replacements: {
+            date: date,
+            unit: unit
+          }
+        }
+      );
+      res.json(quantityOrderSentInADate[0]);
+    } catch (err) {
+      res.json(err);
+    }
+  }
+
+  countOrderReceivedInADate = async (req, res) => {
+    try {
+      const date = req.query.date;
+      const unit = req.query.unit;
+
+      const quantityOrderReceivedInADate = await sequelize.query(
+        `SELECT COUNT(*) 
+            FROM (
+                SELECT orders.order_id
+                FROM orders 
+                JOIN deliveries ON orders.order_id = deliveries.order_id 
+                JOIN gatherings ON gatherings.gather_id = deliveries.to_id
+                WHERE orders.date = :date AND gatherings.trans_id = :unit
+            ) AS subquery`,
+        {
+          replacements: {
+            date: date,
+            unit: unit
+          }
+        }
+      );
+      res.json(quantityOrderReceivedInADate[0]);
+    } catch (err) {
+      res.json(err);
+    }
+  }
 }
 
 module.exports = new GatheringManagerController();
