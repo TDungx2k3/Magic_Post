@@ -5,6 +5,7 @@ const { Order } = require("../models/ordersModel");
 const { Delivery } = require("../models/deliveriesModel");
 const bcrypt = require('bcrypt');
 const Joi = require('joi');
+const { where } = require("sequelize");
 
 // Còn phải get được unit khi đăng nhập để làm điềU kiện where cho 2 cái thống kê hàng đi và đến
 
@@ -133,15 +134,31 @@ class transactionManagerController {
         }
     };
 
-    getMaxDate = async (req, res) => {
+    getMaxDateSent = async (req, res) => {
+        const unit = req.query.unit;
         try {
-            const result = await Order.findOne({
-                attributes: [
-                    [sequelize.fn('MAX', sequelize.col('date')), 'maxDate']
-                ]
-            });
-            const maxDate = result.getDataValue('maxDate');
-            res.json(maxDate);
+            const result = await sequelize.query("SELECT MAX(orders.date) FROM orders JOIN deliveries ON orders.order_id = deliveries.order_id JOIN transactions ON deliveries.from_id = transactions.trans_id WHERE transactions.trans_id = :unit",
+            {
+                replacements: { unit: unit }
+            }
+            );
+            console.log(result);
+            res.json(result);
+        } catch (err) {
+            console.log(err);
+            res.json(err);
+        }
+    };
+
+    getMaxDateReceived = async (req, res) => {
+        const unit = req.query.unit;
+        try {
+            const result = await sequelize.query("SELECT MAX(orders.date) FROM orders JOIN deliveries ON orders.order_id = deliveries.order_id JOIN transactions ON deliveries.to_id = transactions.trans_id WHERE transactions.trans_id = :unit",
+            {
+                replacements: { unit: unit }
+            }
+            );
+            res.json(result);
         } catch (err) {
             console.log(err);
             res.json(err);
@@ -169,7 +186,6 @@ class transactionManagerController {
                     }
                 }
             );
-            console.log(count[0]);
             res.json(count[0]);
         } catch (err) {
             res.json(err);

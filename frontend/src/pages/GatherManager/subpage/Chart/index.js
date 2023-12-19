@@ -1,13 +1,15 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, Fragment } from "react";
 import ReactApexCharts from "react-apexcharts";
 import clsx from "clsx";
-import style from "./Statistic.module.scss";
+import style from "./Chart.module.scss";
 import axios from "axios";
-import { format, subDays } from "date-fns";
+import { format, subDays, max } from "date-fns";
 import { useContext } from "react";
 import { LoginContext } from "../../../../App";
+import { useNavigate } from "react-router-dom";
 
-const Statistic = () => {
+const Chart = () => {
+    const navigate = useNavigate();
     const userInfo = useContext(LoginContext);
 
     const [isFetchedDateData, setIsFetchedDateData] = useState(false);
@@ -17,8 +19,36 @@ const Statistic = () => {
 
     const handleDateData = async () => {
         try {
-            let maxDate = await axios.get("http://localhost:8080/gathering-manager/get-max-date-gather");
-            maxDate = new Date(maxDate.data);
+            let maxDateSent = await axios.get("http://localhost:8080/gathering-manager/get-max-date-sent-gather",
+                {
+                    params: {
+                        unit: userInfo.userInfo.uUnit
+                    }
+                }
+            );
+
+            let maxDateReceived = await axios.get("http://localhost:8080/gathering-manager/get-max-date-received-gather",
+                {
+                    params: {
+                        unit: userInfo.userInfo.uUnit
+                    }
+                }
+            )
+
+            if (maxDateReceived.data[0][0]["MAX(orders.date)"] === null && maxDateSent.data[0][0]["MAX(orders.date)"] !== null) {
+                maxDateReceived.data[0][0]["MAX(orders.date)"] = maxDateSent.data[0][0]["MAX(orders.date)"];
+            } else if (maxDateReceived.data[0][0]["MAX(orders.date)"] !== null && maxDateSent.data[0][0]["MAX(orders.date)"] === null) {
+                maxDateSent.data[0][0]["MAX(orders.date)"] = maxDateReceived.data[0][0]["MAX(orders.date)"];
+            } else if (maxDateReceived.data[0][0]["MAX(orders.date)"] === null && maxDateSent.data[0][0]["MAX(orders.date)"] === null) {
+                maxDateSent.data[0][0]["MAX(orders.date)"] = new Date();
+                maxDateReceived.data[0][0]["MAX(orders.date)"] = new Date();
+            }
+
+            maxDateSent = new Date(maxDateSent.data[0][0]["MAX(orders.date)"]);
+            maxDateReceived = new Date(maxDateReceived.data[0][0]["MAX(orders.date)"]);
+
+            let maxDate = max([maxDateSent, maxDateReceived]);
+
             setIsFetchedDateData(true);
 
             const dateMinusOneDay = subDays(maxDate, 1);
@@ -80,22 +110,23 @@ const Statistic = () => {
         const promisesReceived = dates.map((date) => (fetchDataReceivedForDate(date)));
         const resultsSent = await Promise.all(promisesSent);
         const resultsReceived = await Promise.all(promisesReceived);
-        console.log(resultsSent);
 
         // results là một mảng chứa kết quả tương ứng với mỗi ngày
         const updatedDataSent = resultsSent.map(result => result !== null ? result : 0);
         const updatedDataReceived = resultsReceived.map(result => result !== null ? result : 0);
         setDataSent(updatedDataSent);
         setDataReceived(updatedDataReceived);
-        console.log(updatedDataSent);
 
         // Đặt allDataReady thành true để hiển thị biểu đồ
         setAllDataReady(true);
     };
     useEffect(() => {
-
         fetchData();
     }, [dates]);
+
+    const handleBack = () => {
+        navigate("/gather-manager");
+    }
 
     const [dataSent, setDataSent] = useState([]);
     const [dataReceived, setDataReceived] = useState([]);
@@ -205,10 +236,16 @@ const Statistic = () => {
     }, [allDataReady, dataSent]);
 
     return (
-        <div id="chart" className={clsx(style.chartContainer)}>
-            <ReactApexCharts options={chartData.options} series={chartData.series} type="bar" height={500} />
-        </div>
+        <Fragment>
+            <div id="chart" className={clsx(style.chartContainer)}>
+                <ReactApexCharts options={chartData.options} series={chartData.series} type="bar" height={500} />
+            </div>
+
+            <button className={clsx(style.back)} onClick={handleBack}>
+                Back
+            </button>
+        </Fragment>
     );
 }
 
-export default Statistic;
+export default Chart;

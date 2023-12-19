@@ -1,15 +1,16 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, Fragment } from "react";
 import ReactApexCharts from "react-apexcharts";
 import clsx from "clsx";
 import style from "./Chart.module.scss";
 import axios from "axios";
-import { format, subDays } from "date-fns";
+import { format, subDays, max } from "date-fns";
 import { useContext } from "react";
 import { LoginContext } from "../../../../App";
+import { useNavigate } from "react-router-dom";
 
 const Chart = () => {
+    const navigate = useNavigate();
     const userInfo = useContext(LoginContext);
-    console.log(userInfo.userInfo.uUnit);
 
     const [isFetchedDateData, setIsFetchedDateData] = useState(false);
     const [dates, setDates] = useState([]);
@@ -18,8 +19,43 @@ const Chart = () => {
 
     const handleDateData = async () => {
         try {
-            let maxDate = await axios.get("http://localhost:8080/transaction-manager/get-max-date");
-            maxDate = new Date(maxDate.data);
+            let maxDateSent = await axios.get("http://localhost:8080/transaction-manager/get-max-date-sent-transaction",
+                {
+                    params: {
+                        unit: userInfo.userInfo.uUnit
+                    }
+                }
+            );
+
+            let maxDateReceived = await axios.get("http://localhost:8080/transaction-manager/get-max-date-received-transaction",
+                {
+                    params: {
+                        unit: userInfo.userInfo.uUnit
+                    }
+                }
+            )
+
+            console.log(maxDateReceived.data[0][0]["MAX(orders.date)"]);
+
+            if (maxDateReceived.data[0][0]["MAX(orders.date)"] === null && maxDateSent.data[0][0]["MAX(orders.date)"] !== null) {
+                maxDateReceived.data[0][0]["MAX(orders.date)"] = maxDateSent.data[0][0]["MAX(orders.date)"];
+            } else if (maxDateReceived.data[0][0]["MAX(orders.date)"] !== null && maxDateSent.data[0][0]["MAX(orders.date)"] === null) {
+                maxDateSent.data[0][0]["MAX(orders.date)"] = maxDateReceived.data[0][0]["MAX(orders.date)"];
+            } else if (maxDateReceived.data[0][0]["MAX(orders.date)"] === null && maxDateSent.data[0][0]["MAX(orders.date)"] === null) {
+                maxDateSent.data[0][0]["MAX(orders.date)"] = new Date();
+                maxDateReceived.data[0][0]["MAX(orders.date)"] = new Date();
+            }
+
+            console.log(maxDateSent.data[0][0]["MAX(orders.date)"]);
+            console.log(maxDateReceived.data[0][0]["MAX(orders.date)"]);
+
+            maxDateSent = new Date(maxDateSent.data[0][0]["MAX(orders.date)"]);
+            maxDateReceived = new Date(maxDateReceived.data[0][0]["MAX(orders.date)"]);
+            console.log(maxDateSent);
+            console.log(maxDateReceived);
+            let maxDate = max([maxDateSent, maxDateReceived]);
+            console.log(maxDate);
+
             setIsFetchedDateData(true);
 
             const dateMinusOneDay = subDays(maxDate, 1);
@@ -94,9 +130,12 @@ const Chart = () => {
         setAllDataReady(true);
     };
     useEffect(() => {
-
         fetchData();
     }, [dates]);
+
+    const handleBack = () => {
+        navigate("/transaction-manager");
+    }
 
     const [dataSent, setDataSent] = useState([]);
     const [dataReceived, setDataReceived] = useState([]);
@@ -207,9 +246,15 @@ const Chart = () => {
     }, [allDataReady, dataSent]);
 
     return (
-        <div id="chart" className={clsx(style.chartContainer)}>
-            <ReactApexCharts options={chartData.options} series={chartData.series} type="bar" height={500} />
-        </div>
+        <Fragment>
+            <div id="chart" className={clsx(style.chartContainer)}>
+                <ReactApexCharts options={chartData.options} series={chartData.series} type="bar" height={500} />
+            </div>
+
+            <button className={clsx(style.back)} onClick={handleBack}>
+                Back
+            </button>
+        </Fragment>
     );
 }
 

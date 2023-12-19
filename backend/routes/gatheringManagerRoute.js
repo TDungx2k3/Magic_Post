@@ -10,8 +10,11 @@ router.post("/delete-account-by-id", gatheringManagerController.deleteAccountEmp
 router.post("/update-account-by-id", gatheringManagerController.updateAccountEmployee);
 router.get("/all-orders-sent", gatheringManagerController.showAllOrdersSent);
 router.get("/all-orders-received", gatheringManagerController.showAllOrdersReceived);
-router.get("/get-max-date-gather", gatheringManagerController.getMaxDate);
+router.get("/get-max-date-sent-gather", gatheringManagerController.getMaxDateSent);
+router.get("/get-max-date-received-gather", gatheringManagerController.getMaxDateReceived);
 router.get("/get-quantity-orders-sent-in-a-date", gatheringManagerController.countOrderSentInADate);
 router.get("/get-quantity-orders-received-in-a-date", gatheringManagerController.countOrderReceivedInADate);
+router.get("/get-customer-deny-list", gatheringManagerController.getCustomerDenyList);
+router.get("/get-lost-order-list", gatheringManagerController.getLostOrderList);
 
 module.exports = router;

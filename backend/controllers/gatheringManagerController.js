@@ -142,34 +142,51 @@ class GatheringManagerController {
     }
   }
 
-  getMaxDate = async (req, res) => {
+  getMaxDateSent = async (req, res) => {
+    const unit = req.query.unit;
     try {
-      const result = await Order.findOne({
-        attributes: [
-          [sequelize.fn('MAX', sequelize.col('date')), 'maxDate']
-        ]
-      });
-      const maxDate = result.getDataValue('maxDate');
-      res.json(maxDate);
+      const result = await sequelize.query("SELECT MAX(orders.date) FROM orders JOIN deliveries ON orders.order_id = deliveries.order_id JOIN gatherings ON deliveries.from_id = gatherings.gather_id WHERE gatherings.gather_id = :unit",
+        {
+          replacements: { unit: unit }
+        }
+      );
+      console.log(result);
+      res.json(result);
     } catch (err) {
       console.log(err);
       res.json(err);
     }
-  }
+  };
+
+  getMaxDateReceived = async (req, res) => {
+    const unit = req.query.unit;
+    try {
+      const result = await sequelize.query("SELECT MAX(orders.date) FROM orders JOIN deliveries ON orders.order_id = deliveries.order_id JOIN gatherings ON deliveries.to_id = gatherings.gather_id WHERE gatherings.gather_id = :unit",
+        {
+          replacements: { unit: unit }
+        }
+      );
+      console.log(result);
+      res.json(result);
+    } catch (err) {
+      console.log(err);
+      res.json(err);
+    }
+  };
 
   countOrderSentInADate = async (req, res) => {
     try {
       const date = req.query.date;
       const unit = req.query.unit;
 
-      const quantityOrderSentInADate = await sequelize.query(
+      const count = await sequelize.query(
         `SELECT COUNT(*) 
             FROM (
                 SELECT orders.order_id
                 FROM orders 
                 JOIN deliveries ON orders.order_id = deliveries.order_id 
                 JOIN gatherings ON gatherings.gather_id = deliveries.from_id
-                WHERE orders.date = :date AND gatherings.trans_id = :unit
+                WHERE orders.date = :date AND gatherings.gather_id = :unit
             ) AS subquery`,
         {
           replacements: {
@@ -178,7 +195,7 @@ class GatheringManagerController {
           }
         }
       );
-      res.json(quantityOrderSentInADate[0]);
+      res.json(count[0]);
     } catch (err) {
       res.json(err);
     }
@@ -189,14 +206,14 @@ class GatheringManagerController {
       const date = req.query.date;
       const unit = req.query.unit;
 
-      const quantityOrderReceivedInADate = await sequelize.query(
+      const count = await sequelize.query(
         `SELECT COUNT(*) 
             FROM (
                 SELECT orders.order_id
                 FROM orders 
                 JOIN deliveries ON orders.order_id = deliveries.order_id 
                 JOIN gatherings ON gatherings.gather_id = deliveries.to_id
-                WHERE orders.date = :date AND gatherings.trans_id = :unit
+                WHERE orders.date = :date AND gatherings.gather_id = :unit
             ) AS subquery`,
         {
           replacements: {
@@ -205,8 +222,40 @@ class GatheringManagerController {
           }
         }
       );
-      res.json(quantityOrderReceivedInADate[0]);
+      console.log(count[0]);
+      res.json(count[0]);
     } catch (err) {
+      res.json(err);
+    }
+  }
+
+  getCustomerDenyList = async (req, res) => {
+    try {
+      const unit = req.query.unit;
+
+      const denyList = await sequelize.query("SELECT `orders`.order_id, `orders`.weight, `orders`.price, `orders`.date, `orders`.customer_name, `orders`.customer_phone, `orders`.receiver_name, `orders`.receiver_phone FROM `orders` JOIN deliveries ON orders.order_id = deliveries.order_id JOIN gatherings ON deliveries.from_id = gatherings.gather_id WHERE deliveries.from_id = :unit AND deliveries.deliver_status = 0 ORDER BY orders.date DESC",
+        {
+          replacements: { unit: unit }
+        });
+      res.json(denyList);
+    }
+    catch (err) {
+      res.json(err);
+    }
+  }
+
+  getLostOrderList = async (req, res) => {
+    try {
+      const unit = req.query.unit;
+
+      const lostOrderList = await sequelize.query("SELECT `orders`.order_id, `orders`.weight, `orders`.price, `orders`.date, `orders`.customer_name, `orders`.customer_phone, `orders`.receiver_name, `orders`.receiver_phone FROM `orders` JOIN deliveries ON orders.order_id = deliveries.order_id JOIN gatherings ON deliveries.to_id = gatherings.gather_id WHERE deliveries.from_id = :unit AND deliveries.deliver_status = -1 ORDER BY orders.date DESC",
+        {
+          replacements: { unit: unit }
+        });
+      res.json(lostOrderList);
+    }
+    catch (err) {
+      console.log(err);
       res.json(err);
     }
   }
