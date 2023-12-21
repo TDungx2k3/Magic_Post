@@ -1,14 +1,15 @@
 import clsx from "clsx";
 import style from "./TransactionManagerFormCreateAccount.module.scss";
-import { useState, useEffect, useRef, useContext } from "react";
+import { useState, useContext, Fragment } from "react";
 import { LoginContext } from "../../../../App";
 import axios from "axios";
-
+import { Alert } from 'flowbite-react';
+import { HiInformationCircle } from 'react-icons/hi';
+import Aos from "aos";
 // Call API được rồi, nma gần như mới là test, vì chưa lấy unit nên đang để unit defalt là "test, còn lại gần như ok"
 
 function TransactionManagerFormCreateAccount(props) {
-    const { isLogin, setIsLogin, userInfo, setUserInfo} = useContext(LoginContext);
-    console.log(userInfo.uUnit);
+    const { userInfo } = useContext(LoginContext);
 
     const [inputs, setInputs] = useState({
         accountName: "",
@@ -67,21 +68,8 @@ function TransactionManagerFormCreateAccount(props) {
         });
     };
 
-    // const [messageCheckDuplicate, setMessageCheckDuplicate] = useState("");
-
-    // const [checkIsCreateSuccess, setCheckIsCreateSuccess] = useState();
-
-    // const handleCheckIsCreateSuccess = () => {
-    //     setCheckIsCreateSuccess(true);
-    // }
-
-    // useEffect(() => {
-    //     handleCheckIsCreateSuccess();
-    // }, [checkIsCreateSuccess])
-
-    // useEffect(() => {
-    //     handleCheckIsCreateSuccess();
-    // }, [checkIsCreateSuccess])
+    const [alertVisible, setAlertVisible] = useState(false);
+    const [checkIsSuccess, setCheckIsSuccess] = useState(true);
 
     const handleGetData = async () => {
         try {
@@ -92,7 +80,13 @@ function TransactionManagerFormCreateAccount(props) {
             });
 
             if (response.data.message === "Phone number exists" && errorForName === false && errorForPhone === false && errorForPassword === false) {
-                alert("Phone number already exists");
+                setCheckIsSuccess(false);
+                setAlertVisible(true);
+
+                // setTimeout(() => {
+                //     setAlertVisible(false);
+                // }, 1500);
+                // alert("Phone number already exists");
                 setInputs((prevInputs) => {
                     return {
                         ...prevInputs,
@@ -107,16 +101,13 @@ function TransactionManagerFormCreateAccount(props) {
             } else {
                 if (response.data.message === "Phone number does not exist" && inputs.accountName !== "" && inputs.accountPhone !== "" && inputs.accountPassword !== "") {
                     await axios.post("http://localhost:8080/transaction-manager/createAccount", { ...inputs, unit: userInfo.uUnit });
-                    alert("Create Successfully");
-                    // setCheckIsCreateSuccess(true);
-                    // handleCheckIsCreateSuccess();
-                    // console.log(checkIsCreateSuccess);
+                    setCheckIsSuccess(true);
+                    setAlertVisible(true);
+
                     // setTimeout(() => {
-                    //     setCheckIsCreateSuccess(false);
-                    // }, 2000);
-                    // setTimeout(() => {
-                    //     console.log(checkIsCreateSuccess);
-                    // }, 2500);
+                    //     setAlertVisible(false);
+                    // }, 1500);
+                    // alert("Create Successfully");
                     setInputs((prevInputs) => {
                         return {
                             ...prevInputs,
@@ -137,95 +128,99 @@ function TransactionManagerFormCreateAccount(props) {
         }
     }
 
+    console.log(checkIsSuccess);
+
     return (
-        <div className={clsx(style.container, props.className)}>
+        <Fragment>
+            {
+                alertVisible ? (
+                    checkIsSuccess ? (
+                        <Alert color="success" onDismiss={() => setAlertVisible(false)} className={clsx(style.alert)} data-aos="fade-down">
+                            <span className="font-medium">Create Successfully!</span>
+                        </Alert>
+                    ) : (
+                        <Alert color="failure" icon={HiInformationCircle} onDismiss={() => setAlertVisible(false)} className={clsx(style.alert)} data-aos="fade-down">
+                            <span className="font-medium">Phone number already exists</span>
+                        </Alert>
+                    )
+                ) : null
+            }
 
-            <div className={clsx(style["form-container"])}>
-                
-                {/* <div className={clsx({ [style["alert-successfully"]]: checkIsCreateSuccess === true}, { [style["alert-successfully-hidden"]]: checkIsCreateSuccess === false})} data-aos="zoom-in">
-                    <p>
-                        Create Account Successfully!
-                    </p>
-                    <span className={clsx(style.wrapper)}>
-                        <svg className={clsx(style.checkmark)} xmlns="http://www.w3.org/2000/svg" viewBox="0 0 52 52">
-                            <circle className={clsx(style["checkmark__circle"])} cx="20" cy="20" r="25" fill="none" />
-                            <path className={clsx(style["checkmark__check"])} fill="none" d="M14.1 27.2l7.1 7.2 16.7-16.8" />
-                        </svg>
-                    </span>
-                </div> */}
+            <div className={clsx(style.container, props.className)}>
+                <div className={clsx(style["form-container"])}>
+                    <form onSubmit={handleIsClickAddAccount}>
+                        <div>
+                            <label htmlFor="name" className={clsx(style.labelName)}>
+                                Name:
+                            </label>
+                            <input
+                                type="text"
+                                className={clsx(style["input-zone"])}
+                                onBlur={handleErrorForName}
+                                name="accountName"
+                                onChange={handleChange}
+                                onClick={() => setErrorForName(false)}
+                            />
+                            <span
+                                className={errorForName ? clsx(style.error) : clsx(style["error-hidden"])}
+                                id={clsx(style["error-for-name"])}
+                            >
+                                Please enter your name.
+                            </span>
+                        </div>
 
-                <form onSubmit={handleIsClickAddAccount}>
-                    <div>
-                        <label htmlFor="name" className={clsx(style.labelName)}>
-                            Name:
-                        </label>
-                        <input
-                            type="text"
-                            className={clsx(style["input-zone"])}
-                            onBlur={handleErrorForName}
-                            name="accountName"
-                            onChange={handleChange}
-                            onClick={() => setErrorForName(false)}
-                        />
-                        <span
-                            className={errorForName ? clsx(style.error) : clsx(style["error-hidden"])}
-                            id={clsx(style["error-for-name"])}
-                        >
-                            Please enter your name.
-                        </span>
-                    </div>
+                        <div>
+                            <label htmlFor="phone" className={clsx(style.labelName)}>
+                                Phone:
+                            </label>
+                            <input
+                                type="text"
+                                className={clsx(style["input-zone"])}
+                                onBlur={handleErrorForPhone}
+                                name="accountPhone"
+                                onChange={handleChange}
+                                onClick={() => setErrorForPhone(false)}
+                            />
+                            <span
+                                className={errorForPhone ? clsx(style.error) : clsx(style["error-hidden"])}
+                                id={clsx(style["error-for-phone"])}
+                            >
+                                Please enter a valid phone number.
+                            </span>
+                        </div>
 
-                    <div>
-                        <label htmlFor="phone" className={clsx(style.labelName)}>
-                            Phone:
-                        </label>
-                        <input
-                            type="text"
-                            className={clsx(style["input-zone"])}
-                            onBlur={handleErrorForPhone}
-                            name="accountPhone"
-                            onChange={handleChange}
-                            onClick={() => setErrorForPhone(false)}
-                        />
-                        <span
-                            className={errorForPhone ? clsx(style.error) : clsx(style["error-hidden"])}
-                            id={clsx(style["error-for-phone"])}
-                        >
-                            Please enter a valid phone number.
-                        </span>
-                    </div>
+                        <div>
+                            <label htmlFor="password" className={clsx(style.labelName)}>
+                                Password:
+                            </label>
+                            <input
+                                type="password"
+                                className={clsx(style["input-zone"])}
+                                onBlur={handleErrorForPassword}
+                                name="accountPassword"
+                                onChange={handleChange}
+                                onClick={() => setErrorForPassword(false)}
+                            />
+                            <span
+                                className={errorForPassword ? clsx(style.error) : clsx(style["error-hidden"])}
+                                id={clsx(style["error-for-password"])}
+                            >
+                                Please enter a valid password.
+                            </span>
+                        </div>
+                    </form>
+                </div>
 
-                    <div>
-                        <label htmlFor="password" className={clsx(style.labelName)}>
-                            Password:
-                        </label>
-                        <input
-                            type="password"
-                            className={clsx(style["input-zone"])}
-                            onBlur={handleErrorForPassword}
-                            name="accountPassword"
-                            onChange={handleChange}
-                            onClick={() => setErrorForPassword(false)}
-                        />
-                        <span
-                            className={errorForPassword ? clsx(style.error) : clsx(style["error-hidden"])}
-                            id={clsx(style["error-for-password"])}
-                        >
-                            Please enter a valid password.
-                        </span>
-                    </div>
-                </form>
-            </div>
-
-            <div className={clsx(style.accept)}>
-                <button
-                    className={clsx(style["add-account"])}
-                    onClick={handleIsClickAddAccount}
-                >
-                    Add Account
-                </button>
-            </div>
-        </div>
+                <div className={clsx(style.accept)}>
+                    <button
+                        className={clsx(style["add-account"])}
+                        onClick={handleIsClickAddAccount}
+                    >
+                        Add Account
+                    </button>
+                </div>
+            </div >
+        </Fragment>
     );
 }
 

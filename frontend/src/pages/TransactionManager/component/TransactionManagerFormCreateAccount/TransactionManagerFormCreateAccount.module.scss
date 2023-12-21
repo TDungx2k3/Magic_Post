@@ -47,13 +47,13 @@ form div .labelName {
 
 form div input {
     margin-top: 1.5%;
-    font-size: 18px;
+    font-size: 18px !important;
     padding: 8px;
     width: 40%;
     height: 50px;
     box-sizing: border-box;
     border: 1px solid #ccc;
-    border-radius: 16px;
+    border-radius: 16px !important;
     position: relative;
 }
 
@@ -93,6 +93,10 @@ form div input {
 
 .add-account:hover {
     animation: scaleUp 0.5s ease forwards;
+}
+
+.alert {
+    top: 0;
 }
 
 .alert-successfully {
@@ -252,7 +256,7 @@ form div input {
         margin-left: 5px;
         width: 36%;
         height: 40px;
-        font-size: 16px;
+        font-size: 16px !important;
     }
 
     .add-account {
@@ -276,7 +280,7 @@ form div input {
         margin-left: 5px;
         width: 34%;
         height: 40px;
-        font-size: 14px;
+        font-size: 14px !important;
     }
 
     .add-account {
@@ -300,7 +304,7 @@ form div input {
         margin-left: 3px;
         width: 34%;
         height: 34px;
-        font-size: 12px;
+        font-size: 12px !important;
     }
 
     .add-account {
