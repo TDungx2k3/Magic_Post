@@ -375,7 +375,7 @@ function CreateOrderPage() {
 
           <div>
             <label htmlFor={style.price}>Price:</label>
-            <strong>${finalPrice} VND</strong>
+            <strong>{finalPrice} VND</strong>
           </div>
 
         </div>
