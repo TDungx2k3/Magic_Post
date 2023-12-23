@@ -14,6 +14,7 @@ function CustomerQR() {
   const inputTextRef = useRef(null);
   const inputQRRef = useRef(null);
   const [receiverAddressFormat, setReceiverAddressFormat] = useState('');
+  const [mappedDelivery, setMappedDelivery] = useState([]);
 
   useEffect(() => {
     if(result && result.receiver_address !== "") {
@@ -58,6 +59,72 @@ function CustomerQR() {
       getDeliveryByOrderId();
     }
   }, [result]);
+
+  useEffect(()  => {
+    const mapToAddressType = async (toId) => {
+      if (toId.startsWith("r")) {
+        return result.receiver_address.split('#')[0];
+      } else if (toId.startsWith("t")) {
+        try {
+          let transName;
+          await axios.get("http://localhost:8080/transTeller/getTransNameById", {
+            params: {
+              trans_id: toId,
+            }  
+          }).then((response) => {
+            console.log(response.data.trans_name);
+            transName = response.data.trans_name;
+          })
+          .catch((error) => {
+            console.log(error);
+          });
+          return transName;
+        } catch (error) {
+          console.error("Error fetching transaction:", error);
+        }
+      } else if (toId.startsWith("g")) {
+        try {
+          let gatherName;
+          await axios.get("http://localhost:8080/transTeller/getGatherNameById", {
+            params: {
+              gather_id: toId,
+            }  
+          }).then((response) => {
+            console.log(response.data);
+            gatherName = response.data.gather_name;
+          })
+          .catch((error) => {
+            console.log(error);
+          });
+          return gatherName;
+        } catch (error) {
+          console.error("Error fetching transaction:", error);
+        }
+      } else {
+        // Xử lý trường hợp khác nếu cần
+        return "unknown"; 
+      }
+    };
+
+    const fetchAddress = async () => {
+      if (Array.isArray(delivery)) {
+        const mappedDeliveryData = await Promise.all(
+          delivery.map(async (item)  => ({
+            ...item,
+            address: await mapToAddressType(item.to_id),
+          }))
+        );
+        setMappedDelivery(mappedDeliveryData);
+        console.log(mappedDelivery);
+      } else {
+        console.log("Error: delivery is not an array");
+      }
+    }
+
+    fetchAddress();
+    
+  }, [result, delivery]);
+
   //const [showOrderDetail, setShowOrderDetail] = useState(false);
 
   // Check có show thông tin đơn hàng không
@@ -212,12 +279,30 @@ function CustomerQR() {
               
               <section className={style.orderDeliveryInfo}>
                <h1>Delivery</h1>
-               {delivery.length > 0 && (
+               {mappedDelivery.length > 0 && (
                 <>
-                  <div>
-                    <p><i>{delivery[0].date}</i> </p>  
-                    <p>Đơn hàng đã xác nhận tại điểm {delivery[0].to_id}</p>
-                  </div>
+                  {mappedDelivery.map((item, index) => (
+                    <div key={index}>
+                      {index === 0 && (
+                        <>
+                          <p><i>{mappedDelivery[index].date}</i>Đơn hàng đã xác nhận tại điểm giao dịch {mappedDelivery[index].address}</p>
+                        </>
+                      )}
+
+                      {index !== 0 && mappedDelivery[index].deliver_status === 0 && (
+                        <>
+                          <p><i>{mappedDelivery[index].date}</i> Đơn hàng đang trên đường chuyển đến {mappedDelivery[index].address}</p>
+                        </>
+                      )}
+
+                      {index !== 0 && mappedDelivery[index].deliver_status === 1 && (
+                        <>
+                          <p><i>{mappedDelivery[index].date}</i>Đơn hàng đang trên đường chuyển đến {mappedDelivery[index].address}</p>
+                          <p><i>{mappedDelivery[index].date}</i>Đơn hàng đã đến {mappedDelivery[index].address}</p>
+                        </>
+                      )}
+                    </div>
+                  ))}
                 </>
                )}
               </section>

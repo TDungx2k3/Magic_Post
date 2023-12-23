@@ -20,4 +20,7 @@ router.get("/getDeliveryByOrderId", transactionTellerController.getAllDeliveryBy
 router.get("/showAllGathers", transactionTellerController.showAllGathers);
 router.get("/showAllTransactionsByGather", transactionTellerController.showAllTransactionsByGather);
 
+router.get("/getTransNameById", transactionTellerController.getTransNameById);
+router.get("/getGatherNameById", transactionTellerController.getGatherNameById);
+
 module.exports = router;

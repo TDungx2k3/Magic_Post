@@ -100,15 +100,12 @@
     padding-left: 10px;
 }
 
-.orderDeliveryInfo div {
-    display: flex;
+
+.container .orderDeliveryInfo div{
+    display: block;
 }
 
-.orderDeliveryInfo div :first-child {
-    flex: 1;
-}
-
-.orderDeliveryInfo div :nth-child(2) {
-    flex: 4;
+.container .orderDeliveryInfo div i{
+    margin-right: 2%;
 }
 
