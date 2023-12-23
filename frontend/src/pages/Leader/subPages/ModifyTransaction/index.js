@@ -28,10 +28,8 @@ function ModifyTransaction() {
             account_id: "",
             trans_name: "",
             gather_id: "",
-            account: {
-                account_name: "",
-                account_phone: ""
-            }
+            account_name: "",
+            account_phone: ""
         }
     );
 
@@ -170,7 +168,7 @@ function ModifyTransaction() {
             const res = await axios.get("http://localhost:8080/leader/getCntPhone",
             {
                 params :{
-                    account_phone: transInfo.account.account_phone,
+                    account_phone: transInfo.account_phone,
                 }
             }
             );
@@ -193,7 +191,7 @@ function ModifyTransaction() {
         checkNewPassword();
 
         let cnt = await checkCntPhone();
-        if(cnt > 0 && transInfo.account.account_phone !== mPhone) {
+        if(cnt > 0 && transInfo.account_phone !== mPhone) {
             alert("This phone number is already used by another account");
         }
         else if(transNameErr === ""
@@ -272,7 +270,7 @@ function ModifyTransaction() {
                     <div className = {clsx(style.nameContainer)}>
                         <label>Manager Name: </label>
                         <br/>
-                        <input type="text" defaultValue={transInfo.account.account_name}
+                        <input type="text" defaultValue={transInfo.account_name}
                         onBlur={checkManagerName}
                         onClick={() => {
                             setManagerNameErr("");
@@ -284,7 +282,7 @@ function ModifyTransaction() {
 
                     <div className = {clsx(style.phoneContainer)}>
                         <label>Manager Phone: </label>
-                        <input type="text" defaultValue={transInfo.account.account_phone}
+                        <input type="text" defaultValue={transInfo.account_phone}
                         onBlur={checkManagerPhone}
                         onClick={() => {
                             setManagerPhoneErr("");

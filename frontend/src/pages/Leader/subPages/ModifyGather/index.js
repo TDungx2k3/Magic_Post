@@ -28,10 +28,8 @@ function ModifyGather() {
         {
             account_id: "",
             gather_name: "",
-            account: {
-                account_name: "",
-                account_phone: ""
-            }
+            account_name: "",
+            account_phone: ""
         }
     );
 
@@ -170,7 +168,7 @@ function ModifyGather() {
             const res = await axios.get("http://localhost:8080/leader/getCntPhone",
             {
                 params :{
-                    account_phone: gatherInfo.account.account_phone,
+                    account_phone: gatherInfo.account_phone,
                 }
             }
             );
@@ -192,7 +190,7 @@ function ModifyGather() {
         checkNewPassword();
 
         let cnt = await checkCntPhone();
-        if(cnt > 0 && mPhone !== gatherInfo.account.account_phone) {
+        if(cnt > 0 && mPhone !== gatherInfo.account_phone) {
             alert("This phone number is already used by another account");
         }
         else if(gatherNameErr === ""
@@ -202,6 +200,7 @@ function ModifyGather() {
             alert("Click OK to update gather and manager with infomation below.");
             await updateGather(gName);
             await updateManager(mName, mPhone);
+            console.log(1);
             if(newPwd !== "") {
                 console.log(newPwd);
                 await updateManagerPassword(newPwd);
@@ -272,7 +271,7 @@ function ModifyGather() {
                     <div className = {clsx(style.nameContainer)}>
                         <label>Manager Name: </label>
                         <br/>
-                        <input type="text" defaultValue={gatherInfo.account.account_name}
+                        <input type="text" defaultValue={gatherInfo.account_name}
                         placeholder="Enter Manager Name!"
                         onBlur={checkManagerName}
                         onClick={() => {
@@ -285,7 +284,7 @@ function ModifyGather() {
 
                     <div className = {clsx(style.phoneContainer)}>
                         <label>Manager Phone: </label>
-                        <input type="text" defaultValue={gatherInfo.account.account_phone}
+                        <input type="text" defaultValue={gatherInfo.account_phone}
                         placeholder="Enter Manager Phone Number!"
                         onBlur={checkManagerPhone}
                         onClick={() => {

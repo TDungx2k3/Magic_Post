@@ -143,7 +143,8 @@ class LeaderController {
     updateManager = async(req, res) => {
         let mPhone = req.body.manager_phone;
         let mName = req.body.manager_name;
-        let mId = req.body.manager_id;
+        let mId = "" + req.body.manager_id;
+        console.log(mId);
         let validateMPhoneRs = Joi.string().required().pattern(/^0\d+$/).length(10).validate(mPhone);
         let validateMNameRs = Joi.string().required().validate(mName);
         let validateMIdRs = Joi.string().required().pattern(/^\d+$/).validate(mId);
@@ -181,7 +182,7 @@ class LeaderController {
 
     updateManagerPassword = async(req, res) => {
         console.log(req.body);
-        let mId = req.body.manager_id;
+        let mId = "" + req.body.manager_id;
         let mPass = req.body.new_password;
         let validateMIdRs = Joi.string().required().pattern(/^\d+$/).validate(mId);
         let validateMPassRs = Joi.string().required().min(6).max(30).validate(mPass)
