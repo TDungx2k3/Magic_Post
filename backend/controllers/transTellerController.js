@@ -457,6 +457,60 @@ class transactionTellerController {
             console.log(error);
         }
     }
+
+    getAllDeliveryByOrderId = async (req, res) => {
+        const data = req.query.order_id;
+        try {
+            await sequelize.authenticate();
+            await sequelize.sync();
+            let delivery = [];
+            delivery = await Delivery.findAll({
+                where: {
+                    order_id: data,
+                },
+            });
+            res.json(delivery);
+        } catch (error) {
+            res.send(error);
+            console.log(error);
+        }
+    }
+
+    getTransNameById = async (req, res) => {
+        const data = req.query.trans_id;
+        try {
+            await sequelize.authenticate();
+            await sequelize.sync();
+            let trans = [];
+            trans = await Transaction.findOne({
+                where: {
+                    trans_id: data,
+                },
+            });
+            res.json(trans);
+        } catch (error) {
+            res.send(error);
+            console.log(error);
+        }
+    }
+
+    getGatherNameById = async (req, res) => {
+        const data = req.query.gather_id;
+        try {
+            await sequelize.authenticate();
+            await sequelize.sync();
+            let gather = [];
+            gather = await Gathering.findOne({
+                where: {
+                    gather_id: data,
+                },
+            });
+            res.json(gather);
+        } catch (error) {
+            res.send(error);
+            console.log(error);
+        }
+    }
 };
 
 module.exports = new transactionTellerController();

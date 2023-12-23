@@ -10,9 +10,12 @@ import Leader from './pages/Leader';
 import TransactionManager from './pages/TransactionManager';
 import Chart from './pages/TransactionManager/subpages/Chart';
 import DenyList from './pages/TransactionManager/subpages/DenyList';
-import LostOrderList from './pages/TransactionManager/subpages/LostOrderList';
+import LostOrderListTransaction from './pages/TransactionManager/subpages/LostOrderListTransaction';
 import GatherManager from './pages/GatherManager';
+import Statistic from './pages/GatherManager/subpage/Chart';
 import ModifyAccountEmployee from './pages/GatherManager/subpage/ModifyAccountEmployee';
+import CustomerDenyList from './pages/GatherManager/subpage/CustomerDenyList';
+import LostOrderListGather from './pages/GatherManager/subpage/LostOrderListGather/indes';
 import { createContext, useEffect, useState } from 'react';
 import ManageGather from './pages/Leader/subPages/ManageGather';
 import ModifyGather from './pages/Leader/subPages/ModifyGather';
@@ -138,8 +141,11 @@ function App() {
             <Route path='/transaction-manager' element={<TransactionManager />}/>
             <Route path='/transaction-manager/statistic' element={<Chart />}/>
             <Route path='/transaction-manager/deny-list' element={<DenyList />}/>
-            <Route path='/transaction-manager/lost-order-list' element={<LostOrderList />}/>
+            <Route path='/transaction-manager/lost-order-list' element={<LostOrderListTransaction />}/>
             <Route path='/gather-manager' element={<GatherManager />}/>
+            <Route path='/gather-manager/statistic' element={<Statistic />}/>
+            <Route path='/gather-manager/deny-list' element={<CustomerDenyList />}/>
+            <Route path='/gather-manager/lost-order-list' element={<LostOrderListGather />}/>
             <Route path='/modify-account' element={<ModifyAccountEmployee />}/>
             <Route path = '/leaderManageGather' element={<ManageGather/>} />
             <Route path = '/leaderManageTransaction' element={<ManageTransaction/>} />

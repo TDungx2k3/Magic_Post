@@ -14,6 +14,7 @@ function ManageAccountEmployee(props) {
     const [hasFetchedData, setHasFetchedData] = useState(false);
 
     const { userInfo } = useContext(LoginContext);
+    console.log(userInfo.uUnit);
     const [accountList, setAccountList] = useState([]);
     const [rerender, setRerender] = useState(true);
 
@@ -45,12 +46,16 @@ function ManageAccountEmployee(props) {
         }
     }
 
+    // useEffect(() => {
+    //     if (!hasFetchedData) {
+    //         getAllAccounts();
+    //         setRerender(false);
+    //     }
+    // }, [rerender, hasFetchedData]);
+
     useEffect(() => {
-        if (!hasFetchedData) {
-            getAllAccounts();
-            setRerender(false);
-        }
-    }, [rerender, hasFetchedData]);
+        getAllAccounts();
+    }, [hasFetchedData]);
 
     return (
         <Fragment>

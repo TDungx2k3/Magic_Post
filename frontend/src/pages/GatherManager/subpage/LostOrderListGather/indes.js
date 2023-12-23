@@ -1,12 +1,14 @@
 import clsx from "clsx";
-import style from "./LostOrderList.module.scss";
+import style from "./LostOrderListGather.module.scss";
 import { Fragment, useContext, useEffect, useState } from "react";
 import Header from "../../../../components/Header";
 import Footer from "../../../../components/Footer";
 import { LoginContext } from "../../../../App";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
-function LostOrderList() {
+function LostOrderListGather() {
+    const navigate = useNavigate();
     const userInfo = useContext(LoginContext)
 
     const [lostOrderList, setLostOrderList] = useState([]);
@@ -14,13 +16,13 @@ function LostOrderList() {
 
     const getLostOrderList = async () => {
         try {
-            const lostOrderList = await axios.get("http://localhost:8080/transaction-manager/get-lost-order-list",
-                { params : { unit: userInfo.userInfo.uUnit } }
+            const lostOrderList = await axios.get("http://localhost:8080/gathering-manager/get-lost-order-list",
+                { params: { unit: userInfo.userInfo.uUnit } }
             )
             setLostOrderList(lostOrderList.data[0]);
             setIsFetchedData(true);
         }
-        catch(err) {
+        catch (err) {
             console.log(err);
         }
     }
@@ -28,6 +30,10 @@ function LostOrderList() {
     useEffect(() => {
         getLostOrderList();
     }, [isFetchedData]);
+
+    const handleBack = () => {
+        navigate("/gather-manager");
+    }
 
     return (
         <Fragment>
@@ -129,9 +135,13 @@ function LostOrderList() {
                 }
             </div>
 
+            <button onClick={handleBack} className={clsx(style.back)}>
+                Back
+            </button>
+
             <Footer />
         </Fragment>
     )
 }
 
-export default LostOrderList;
+export default LostOrderListGather;

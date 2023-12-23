@@ -1,5 +1,5 @@
 import clsx from "clsx";
-import style from "./DenyList.module.scss";
+import style from "./CustomerDenyList.module.scss";
 import { Fragment, useContext, useEffect, useState } from "react";
 import Header from "../../../../components/Header";
 import Footer from "../../../../components/Footer";
@@ -7,17 +7,16 @@ import axios from "axios";
 import { LoginContext } from "../../../../App";
 import { useNavigate } from "react-router-dom";
 
-function DenyList() {
+function CustomerDenyList() {
     const navigate = useNavigate();
     const userInfo = useContext(LoginContext);
-    console.log(userInfo.userInfo.uUnit);
 
     const [denyList, setDenyList] = useState([]);
     const [isFetchedData, setIsFetchedData] = useState(false);
 
     const getDenyList = async () => {
         try {
-            const denyList = await axios.get("http://localhost:8080/transaction-manager/get-deny-list",
+            const denyList = await axios.get("http://localhost:8080/gathering-manager/get-customer-deny-list",
                 {
                     params: { unit: userInfo.userInfo.uUnit }
                 });
@@ -33,10 +32,8 @@ function DenyList() {
         getDenyList();
     }, [isFetchedData]);
 
-    console.log(denyList);
-
     const handleBack = () => {
-        navigate("/transaction-manager");
+        navigate("/gather-manager");
     }
 
     return (
@@ -139,7 +136,7 @@ function DenyList() {
                 }
             </div>
 
-            <button className={clsx(style.back)} onClick={handleBack}>
+            <button onClick={handleBack} className={clsx(style.back)}>
                 Back
             </button>
 
@@ -148,4 +145,4 @@ function DenyList() {
     )
 }
 
-export default DenyList;
+export default CustomerDenyList;

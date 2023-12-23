@@ -19,7 +19,7 @@ const Chart = () => {
 
     const handleDateData = async () => {
         try {
-            let maxDateSent = await axios.get("http://localhost:8080/transaction-manager/get-max-date-sent-transaction",
+            let maxDateSent = await axios.get("http://localhost:8080/gathering-manager/get-max-date-sent-gather",
                 {
                     params: {
                         unit: userInfo.userInfo.uUnit
@@ -27,15 +27,13 @@ const Chart = () => {
                 }
             );
 
-            let maxDateReceived = await axios.get("http://localhost:8080/transaction-manager/get-max-date-received-transaction",
+            let maxDateReceived = await axios.get("http://localhost:8080/gathering-manager/get-max-date-received-gather",
                 {
                     params: {
                         unit: userInfo.userInfo.uUnit
                     }
                 }
             )
-
-            console.log(maxDateReceived.data[0][0]["MAX(orders.date)"]);
 
             if (maxDateReceived.data[0][0]["MAX(orders.date)"] === null && maxDateSent.data[0][0]["MAX(orders.date)"] !== null) {
                 maxDateReceived.data[0][0]["MAX(orders.date)"] = maxDateSent.data[0][0]["MAX(orders.date)"];
@@ -46,15 +44,10 @@ const Chart = () => {
                 maxDateReceived.data[0][0]["MAX(orders.date)"] = new Date();
             }
 
-            console.log(maxDateSent.data[0][0]["MAX(orders.date)"]);
-            console.log(maxDateReceived.data[0][0]["MAX(orders.date)"]);
-
             maxDateSent = new Date(maxDateSent.data[0][0]["MAX(orders.date)"]);
             maxDateReceived = new Date(maxDateReceived.data[0][0]["MAX(orders.date)"]);
-            console.log(maxDateSent);
-            console.log(maxDateReceived);
+
             let maxDate = max([maxDateSent, maxDateReceived]);
-            console.log(maxDate);
 
             setIsFetchedDateData(true);
 
@@ -78,7 +71,7 @@ const Chart = () => {
 
     const fetchDataSentForDate = async (date) => {
         try {
-            const response = await axios.get("http://localhost:8080/transaction-manager/count-order-sent-by-date"
+            const response = await axios.get("http://localhost:8080/gathering-manager/get-quantity-orders-sent-in-a-date"
                 , {
                     params: {
                         date,
@@ -95,7 +88,7 @@ const Chart = () => {
 
     const fetchDataReceivedForDate = async (date) => {
         try {
-            const response = await axios.get("http://localhost:8080/transaction-manager/count-order-received-by-date"
+            const response = await axios.get("http://localhost:8080/gathering-manager/get-quantity-orders-received-in-a-date"
                 , {
                     params: {
                         date,
@@ -117,14 +110,12 @@ const Chart = () => {
         const promisesReceived = dates.map((date) => (fetchDataReceivedForDate(date)));
         const resultsSent = await Promise.all(promisesSent);
         const resultsReceived = await Promise.all(promisesReceived);
-        console.log(resultsSent);
 
         // results là một mảng chứa kết quả tương ứng với mỗi ngày
         const updatedDataSent = resultsSent.map(result => result !== null ? result : 0);
         const updatedDataReceived = resultsReceived.map(result => result !== null ? result : 0);
         setDataSent(updatedDataSent);
         setDataReceived(updatedDataReceived);
-        console.log(updatedDataSent);
 
         // Đặt allDataReady thành true để hiển thị biểu đồ
         setAllDataReady(true);
@@ -134,14 +125,13 @@ const Chart = () => {
     }, [dates]);
 
     const handleBack = () => {
-        navigate("/transaction-manager");
+        navigate("/gather-manager");
     }
 
     const [dataSent, setDataSent] = useState([]);
     const [dataReceived, setDataReceived] = useState([]);
 
     const [allDataReady, setAllDataReady] = useState(false);
-    console.log(dataReceived);
 
     const [chartData, setChartData] = useState({
         series: [

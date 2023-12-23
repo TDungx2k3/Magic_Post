@@ -102,7 +102,7 @@ function DeliveryReceiptPage() {
             <img src={logo} alt="Logo" style={{ width: '100px', height: 'auto' }}/>
         </Link>
         <p className={style.orderID}>Số phiếu: {orderId}</p>
-        {orderObject && <QRCode className={style.qrCode} onClick={handleDownloadQRCode} value={JSON.stringify(orderObject)} />}
+        {orderObject && <QRCode id="qrcode-canvas" className={style.qrCode} onClick={handleDownloadQRCode} value={JSON.stringify(orderObject)} />}
       </div>
       <div className={style.body}>
         <div className={style.content1}>
