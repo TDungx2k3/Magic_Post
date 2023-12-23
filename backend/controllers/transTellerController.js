@@ -457,6 +457,24 @@ class transactionTellerController {
             console.log(error);
         }
     }
+
+    getAllDeliveryByOrderId = async (req, res) => {
+        const data = req.query.order_id;
+        try {
+            await sequelize.authenticate();
+            await sequelize.sync();
+            let delivery = [];
+            delivery = await Delivery.findAll({
+                where: {
+                    order_id: data,
+                },
+            });
+            res.json(delivery);
+        } catch (error) {
+            res.send(error);
+            console.log(error);
+        }
+    }
 };
 
 module.exports = new transactionTellerController();
