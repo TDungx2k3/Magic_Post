@@ -14,12 +14,30 @@ function LostOrderListGather() {
     const [lostOrderList, setLostOrderList] = useState([]);
     const [isFetchedData, setIsFetchedData] = useState(false);
 
+    const maxItemsInOnePage = 5;
+    let cnt = lostOrderList.length;
+    let numOfPages = Math.ceil(cnt / maxItemsInOnePage);
+    const [pageNum, setPageNum] = useState(1);
+    const [pages, setPages] = useState([]);
+    
+    const updatePages = () => {
+        let tmpPages = [];
+        for(let i = 0; i < numOfPages; i++) {
+            tmpPages.push(i);
+        }
+        setPages(tmpPages);
+    }
+
     const getLostOrderList = async () => {
         try {
             const lostOrderList = await axios.get("http://localhost:8080/gathering-manager/get-lost-order-list",
                 { params: { unit: userInfo.userInfo.uUnit } }
             )
             setLostOrderList(lostOrderList.data[0]);
+            let tmpList = lostOrderList.data[0];
+            cnt = tmpList.length;
+            numOfPages = Math.ceil(cnt / maxItemsInOnePage);
+            updatePages();
             setIsFetchedData(true);
         }
         catch (err) {
@@ -132,6 +150,48 @@ function LostOrderListGather() {
                             </div>
                         </div>
                     </div>
+                }
+            </div>
+
+            <div className={clsx(style.choosePageContainer)}>
+                {
+                    pages.map((page, index) => {
+                        if(index == 0 || index == numOfPages - 1
+                        || (index >= (pageNum - 2) && index <= pageNum )) {
+                            if(index == pageNum -2 && pageNum > 3) {
+                                return (
+                                    <Fragment key={index}>
+                                        <span>. . .</span>
+                                        <button className= {clsx(style.pageBtn, {[style.pageBtnActive] : index == pageNum -1})} onClick={
+                                            ()=>{
+                                                setPageNum(index + 1)
+                                            }
+                                        }>{index + 1}</button>
+                                    </Fragment>
+                                );
+                            }
+                            else if (index == pageNum && pageNum < numOfPages - 2) {
+                                return (
+                                    <Fragment key={index}>
+                                        <button className= {clsx(style.pageBtn, {[style.pageBtnActive] : index == pageNum -1})} onClick={
+                                            ()=>{
+                                                setPageNum(index + 1)
+                                            }
+                                        }>{index + 1}</button>
+                                        <span>. . .</span>
+                                    </Fragment>
+                                );
+                            }
+                            else 
+                            return(
+                                <button className= {clsx(style.pageBtn, {[style.pageBtnActive] : index == pageNum -1})} key={index} onClick={
+                                    ()=>{
+                                        setPageNum(index + 1)
+                                    }
+                                }>{index + 1}</button>
+                            );
+                        }
+                    })
                 }
             </div>
 

@@ -6,7 +6,7 @@ import axios from "axios";
 import { OrderListStatusContext } from "../OrderList";
 
 function Order(props) {
-    const { updateFr } = useContext(OrderListStatusContext);
+    const { updateFr, updateFrLost } = useContext(OrderListStatusContext);
     
     const navigate = useNavigate();
 
@@ -76,6 +76,34 @@ function Order(props) {
         } catch (error) {
             console.log(error);
         }
+    };
+
+    const lostOrder = async() => {
+        
+        await axios
+        .post("http://localhost:8080/gatherTeller/lostOrder",
+            {
+                deliver_id: props.data.max_delivery,
+                order_id: props.data.order_id,
+            }
+        )
+        .then(() => {
+            updateFrLost(props.addition);
+        })
+        
+    };
+
+    const cusDeny = async() => {
+        await axios
+        .post("http://localhost:8080/gatherTeller/customerDeny",
+            {
+                deliver_id: props.data.max_delivery,
+                order_id: props.data.order_id,
+            }
+        )
+        .then(() => {
+            updateFrLost(props.addition);
+        })
     }
 
     return (
@@ -145,7 +173,8 @@ function Order(props) {
                             <div className={clsx(style.successStatus)}
                             onClick={cfSuccess}
                             >Success</div>
-                            <div className={clsx(style.pendingStatus)}>Lost order</div>
+                            <div className={clsx(style.pendingStatus)}
+                            onClick={lostOrder}>Lost order</div>
                         </div>
 
                         <div className={clsx(style.inStatus, {[style.hidden] : props.data.status !== 0 && props.data.status !== 6})}>
@@ -158,7 +187,8 @@ function Order(props) {
                             <div className={clsx(style.cusAcepted, )}
                             onClick={customerAccept}
                             >Success</div>
-                            <div className={clsx(style.cusDenied, )}>Denied</div>
+                            <div className={clsx(style.cusDenied, )}
+                            onClick={cusDeny}>Denied</div>
                         </div>
                     </div>
                 </div>

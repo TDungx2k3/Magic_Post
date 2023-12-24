@@ -145,7 +145,7 @@ function OrderList(props) {
     };
 
     const handleSearch = () => {
-        let oIdInp = document.querySelector("." + style.searchID).value;
+        let oIdInp = document.querySelector("." + style.orderId).value;
         let phoneInp = document.querySelector("." + style.searchPhone).value;
         let tmpOrderList = [];
         if(oIdInp !== "") {
@@ -202,8 +202,21 @@ function OrderList(props) {
         console.log(tmp);
         setAllOrdersList(tmp);
         setRe(!re);
-    }
+    };
 
+    const updateFrLost = (id) => {
+        let tmp = allOrdersList;
+        const storedUserInfo = JSON.parse(localStorage.getItem('userInfo'));
+        for(let i = 0; i < tmp.length; i++) {
+            if(tmp[i].order_id === id) {
+                tmp.splice(i,1);
+                break;
+            }
+        }
+        console.log(tmp);
+        setAllOrdersList(tmp);
+        setRe(!re);
+    };
 
     useEffect(() => {
         // console.log(1);
@@ -220,7 +233,7 @@ function OrderList(props) {
 
                         <div className={clsx(style.filterContainer)}>
                             <div className={clsx(style.searchContainer)}>
-                                <input type="text" className={clsx(style.searchID)} placeholder="Order ID" />
+                                <input type="text" className={clsx(style.orderId)} placeholder="Order ID" />
                                 <input type="text" className={clsx(style.searchPhone)} placeholder="Phone Number" />
                             </div>
 
@@ -233,7 +246,7 @@ function OrderList(props) {
                             onClick={() => {
                                 setStatus(0);
                                 setPageNum(1);
-                                document.querySelector("." + style.searchID).value = "";
+                                document.querySelector("." + style.orderId).value = "";
                                 document.querySelector("." + style.searchPhone).value = "";
                                 // updateOrderList();
                             }}
@@ -242,7 +255,8 @@ function OrderList(props) {
                             onClick={() => {
                                 setStatus(1);
                                 setPageNum(1);
-                                document.querySelector("." + style.searchID).value = "";
+                                console.log(document.querySelector("." + style.orderId));
+                                document.querySelector("." + style.orderId).value = "";
                                 document.querySelector("." + style.searchPhone).value = "";
                                 // updateOrderList();
                             }}
@@ -251,7 +265,7 @@ function OrderList(props) {
                             onClick={() => {
                                 setStatus(2);
                                 setPageNum(1);
-                                document.querySelector("." + style.searchID).value = "";
+                                document.querySelector("." + style.orderId).value = "";
                                 document.querySelector("." + style.searchPhone).value = "";
                                 // updateOrderList();
                             }}
@@ -280,7 +294,7 @@ function OrderList(props) {
                                 if(index >= (pageNum-1) * maxItemsInOnePage 
                                 && index < (pageNum * maxItemsInOnePage))
                                 return(
-                                    <OrderListStatusContext.Provider value={{updateFr, status}} key={index}>
+                                    <OrderListStatusContext.Provider value={{updateFr, updateFrLost, status}} key={index}>
                                         <div className={clsx(style.orderContainer)}>
                                             <Order data = {orderData} addition={order.order_id}/>
                                         </div>
