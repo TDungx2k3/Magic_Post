@@ -145,7 +145,7 @@ function OrderList(props) {
     };
 
     const handleSearch = () => {
-        let oIdInp = document.querySelector("." + style.searchID).value;
+        let oIdInp = document.querySelector("." + style.orderId).value;
         let phoneInp = document.querySelector("." + style.searchPhone).value;
         let tmpOrderList = [];
         if(oIdInp !== "") {
@@ -233,7 +233,7 @@ function OrderList(props) {
 
                         <div className={clsx(style.filterContainer)}>
                             <div className={clsx(style.searchContainer)}>
-                                <input type="text" className={clsx(style.searchID)} placeholder="Order ID" />
+                                <input type="text" className={clsx(style.orderId)} placeholder="Order ID" />
                                 <input type="text" className={clsx(style.searchPhone)} placeholder="Phone Number" />
                             </div>
 
@@ -246,7 +246,7 @@ function OrderList(props) {
                             onClick={() => {
                                 setStatus(0);
                                 setPageNum(1);
-                                document.querySelector("." + style.searchID).value = "";
+                                document.querySelector("." + style.orderId).value = "";
                                 document.querySelector("." + style.searchPhone).value = "";
                                 // updateOrderList();
                             }}
@@ -255,7 +255,8 @@ function OrderList(props) {
                             onClick={() => {
                                 setStatus(1);
                                 setPageNum(1);
-                                document.querySelector("." + style.searchID).value = "";
+                                console.log(document.querySelector("." + style.orderId));
+                                document.querySelector("." + style.orderId).value = "";
                                 document.querySelector("." + style.searchPhone).value = "";
                                 // updateOrderList();
                             }}
@@ -264,7 +265,7 @@ function OrderList(props) {
                             onClick={() => {
                                 setStatus(2);
                                 setPageNum(1);
-                                document.querySelector("." + style.searchID).value = "";
+                                document.querySelector("." + style.orderId).value = "";
                                 document.querySelector("." + style.searchPhone).value = "";
                                 // updateOrderList();
                             }}
