@@ -15,7 +15,7 @@ import GatherManager from './pages/GatherManager';
 import Statistic from './pages/GatherManager/subpage/Chart';
 import ModifyAccountEmployee from './pages/GatherManager/subpage/ModifyAccountEmployee';
 import CustomerDenyList from './pages/GatherManager/subpage/CustomerDenyList';
-import LostOrderListGather from './pages/GatherManager/subpage/LostOrderListGather/indes';
+import LostOrderListGather from './pages/GatherManager/subpage/LostOrderListGather';
 import { createContext, useEffect, useState } from 'react';
 import ManageGather from './pages/Leader/subPages/ManageGather';
 import ModifyGather from './pages/Leader/subPages/ModifyGather';

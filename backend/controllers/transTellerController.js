@@ -510,7 +510,85 @@ class transactionTellerController {
             res.send(error);
             console.log(error);
         }
-    }
+    };
+
+    lostOrder = async(req, res) => {
+        let dId = req.body.deliver_id;
+        let oId = req.body.order_id;
+        let validateDIdRs = Joi.number().positive().required().validate(dId);
+        let validateOIdRs = Joi.number().positive().required().validate(oId);
+        if(validateDIdRs.error || validateOIdRs.error) {
+            console.log("d" + validateDIdRs.error);
+            console.log(validateOIdRs.error);
+        }
+        else {
+            
+            try {
+                await Delivery.update(
+                    {
+                        deliver_status: -1,
+                    },
+                    {
+                        where: {
+                            deliver_id: dId
+                        }
+                    }
+                );
+                await Order.update(
+                    {
+                        order_status: "lost",
+                    },
+                    {
+                        where: {
+                            order_id: oId,
+                        }
+                    }
+                );
+                res.send();
+            } catch (error) {
+                console.log(error);
+            }
+        }
+    };
+
+    customerDeny = async(req, res) => {
+        let dId = req.body.deliver_id;
+        let oId = req.body.order_id;
+        let validateDIdRs = Joi.number().positive().required().validate(dId);
+        let validateOIdRs = Joi.number().positive().required().validate(oId);
+        if(validateDIdRs.error || validateOIdRs.error) {
+            console.log("d" + validateDIdRs.error);
+            console.log(validateOIdRs.error);
+        }
+        else {
+            
+            try {
+                await Delivery.update(
+                    {
+                        deliver_status: -1,
+                    },
+                    {
+                        where: {
+                            deliver_id: dId
+                        }
+                    }
+                );
+                await Order.update(
+                    {
+                        order_status: "deny",
+                    },
+                    {
+                        where: {
+                            order_id: oId,
+                        }
+                    }
+                );
+                res.send();
+            } catch (error) {
+                console.log(error);
+            }
+        }
+    };
 };
 
 module.exports = new transactionTellerController();

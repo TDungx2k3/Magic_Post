@@ -202,8 +202,21 @@ function OrderList(props) {
         console.log(tmp);
         setAllOrdersList(tmp);
         setRe(!re);
-    }
+    };
 
+    const updateFrLost = (id) => {
+        let tmp = allOrdersList;
+        const storedUserInfo = JSON.parse(localStorage.getItem('userInfo'));
+        for(let i = 0; i < tmp.length; i++) {
+            if(tmp[i].order_id === id) {
+                tmp.splice(i,1);
+                break;
+            }
+        }
+        console.log(tmp);
+        setAllOrdersList(tmp);
+        setRe(!re);
+    };
 
     useEffect(() => {
         // console.log(1);
@@ -280,7 +293,7 @@ function OrderList(props) {
                                 if(index >= (pageNum-1) * maxItemsInOnePage 
                                 && index < (pageNum * maxItemsInOnePage))
                                 return(
-                                    <OrderListStatusContext.Provider value={{updateFr, status}} key={index}>
+                                    <OrderListStatusContext.Provider value={{updateFr, updateFrLost, status}} key={index}>
                                         <div className={clsx(style.orderContainer)}>
                                             <Order data = {orderData} addition={order.order_id}/>
                                         </div>

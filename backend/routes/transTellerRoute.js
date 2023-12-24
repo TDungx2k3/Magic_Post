@@ -23,4 +23,7 @@ router.get("/showAllTransactionsByGather", transactionTellerController.showAllTr
 router.get("/getTransNameById", transactionTellerController.getTransNameById);
 router.get("/getGatherNameById", transactionTellerController.getGatherNameById);
 
+router.post("/lostOrder", transactionTellerController.lostOrder);
+router.post("/customerDeny", transactionTellerController.customerDeny);
+
 module.exports = router;
