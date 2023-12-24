@@ -6,6 +6,7 @@ const { Transaction } = require('../models/transactionsModel');
 const { Role } = require("../models/rolesModel");
 const bcrypt = require('bcrypt');
 const Joi = require('joi');
+const { Order } = require('../models/ordersModel');
 
 // Gathering.belongsTo(Account, {
 //     foreignKey: 'account_id',
@@ -779,6 +780,29 @@ class LeaderController {
         }
     };
 
+    getMaxDate = async (req, res) => {
+        try {
+            const maxDate = await Order.max('date');
+            res.json(maxDate);
+        }
+        catch(err) {
+            res.json(err);
+        }
+    };
+
+    countOrdersInADate = async (req, res) => {
+        try {
+            const ordersInADate = await Order.count({
+                where: {
+                    date: req.query.date
+                }
+            });
+            res.json(ordersInADate);
+        }
+        catch(err) {
+            res.json(err);
+        }
+    };
 }
 
 module.exports = new LeaderController();

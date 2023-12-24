@@ -1,6 +1,6 @@
 import clsx from "clsx";
 import style from "./TransactionManagerFormCreateAccount.module.scss";
-import { useState, useContext, Fragment } from "react";
+import { useState, useContext, Fragment, useEffect } from "react";
 import { LoginContext } from "../../../../App";
 import axios from "axios";
 import { Alert } from 'flowbite-react';
@@ -83,9 +83,9 @@ function TransactionManagerFormCreateAccount(props) {
                 setCheckIsSuccess(false);
                 setAlertVisible(true);
 
-                // setTimeout(() => {
-                //     setAlertVisible(false);
-                // }, 1500);
+                setTimeout(() => {
+                    setAlertVisible(false);
+                }, 1500);
                 // alert("Phone number already exists");
                 setInputs((prevInputs) => {
                     return {
@@ -104,9 +104,9 @@ function TransactionManagerFormCreateAccount(props) {
                     setCheckIsSuccess(true);
                     setAlertVisible(true);
 
-                    // setTimeout(() => {
-                    //     setAlertVisible(false);
-                    // }, 1500);
+                    setTimeout(() => {
+                        setAlertVisible(false);
+                    }, 1500);
                     // alert("Create Successfully");
                     setInputs((prevInputs) => {
                         return {
@@ -128,18 +128,22 @@ function TransactionManagerFormCreateAccount(props) {
         }
     }
 
-    console.log(checkIsSuccess);
+    const handleEnterKey = (event) => {
+        if (event.key === "Enter") {
+            handleIsClickAddAccount();
+        }
+    };
 
     return (
         <Fragment>
             {
                 alertVisible ? (
                     checkIsSuccess ? (
-                        <Alert color="success" onDismiss={() => setAlertVisible(false)} className={clsx(style.alert)} data-aos="fade-down">
+                        <Alert color="success" className={clsx(style.alert)} data-aos="fade-down">
                             <span className="font-medium">Create Successfully!</span>
                         </Alert>
                     ) : (
-                        <Alert color="failure" icon={HiInformationCircle} onDismiss={() => setAlertVisible(false)} className={clsx(style.alert)} data-aos="fade-down">
+                        <Alert color="failure" icon={HiInformationCircle} data-aos="fade-down">
                             <span className="font-medium">Phone number already exists</span>
                         </Alert>
                     )
@@ -160,6 +164,7 @@ function TransactionManagerFormCreateAccount(props) {
                                 name="accountName"
                                 onChange={handleChange}
                                 onClick={() => setErrorForName(false)}
+                                onKeyDown={handleEnterKey}
                             />
                             <span
                                 className={errorForName ? clsx(style.error) : clsx(style["error-hidden"])}
@@ -180,6 +185,7 @@ function TransactionManagerFormCreateAccount(props) {
                                 name="accountPhone"
                                 onChange={handleChange}
                                 onClick={() => setErrorForPhone(false)}
+                                onKeyDown={handleEnterKey}
                             />
                             <span
                                 className={errorForPhone ? clsx(style.error) : clsx(style["error-hidden"])}
@@ -200,6 +206,7 @@ function TransactionManagerFormCreateAccount(props) {
                                 name="accountPassword"
                                 onChange={handleChange}
                                 onClick={() => setErrorForPassword(false)}
+                                onKeyDown={handleEnterKey}
                             />
                             <span
                                 className={errorForPassword ? clsx(style.error) : clsx(style["error-hidden"])}
