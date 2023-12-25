@@ -12,6 +12,7 @@ import Chart from './pages/TransactionManager/subpages/Chart';
 import DenyList from './pages/TransactionManager/subpages/DenyList';
 import LostOrderListTransaction from './pages/TransactionManager/subpages/LostOrderListTransaction';
 import GatherManager from './pages/GatherManager';
+import CreateAccount from './pages/GatherManager/subpage/CreateAccount';
 import Statistic from './pages/GatherManager/subpage/Chart';
 import ModifyAccountEmployee from './pages/GatherManager/subpage/ModifyAccountEmployee';
 import CustomerDenyList from './pages/GatherManager/subpage/CustomerDenyList';
@@ -146,6 +147,7 @@ function App() {
             <Route path='/gather-manager/statistic' element={<Statistic />}/>
             <Route path='/gather-manager/deny-list' element={<CustomerDenyList />}/>
             <Route path='/gather-manager/lost-order-list' element={<LostOrderListGather />}/>
+            <Route path='/gather-manager/create-account' element={<CreateAccount />}/>
             <Route path='/modify-account' element={<ModifyAccountEmployee />}/>
             <Route path = '/leaderManageGather' element={<ManageGather/>} />
             <Route path = '/leaderManageTransaction' element={<ManageTransaction/>} />

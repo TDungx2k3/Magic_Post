@@ -26,7 +26,6 @@ class transactionManagerController {
             });
         });
         res.send();
-        console.log("akjfkaf" + data.accountPassword);
     };
 
     showAllOrderReceived = async (req, res) => {
