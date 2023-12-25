@@ -21,6 +21,7 @@ function DeliveryReceiptPage() {
   const [receiverAddressFormat, setReceiverAddressFormat] = useState('');
   const[orderObject, setOrderObject] = useState([]);
 
+  // Lấy thông tin địa chỉ cụ thể
   useEffect(() => {
     const fetchTransData = async () => {
       try {
@@ -68,6 +69,7 @@ function DeliveryReceiptPage() {
     fetchOrderData();
   }, [orderId]);
 
+  // Download ảnh mã QR
   const handleDownloadQRCode = () => {
     const canvas = document.getElementById('qrcode-canvas');
     const url = canvas.toDataURL('image/png');
@@ -77,6 +79,20 @@ function DeliveryReceiptPage() {
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
+  };
+
+  // Xử lý checkbox
+  const [isTaiLieuChecked, setIsTaiLieuChecked] = useState(false);
+  const [isHangHoaChecked, setIsHangHoaChecked] = useState(true);
+
+  const handleCheckboxChange = (checkboxType) => {
+    if (checkboxType === 'taiLieu') {
+      setIsTaiLieuChecked(true);
+      setIsHangHoaChecked(false);
+    } else if (checkboxType === 'hangHoa') {
+      setIsTaiLieuChecked(false);
+      setIsHangHoaChecked(true);
+    }
   };
 
   return (
@@ -106,7 +122,7 @@ function DeliveryReceiptPage() {
       </div>
       <div className={style.body}>
         <div className={style.content1}>
-          <strong>1. Họ tên địa chỉ người gửi:</strong>
+          <i>1. Họ tên địa chỉ người gửi:</i>
           <br />
           {customerName} <br /> {customerAddress}
           <br />
@@ -120,7 +136,7 @@ function DeliveryReceiptPage() {
         </div>
 
         <div className={style.content2}>
-          <strong>2. Họ tên địa chỉ người nhận</strong>
+          <i>2. Họ tên địa chỉ người nhận:</i>
           <br />
           {receiverName} <br /> {receiverAddressFormat}
           <br />
@@ -134,39 +150,43 @@ function DeliveryReceiptPage() {
         </div>
 
         <div className={style.content3}>
-          <strong>3. Loại hàng gửi:</strong>
+          <i>3. Loại hàng gửi:</i>
           <div>
-            <input type="checkbox" id="taiLieu" />
-            <label for="taiLieu" className={style.inline_checkbox}>
+            <input type="checkbox" id="taiLieu" checked={isTaiLieuChecked} onChange={() => handleCheckboxChange('taiLieu')}/>
+            <label htmlFor="taiLieu" className={style.inline_checkbox}>
               Tài liệu
             </label>
-            <input type="checkbox" id="hangHoa" checked/>
-            <label for="hangHoa" className={style.inline_checkbox}>
+            <input type="checkbox" id="hangHoa" checked={isHangHoaChecked} onChange={() => handleCheckboxChange('hangHoa')}/>
+            <label htmlFor="hangHoa" className={style.inline_checkbox}>
               Hàng Hóa
             </label>
           </div>
-          <strong>4. Nội dung trị giá bưu gửi:</strong>
+          <i>4. Nội dung trị giá bưu gửi:</i>
         </div>
 
         <div className={style.content4}>
           <table>
-            <tr>
-              <th>Nội dung</th>
-              <th>Khối lượng</th>
-              <th>Trị giá</th>
-              <th>Giấy tờ đính kèm</th>
-            </tr>
-            <tr>
-              <td>Tổng</td>
-              <td>{weight}kg</td>
-              <td>{price}</td>
-              <td>0</td>
-            </tr>
+            <thead>
+              <tr>
+                <th>Nội dung</th>
+                <th>Khối lượng</th>
+                <th>Trị giá</th>
+                <th>Giấy tờ đính kèm</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Tổng</td>
+                <td>{weight}kg</td>
+                <td>{price}</td>
+                <td>0</td>
+              </tr>
+            </tbody>
           </table>
         </div>
 
         <div className={style.content5}>
-          <strong>5. Dịch vụ đặc biệt Cộng thêm:</strong>
+          <i>5. Dịch vụ đặc biệt Cộng thêm:</i>
           <br />{" "}
           ..................................................................................................................
           <br />{" "}
@@ -176,32 +196,32 @@ function DeliveryReceiptPage() {
         </div>
 
         <div className={style.content6}>
-          <strong>6. Chỉ dẫn của người gửi khi không phát được bưu gửi:</strong>
+          <i>6. Chỉ dẫn của người gửi khi không phát được bưu gửi:</i>
           <br />
           <input type="checkbox" id="chuyenHoanNgay" />
-          <label for="chuyenHoanNgay" className={style.inline_checkbox}>
+          <label htmlFor="chuyenHoanNgay" className={style.inline_checkbox}>
             Chuyển hoàn ngay
           </label>
           <input type="checkbox" id="goiDien" />
-          <label for="goiDien" className={style.inline_checkbox}>
+          <label htmlFor="goiDien" className={style.inline_checkbox}>
             Gọi điện cho người gửi/BC gửi
           </label>
           <input type="checkbox" id="huy" />
-          <label for="huy" className={style.inline_checkbox}>
+          <label htmlFor="huy" className={style.inline_checkbox}>
             Hủy
           </label>
           <input type="checkbox" id="hangHoa" />
-          <label for="hangHoa" className={style.inline_checkbox}>
+          <label htmlFor="hangHoa" className={style.inline_checkbox}>
             Chuyen hoàn trước ngày
           </label>
           <input type="checkbox" id="chuyenHoanTruoc" />
-          <label for="chuyenHoanTruoc" className={style.inline_checkbox}>
+          <label htmlFor="chuyenHoanTruoc" className={style.inline_checkbox}>
             Chuyen hoàn khi hết thời gian lưu trữ
           </label>
         </div>
 
         <div className={style.content7}>
-          <strong>7. Cam kết của người gửi:</strong>
+          <i>7. Cam kết của người gửi:</i>
           <br />
           Tôi chấp nhận các điều khoản tại mặt sau phiều gửi và cam đoan bưu gửi
           này không chứa những mặt hàng nguy hiểm, cầm gửi. Trường hợp không
@@ -210,50 +230,50 @@ function DeliveryReceiptPage() {
         </div>
 
         <div className={style.content8}>
-          <strong>8. Ngày giờ gửi:</strong>
-          <strong>Chữ kí người gửi</strong>
+          <i>8. Ngày giờ gửi:</i>
+          <i>Chữ kí người gửi</i>
           <br />
           <p>{format(new Date(date), 'hh:mm:ss dd/MM/yyyy')}</p>
         </div>
 
         <div className={style.content9}>
-          <strong>9. Cước:</strong>
+          <i>9. Cước:</i>
           <p>
-            Cước chính: <b>{price}</b>
+            Cước chính: <i>{price}</i>
           </p>
           <p>
-            Phụ phí: <b>0</b>
+            Phụ phí: <i>0</i>
           </p>
           <p>
-            Cước GTGT: <b>0</b>
+            Cước GTGT: <i>0</i>
           </p>
           <p>
-            Tổng cước (gồm VAT): <b>{price}</b>
+            Tổng cước (gồm VAT): <i>{price}</i>
           </p>
           <p>
-            Thu khác: <b>0</b>
+            Thu khác: <i>0</i>
           </p>
         </div>
 
         <div className={style.content10}>
-          <strong>10. Khối lượng (kg):</strong>
-          <br /> Khối lượng thực tế <b>{weight}</b>
-          <br /> Khối lượng quy đổi <b>{weight}</b>
+          <i>10. Khối lượng (kg):</i>
+          <br /> Khối lượng thực tế <i className={style.weight}>{weight}</i>
+          <br /> Khối lượng quy đổi <i className={style.weight}>{weight}</i>
         </div>
 
         <div className={style.content11}>
-          <strong>11. Thu của người nhận:</strong>
-          <br /> COD: <b>0</b>
-          <br /> Thu khác: <b>0</b>
-          <br /> Tổng thu: <b>0</b>
+          <i>11. Thu của người nhận:</i>
+          <br /> COD: <i className={style.price}>0</i>
+          <br /> Thu khác: <i className={style.price}>0</i>
+          <br /> Tổng thu: <i className={style.price}>0</i>
         </div>
 
         <div className={style.content12}>
-          <strong>12. Chú dẫn nghiệp vụ:</strong>
+          <i>12. Chú dẫn nghiệp vụ:</i>
         </div>
 
         <div className={style.content13}>
-          <strong>13. Bưu cục chấp nhận</strong>
+          <i>13. Bưu cục chấp nhận</i>
           <br />
           Chữ ký GDV nhận
           <br />
@@ -262,11 +282,11 @@ function DeliveryReceiptPage() {
             src={dauChuyenPhat}
             alt=""
           ></img>
-          <br /> <i>GDV: {adminName}</i>
+          <i className={style.adminName}>GDV: {adminName}</i>
         </div>
 
         <div className={style.content14}>
-          <strong>14. Ngày giờ nhận</strong>
+          <i>14. Ngày giờ nhận:</i>
           <br /> .....h...../...../...../20.....
           <p>
             Người nhận/ Người được <br />

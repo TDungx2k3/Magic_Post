@@ -92,26 +92,13 @@ function CreateOrderPage() {
   }, []);
 
   // Xử lý địa chỉ
-  // const[isReceiverAddress, setIsReceiverAddress] = useState(true);
-  
-  // let checkAddress;
-
-  // function handleReceiverAddress() {
-  //   checkAddress = inputs.receiver_address.split(', ').pop();
-  //   //console.log(checkAddress);
-  //   if(!checkAddress || !inputs.receiver_address.includes(', ')) {
-  //     setIsReceiverAddress(false);
-  //   } else {
-  //     setIsReceiverAddress(true);
-  //     //inputs.receiver_address = checkAddress;
-  //   }
-  // }
 
   const [gathers, setGather] = useState([]);
   const [selectedGather, setSelectedGather] = useState('');
   const [provinces, setProvinces] = useState([]);
   const [selectedProvince, setSelectedProvince] = useState('');
 
+  // Lấy thông tin tất cả điểm tập kết
   useEffect(() => {
     const fetchGatherData = async () => {
       try {
@@ -127,6 +114,7 @@ function CreateOrderPage() {
   }, []);
 
 
+  // Lấy thông tin tất cả điểm giao dịch thuộc điểm tập kết
   useEffect(() => {
     const fetchTransactionData = async () => {
       //console.log(selectedGather);
@@ -200,6 +188,7 @@ function CreateOrderPage() {
     transaction_end: "",
   });
 
+  // Lưu giá trị nhập vào
   const handleChange = (e) => {
     setInputs((prev) => {
       return {
@@ -209,7 +198,7 @@ function CreateOrderPage() {
     });
   };
 
-
+  // Xử lý lỗi trước khi tạo order
   function handleErrorBeforeSubmit() {
     handleCustomerPhoneBlur();
     handleReceiverPhoneBlur();
@@ -261,7 +250,7 @@ function CreateOrderPage() {
 
   return (
     <Fragment>
-      <Header showNavBar={false} />
+      <Header showSlider={false} />
       <div className={style.container}>
         <header className={style.header}>
           <h1>Create new order</h1>

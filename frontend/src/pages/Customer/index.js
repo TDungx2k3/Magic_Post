@@ -16,6 +16,7 @@ function CustomerQR() {
   const [receiverAddressFormat, setReceiverAddressFormat] = useState('');
   const [mappedDelivery, setMappedDelivery] = useState([]);
 
+  // Lấy thông tin địa chỉ cụ thể
   useEffect(() => {
     if(result && result.receiver_address !== "") {
       const part = result.receiver_address.split('#');
@@ -37,6 +38,7 @@ function CustomerQR() {
       };
       
 
+      // Lấy thông tin vận chuyển
       const getDeliveryByOrderId = async () => {
         try {
           await axios.get("http://localhost:8080/transTeller/getDeliveryByOrderId", {
@@ -60,6 +62,7 @@ function CustomerQR() {
     }
   }, [result]);
 
+  // Chuyển đổi thông tin các điểm giao dịch, tập kết
   useEffect(()  => {
     const mapToAddressType = async (toId) => {
       if (toId.startsWith("r")) {
@@ -106,6 +109,7 @@ function CustomerQR() {
       }
     };
 
+    // Lưu thông tin tên điểm giao dịch, tập kết
     const fetchAddress = async () => {
       if (Array.isArray(delivery)) {
         const mappedDeliveryData = await Promise.all(
@@ -124,18 +128,7 @@ function CustomerQR() {
     fetchAddress();
     
   }, [result, delivery]);
-
-  //const [showOrderDetail, setShowOrderDetail] = useState(false);
-
-  // Check có show thông tin đơn hàng không
-  // useEffect(() => {
-  //   // This effect runs after the component has rendered or when 'result' changes
-  //   if (result.order_id !== "") {
-  //     setShowOrderDetail(true);
-  //   } else {
-  //     setShowOrderDetail(false);
-  //   }
-  // }, [result]);
+  
   
   // Đọc ảnh QR code
   const handleImageLoad = (e) => {
@@ -217,7 +210,7 @@ function CustomerQR() {
         .then((response) => {
           if (response.data.message === "Successful") {
             setResult(response.data.orderObject)
-            //console.log(response.data.orderObject);
+            console.log(response.data.orderObject);
           } else {
             alert(response.data.message);
           }
@@ -233,7 +226,7 @@ function CustomerQR() {
 
   return (
     <Fragment>
-      <Header showNavBar={false} />
+      <Header showSlider={false} />
       <div className={style.container}>
         <div className={style.textCode}>
           <label htmlFor={style.orderIdCode}>Enter your order code:</label>
@@ -289,13 +282,40 @@ function CustomerQR() {
                         </>
                       )}
 
-                      {index !== 0 && mappedDelivery[index].deliver_status === 0 && (
+                      {index === mappedDelivery.length - 1 && result.order_status === "lost" && (
                         <>
-                          <p><i>{mappedDelivery[index].date}</i> Đơn hàng đang trên đường chuyển đến {mappedDelivery[index].address}</p>
+                          <p><i>{mappedDelivery[index].date}</i>Đơn hàng đang trên đường chuyển đến {mappedDelivery[index].address}</p>
+                          <p><i>{mappedDelivery[index].date}</i>Đơn hàng bị đã bị thất lạc</p>
                         </>
                       )}
 
-                      {index !== 0 && mappedDelivery[index].deliver_status === 1 && (
+                      {index !== 0 && mappedDelivery[index].deliver_status === -1 && result.order_status !== "lost" && (
+                        <>
+                          <p><i>{mappedDelivery[index].date}</i>Đơn hàng đang trên đường chuyển đến {mappedDelivery[index].address}</p>
+                          <p><i>{mappedDelivery[index].date}</i>Đơn hàng bị từ chối bởi khách hàng</p>
+                        </>
+                      )}
+
+                      {index !== 0 && index !== mappedDelivery.length - 1 && mappedDelivery[index].deliver_status === 0 && (
+                        <>
+                          <p><i>{mappedDelivery[index].date}</i>Đơn hàng đang trên đường chuyển đến {mappedDelivery[index].address}</p>
+                        </>
+                      )}
+
+                      {index !== 0 && index !== mappedDelivery.length - 1 && mappedDelivery[index].deliver_status === 1 && (
+                        <>
+                          <p><i>{mappedDelivery[index].date}</i>Đơn hàng đang trên đường chuyển đến {mappedDelivery[index].address}</p>
+                          <p><i>{mappedDelivery[index].date}</i>Đơn hàng đã đến {mappedDelivery[index].address}</p>
+                        </>
+                      )}
+
+                      {index === mappedDelivery.length - 1 && mappedDelivery[index].deliver_status === 0 && result.order_status !== "lost" &&(
+                        <>
+                          <p><i>{mappedDelivery[index].date}</i>Đơn hàng đang trên đường chuyển đến {mappedDelivery[index].address}</p>
+                        </>
+                      )}
+
+                      {index === mappedDelivery.length - 1 && mappedDelivery[index].deliver_status === 1 && result.order_status !== "lost" &&(
                         <>
                           <p><i>{mappedDelivery[index].date}</i>Đơn hàng đang trên đường chuyển đến {mappedDelivery[index].address}</p>
                           <p><i>{mappedDelivery[index].date}</i>Đơn hàng đã đến {mappedDelivery[index].address}</p>
