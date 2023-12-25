@@ -77,8 +77,8 @@
 }
 
 .body {
-    width: 80vw;
-    height: 88vh;
+    width: 1280px;
+    height: 735px;
     margin-left: auto;
     margin-right: auto;
     text-align: start;
@@ -142,10 +142,6 @@
     font-size: 17px;
 }
 
-strong {
-    font-size: large;
-}
-
 table {
     font-size: 90%;
     border-collapse: collapse;
@@ -186,27 +182,28 @@ th, td {
     margin-right: 30% !important;
 }
 
-.content9 b {
+.content9 p i {
     float: right;
     margin-right: 2%;
 }
 
-.content10 b {
+.content10 .weight {
     float: right;
     margin-right: 2%;
 }
 
-.content11 b {
+.content11 .price {
     float: right;
     margin-right: 2%;
 }
 
 .dauChuyenPhatImg {
-    height: 65%;
+    height: 150px;
     width: auto;
+    margin: auto;
 }
 
-.content13 > i {
+.content13 .adminName {
     float: right;
     margin-right: 5%;
 }
