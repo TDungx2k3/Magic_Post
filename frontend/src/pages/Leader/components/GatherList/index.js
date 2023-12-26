@@ -45,7 +45,7 @@ function GatherList() {
 
                 {
                     gatherList.map((gather, index) => {
-                        console.log(gather);
+                        // console.log(gather);
                         let gatherData = {
                             gatherId: gather.gather_id,
                             gatherName: gather.gather_name,

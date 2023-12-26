@@ -1,14 +1,17 @@
 import clsx from "clsx";
 import style from "./ChartInLeaderPage.module.scss";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useContext } from "react";
 import ReactApexCharts from "react-apexcharts";
 import axios from "axios";
 import { format, subDays, max, parseISO } from "date-fns";
 
 function ChartInLeaderPage() {
+    // maxdate để lưu ngày gần nhất
     const [maxDate, setMaxDate] = useState();
-    const [isGotDates, setIsGotDates] = useState(false);
+    const [isGotDates, setIsGotDates] = useState(false); // check xem đã get được maxdate chưa
+    const [dates, setDates] = useState([]); // mảng này để lưu 7 ngày gần nhất trong order
 
+    // get ra maxdate với set 7 ngày gần nhất vào dates
     const getMaxDate = async () => {
         try {
             const maxDate = await axios.get("http://localhost:8080/leader/get-max-date");
@@ -30,12 +33,14 @@ function ChartInLeaderPage() {
 
     useEffect(() => {
         getMaxDate();
-    }, [isGotDates]);
+    }, [isGotDates, maxDate]);
 
-    const [dates, setDates] = useState([]);
+    console.log(dates);
 
+    // Dùng để check xem đã get được số lượng order trong ngày chưa
     const [isGotQuantityOrderInADate, setIsGotQuantityOrderInADate] = useState(false);
 
+    // Dùng để get số lượng order trong 1 ngày
     const getQuantityOrderInAdate = async (date) => {
         try {
             const response = await axios.get("http://localhost:8080/leader/get-quantity-order-in-a-date"
@@ -53,20 +58,21 @@ function ChartInLeaderPage() {
         }
     }
 
-    const [listQuantityOrder, setListQuantityOrder] = useState([]);
-    const [isGotListQuantityOrder, setIsGotListQuantityOrder] = useState(false);
+    const [listQuantityOrder, setListQuantityOrder] = useState([]); // để lưu lại list order trong 7 ngày gần nhất;
+    const [isGotListQuantityOrder, setIsGotListQuantityOrder] = useState(false); // để check xem đã get được số lượng order trong 7 ngày chưa
 
-    const [isReady, setIsReady] = useState(false);
+    const [isReady, setIsReady] = useState(false); // check xem tất cả đã set được hết data vào mấy cái state chưa
 
+    // để get số lượng order trong từng ngày, set vào listQuantityOrder
     const getListQuantityOrder = async () => {
         const listQuantityOrder = await Promise.all(dates.map((date) => getQuantityOrderInAdate(date)));
         setListQuantityOrder(listQuantityOrder);
         setIsGotListQuantityOrder(true);
-        setIsReady(true);
     }
 
     useEffect(() => {
         getListQuantityOrder();
+        setIsReady(true);
     }, [isGotListQuantityOrder]);
 
     console.log(listQuantityOrder);
@@ -169,7 +175,7 @@ function ChartInLeaderPage() {
             // Cập nhật state cho biểu đồ
             setChartData(newChartData);
         }
-    }, [isGotListQuantityOrder, listQuantityOrder]);
+    }, [listQuantityOrder, isReady, isGotDates, isGotListQuantityOrder, isGotQuantityOrderInADate]);
 
     return (
         <div id={clsx(style.chart)} className={clsx(style.chartContainer)}>
