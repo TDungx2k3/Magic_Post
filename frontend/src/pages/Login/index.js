@@ -29,9 +29,9 @@ function Login() {
   let loginBtnRef = useRef();
 
   // Kiểm tra xem có đúng là số điện thoại không. Dùng để hiển thị lỗi khi blur ra ngoài vùng nhập
-  const [isPhone, setIsPhone] = useState(true);
+  let [isPhone, setIsPhone] = useState(true);
   // Kiểm tra xem có đúng là mật khẩu không. Dùng để hiển thị lỗi khi blur ra ngoài vùng nhập
-  const [isPass, setIsPass] = useState(true);
+  let [isPass, setIsPass] = useState(true);
 
 
   // Khi message thay đổi thì kiểm tra xem message là gì
@@ -61,8 +61,8 @@ function Login() {
   // Sau khi blur ra ngoài vùng điền điện thoại thì kiểm tra xem có đúng là số điện thoại hay không
   // Nếu đúng thì isPhone = true tương đương với đây là số điện thoại
   // Ngược lại thì đây không phải số điện thoại
-  // Đúng ròi
-  function handlePhoneBlur() {
+  // Đúng ròi.
+  const handlePhoneBlur = async () => {
     if (phoneIn) {
       var phoneno = /^\d{10}$/;
       if (phoneIn.value.match(phoneno)) {
@@ -80,7 +80,7 @@ function Login() {
   // Nếu đúng thì isPass = true tương đương với đây là mật khẩu hợp lệ
   // Ngược lại thì đây không phải mật khẩu hợp lệ
   // Đúng ròi
-  function handlePassBlur() {
+  const handlePassBlur = async () => {
     if (passIn) {
       if (passIn.value.length >= 6) {
         setIsPass(true);
@@ -163,24 +163,26 @@ function Login() {
   };
 
   // Xử lý khi enter ở các input
-  const handleKeyDown = (e) => {
+  const handleKeyDown = async (e) => {
     if (e.key === "Enter") {
-      handlePassReplication();
+      loginBtnRef.current.focus();
+      e.target.blur();
+      setIsPhone(false);
+      setIsPass(false);
+      if(!isPhone && !isPass) {
+        handlePassReplication();
+      }
     }
   };
 
   // Dùng để kiểm tra xem các input có lỗi gì không. Nếu có thì không xử lý kiểm tra đăng nhập
-  function handlePassReplication() {
+  const handlePassReplication = () => {
     handlePhoneBlur();
     handlePassBlur();
+    console.log(isPass + '   ' + isPhone);
     if (isPass && isPhone && inputs.phone !== "" && inputs.password !== "") {
       handleSubmit();
     }
-  }
-
-  // test
-  function submit() {
-    console.log(inputs);
   }
 
   return (

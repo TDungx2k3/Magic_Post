@@ -112,7 +112,8 @@ function ModifyGather() {
     };
 
     const checkNewPassword = () => {
-        let newPwd = document.querySelector("." + style.newPasswordContainer + " input").value;
+        let newPwd = document.querySelector("." + style.newPasswordContainers + " input").value;
+        console.log(newPwd);
         if(!(newPwd === "")) {
             if (newPwd.length < 6) {
                 setNewPasswordErr("Your password must be more than 6 characters!")
@@ -182,7 +183,7 @@ function ModifyGather() {
         let gName = document.querySelector("." + style.gatherNameContainer + " input").value;
         let mName = document.querySelector("." + style.nameContainer + " input").value;
         let mPhone = document.querySelector("." + style.phoneContainer + " input").value;
-        let newPwd = document.querySelector("." + style.newPasswordContainer + " input").value;
+        let newPwd = document.querySelector("." + style.newPasswordContainers + " input").value;
 
         checkGatherName();
         checkManagerName();
@@ -299,7 +300,7 @@ function ModifyGather() {
                 <div className = {clsx(style.changePasswordContainer, {
                     [style.hidden]: options !== 2
                 })}>
-                    <div className = {clsx(style.newPasswordContainer)}>
+                    <div className = {clsx(style.newPasswordContainers)}>
                         <label>Manager New Password: </label>
                         <br/>
                         <input type="text" placeholder="Enter new password!"

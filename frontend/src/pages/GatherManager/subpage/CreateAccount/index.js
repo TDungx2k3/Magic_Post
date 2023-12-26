@@ -1,15 +1,17 @@
 import clsx from "clsx";
-import style from "./TransactionManagerFormCreateAccount.module.scss";
+import style from "./CreateAccount.module.scss";
 import { useState, useContext, Fragment, useEffect } from "react";
 import { LoginContext } from "../../../../App";
 import axios from "axios";
 import { Alert } from 'flowbite-react';
 import { HiInformationCircle } from 'react-icons/hi';
-import Aos from "aos";
+import { useNavigate } from "react-router-dom";
 // Call API được rồi, nma gần như mới là test, vì chưa lấy unit nên đang để unit defalt là "test, còn lại gần như ok"
 
 function TransactionManagerFormCreateAccount(props) {
     const { userInfo } = useContext(LoginContext);
+
+    const navigate = useNavigate();
 
     const [inputs, setInputs] = useState({
         accountName: "",
@@ -100,7 +102,7 @@ function TransactionManagerFormCreateAccount(props) {
                 document.getElementsByName("accountPassword")[0].value = "";
             } else {
                 if (response.data.message === "Phone number does not exist" && inputs.accountName !== "" && inputs.accountPhone !== "" && inputs.accountPassword !== "") {
-                    await axios.post("http://localhost:8080/transaction-manager/createAccount", { ...inputs, unit: userInfo.uUnit });
+                    await axios.post("http://localhost:8080/gathering-manager/create-account-for-employee", { ...inputs, unit: userInfo.uUnit });
                     setCheckIsSuccess(true);
                     setAlertVisible(true);
 
@@ -134,6 +136,10 @@ function TransactionManagerFormCreateAccount(props) {
         }
     };
 
+    const handleClickBackButton = () => {
+        navigate("/gather-manager");
+    }
+
     return (
         <Fragment>
             {
@@ -143,7 +149,7 @@ function TransactionManagerFormCreateAccount(props) {
                             <span className="font-medium">Create Successfully!</span>
                         </Alert>
                     ) : (
-                        <Alert color="failure" icon={HiInformationCircle} data-aos="fade-down">
+                        <Alert color="failure" icon={HiInformationCircle} className={clsx(style.alert)} data-aos="fade-down">
                             <span className="font-medium">Phone number already exists</span>
                         </Alert>
                     )
@@ -223,7 +229,14 @@ function TransactionManagerFormCreateAccount(props) {
                         className={clsx(style["add-account"])}
                         onClick={handleIsClickAddAccount}
                     >
-                        Add Account
+                        Create Account
+                    </button>
+
+                    <button
+                        className={clsx(style["back-button"])}
+                        onClick={handleClickBackButton}
+                    >
+                        Back
                     </button>
                 </div>
             </div >

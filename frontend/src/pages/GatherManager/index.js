@@ -69,22 +69,26 @@ function GatherManager() {
                 </div>
             </Link>
 
-            <ManageGatherNav 
-                onClickManageAccountEmployee={handleIsClickManageAccountEmployee} 
+            <Link to='/gather-manager/create-account' className={clsx(style.addBtn)}>
+                <i className="ti-plus"></i>
+            </Link>
+
+            <ManageGatherNav
+                onClickManageAccountEmployee={handleIsClickManageAccountEmployee}
                 onClickStatisticOrdersSent={handleIsClickStatisticOrdersSent}
                 onClickStatisticOrdersReceived={handleIsClickStatisticOrdersReceived}
             />
             <div>
-                
+
             </div>
             <ManageAccountEmployee
-                className={clsx({[style["manage-account-employee"]] : isClickManageAccountEmployee === true}, {[style["manage-account-employee-hidden"]] : isClickManageAccountEmployee === false})}
+                className={clsx({ [style["manage-account-employee"]]: isClickManageAccountEmployee === true }, { [style["manage-account-employee-hidden"]]: isClickManageAccountEmployee === false })}
             />
-            <StatisticOrdersSent 
-                className={clsx({[style["statistic-orders-sent"]] : isClickStatisticOrdersSent === true}, {[style["statistic-orders-sent-hidden"]] : isClickStatisticOrdersSent === false})}
+            <StatisticOrdersSent
+                className={clsx({ [style["statistic-orders-sent"]]: isClickStatisticOrdersSent === true }, { [style["statistic-orders-sent-hidden"]]: isClickStatisticOrdersSent === false })}
             />
-            <StatisticOrdersReceived 
-                className={clsx({[style["statistic-orders-received"]] : isClickStatisticOrdersReceived === true}, {[style["statistic-orders-received-hidden"]] : isClickStatisticOrdersReceived === false})}
+            <StatisticOrdersReceived
+                className={clsx({ [style["statistic-orders-received"]]: isClickStatisticOrdersReceived === true }, { [style["statistic-orders-received-hidden"]]: isClickStatisticOrdersReceived === false })}
             />
             <Footer />
         </Fragment>

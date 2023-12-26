@@ -235,10 +235,10 @@ class GatheringManagerController {
 
       const denyList = await sequelize.query("SELECT `orders`.order_id, `orders`.weight, `orders`.price, `orders`.date, `orders`.customer_name, `orders`.customer_phone, `orders`.receiver_name, `orders`.receiver_phone FROM `orders` JOIN deliveries ON orders.order_id = deliveries.order_id JOIN gatherings ON deliveries.from_id = gatherings.gather_id WHERE deliveries.from_id = :unit AND deliveries.to_id = :r AND deliveries.deliver_status = -1 ORDER BY orders.date DESC",
         {
-          replacements: { 
+          replacements: {
             unit: unit,
             r: "r"
-           }
+          }
         });
       res.json(denyList);
     }
@@ -262,6 +262,27 @@ class GatheringManagerController {
       res.json(err);
     }
   }
+
+  createAccount = async (req, res) => {
+    const data = req.body;
+    const saltRounds = 10;
+    const plaintextPassword = data.accountPassword;
+    bcrypt.hash(plaintextPassword, saltRounds, (err, hash) => {
+      if (err) {
+        console.error('Error hashing password:', err);
+      } else {
+        data.accountPassword = hash;
+      }
+      Account.create({
+        account_name: data.accountName,
+        account_phone: data.accountPhone,
+        account_password: data.accountPassword,
+        role_id: 6,
+        unit: data.unit,
+      });
+    });
+    res.send();
+  };
 }
 
 module.exports = new GatheringManagerController();

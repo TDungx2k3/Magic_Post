@@ -32,4 +32,7 @@ router.get("/getAllEmployeesInUnit", leaderController.getEmployeesInUnit);
 router.get("/getOrderReceivedList", leaderController.getToOrdersWithUnit);
 router.get("/getOrderSentList", leaderController.getFromOrdersWithUnit);
 
+router.get("/get-max-date", leaderController.getMaxDate);
+router.get("/get-quantity-order-in-a-date", leaderController.countOrdersInADate);
+
 module.exports = router;
