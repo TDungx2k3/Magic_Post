@@ -13,15 +13,40 @@ function DenyList() {
     console.log(userInfo.userInfo.uUnit);
 
     const [denyList, setDenyList] = useState([]);
+    const [denyRenList, setDenyRenList] = useState([]);
     const [isFetchedData, setIsFetchedData] = useState(false);
+
+    const maxItemsInOnePage = 5;
+    let cnt = denyList.length;
+    let numOfPages = Math.ceil(cnt / maxItemsInOnePage);
+    const [pageNum, setPageNum] = useState(0);
+    const [pages, setPages] = useState([]);
+    
+    const updatePages = () => {
+        let tmpPages = [];
+        for(let i = 0; i < numOfPages; i++) {
+            tmpPages.push(i);
+        }
+        setPages(tmpPages);
+    };
+
+    const updateDenyRenList = () => {
+        let tmpDenyList = denyList.slice(maxItemsInOnePage*(pageNum - 1), pageNum*maxItemsInOnePage);
+        // console.log(denyList.slice(pageNum));
+        setDenyRenList(tmpDenyList);
+    }
 
     const getDenyList = async () => {
         try {
-            const denyList = await axios.get("http://localhost:8080/transaction-manager/get-deny-list",
+            const denyOList = await axios.get("http://localhost:8080/transaction-manager/get-deny-list",
                 {
                     params: { unit: userInfo.userInfo.uUnit }
                 });
-            setDenyList(denyList.data[0]);
+            setDenyList(denyOList.data[0]);
+            // console.log(denyOList.data[0]);
+            setPageNum(1);
+            updatePages();
+            updateDenyRenList();
             setIsFetchedData(true);
         }
         catch (err) {
@@ -32,6 +57,11 @@ function DenyList() {
     useEffect(() => {
         getDenyList();
     }, [isFetchedData]);
+
+        useEffect(() => {
+            updateDenyRenList();
+            updatePages();
+        }, [pageNum, denyList])
 
     console.log(denyList);
 
@@ -44,8 +74,8 @@ function DenyList() {
             <Header />
 
             <div className={clsx(style.container)}>
-                {denyList && denyList.length > 0 ? (
-                    denyList.map((denyList, index) => (
+                {denyRenList && denyRenList.length > 0 ? (
+                    denyRenList.map((denyList, index) => (
                         <div className={clsx(style["sub-container"])} key={index}>
                             <div className={style["customer-container"]}>
                                 <div className={style.sender}>
@@ -136,6 +166,51 @@ function DenyList() {
                             </div>
                         </div>
                     </div>
+                }
+            </div>
+
+            <div className={clsx(style.choosePageContainer)}>
+                {
+                    pages.map((page, index) => {
+                        if(index == 0 || index == numOfPages - 1
+                        || (index >= (pageNum - 2) && index <= pageNum )) {
+                            if(index == pageNum -2 && pageNum > 3) {
+                                return (
+                                    <Fragment key={index}>
+                                        <span>. . .</span>
+                                        <button className= {clsx(style.pageBtn, {[style.pageBtnActive] : index == pageNum -1})} onClick={
+                                            ()=>{
+                                                setPageNum(index + 1);
+                                                updateDenyRenList();
+                                            }
+                                        }>{index + 1}</button>
+                                    </Fragment>
+                                );
+                            }
+                            else if (index == pageNum && pageNum < numOfPages - 2) {
+                                return (
+                                    <Fragment key={index}>
+                                        <button className= {clsx(style.pageBtn, {[style.pageBtnActive] : index == pageNum -1})} onClick={
+                                            ()=>{
+                                                setPageNum(index + 1)
+                                                updateDenyRenList();
+                                            }
+                                        }>{index + 1}</button>
+                                        <span>. . .</span>
+                                    </Fragment>
+                                );
+                            }
+                            else 
+                            return(
+                                <button className= {clsx(style.pageBtn, {[style.pageBtnActive] : index == pageNum -1})} key={index} onClick={
+                                    ()=>{
+                                        setPageNum(index + 1)
+                                        updateDenyRenList();
+                                    }
+                                }>{index + 1}</button>
+                            );
+                        }
+                    })
                 }
             </div>
 

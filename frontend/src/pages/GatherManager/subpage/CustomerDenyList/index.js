@@ -12,12 +12,13 @@ function CustomerDenyList() {
     const userInfo = useContext(LoginContext);
 
     const [denyList, setDenyList] = useState([]);
+    const [denyRenList, setDenyRenList] = useState([]);
     const [isFetchedData, setIsFetchedData] = useState(false);
 
     const maxItemsInOnePage = 5;
     let cnt = denyList.length;
     let numOfPages = Math.ceil(cnt / maxItemsInOnePage);
-    const [pageNum, setPageNum] = useState(1);
+    const [pageNum, setPageNum] = useState(0);
     const [pages, setPages] = useState([]);
     
     const updatePages = () => {
@@ -28,6 +29,11 @@ function CustomerDenyList() {
         setPages(tmpPages);
     };
 
+    const updateDenyRenList = () => {
+        let tmpDenyList = denyList.slice(maxItemsInOnePage*(pageNum - 1), pageNum*maxItemsInOnePage);
+        setDenyRenList(tmpDenyList);
+    }
+
     const getDenyList = async () => {
         try {
             const denyOList = await axios.get("http://localhost:8080/gathering-manager/get-customer-deny-list",
@@ -35,10 +41,9 @@ function CustomerDenyList() {
                     params: { unit: userInfo.userInfo.uUnit }
                 });
             setDenyList(denyOList.data[0]);
-            let tmpList = denyOList.data[0];
-            cnt = tmpList.length;
-            numOfPages = Math.ceil(cnt / maxItemsInOnePage);
+            setPageNum(1);
             updatePages();
+            updateDenyRenList();
             setIsFetchedData(true);
         }
         catch (err) {
@@ -50,6 +55,11 @@ function CustomerDenyList() {
         getDenyList();
     }, [isFetchedData]);
 
+    useEffect(() => {
+        updateDenyRenList();
+        updatePages();
+    }, [pageNum, denyList])
+
     const handleBack = () => {
         navigate("/gather-manager");
     }
@@ -59,31 +69,31 @@ function CustomerDenyList() {
             <Header />
 
             <div className={clsx(style.container)}>
-                {denyList && denyList.length > 0 ? (
-                    denyList.map((denyList, index) => (
+                {denyRenList && denyRenList.length > 0 ? (
+                    denyRenList.map((denyRenList, index) => (
                         <div className={clsx(style["sub-container"])} key={index}>
                             <div className={style["customer-container"]}>
                                 <div className={style.sender}>
                                     <div>
                                         <label>Sender Name: </label>
-                                        <span>{denyList.customer_name || "N/A"}</span>
+                                        <span>{denyRenList.customer_name || "N/A"}</span>
                                     </div>
 
                                     <div>
                                         <label>Sender Phone: </label>
-                                        <span>{denyList.customer_phone || "N/A"}</span>
+                                        <span>{denyRenList.customer_phone || "N/A"}</span>
                                     </div>
                                 </div>
 
                                 <div className={clsx(style.receiver)}>
                                     <div>
                                         <label>Receiver Name: </label>
-                                        <span>{denyList.receiver_name || "N/A"}</span>
+                                        <span>{denyRenList.receiver_name || "N/A"}</span>
                                     </div>
 
                                     <div>
                                         <label>Receiver Phone: </label>
-                                        <span>{denyList.receiver_phone || "N/A"}</span>
+                                        <span>{denyRenList.receiver_phone || "N/A"}</span>
                                     </div>
                                 </div>
                             </div>
@@ -91,17 +101,17 @@ function CustomerDenyList() {
                             <div className={clsx(style["order-container"])}>
                                 <div>
                                     <label htmlFor="Weight">Weight: </label>
-                                    <span>{denyList.weight || "N/A"} kg</span>
+                                    <span>{denyRenList.weight || "N/A"} kg</span>
                                 </div>
 
                                 <div>
                                     <label htmlFor="Price">Price: </label>
-                                    <span>{denyList.price || "N/A"} $</span>
+                                    <span>{denyRenList.price || "N/A"} $</span>
                                 </div>
 
                                 <div>
                                     <label htmlFor="Date">Date: </label>
-                                    <span>{denyList.date || "N/A"}</span>
+                                    <span>{denyRenList.date || "N/A"}</span>
                                 </div>
                             </div>
                         </div>
@@ -165,7 +175,8 @@ function CustomerDenyList() {
                                         <span>. . .</span>
                                         <button className= {clsx(style.pageBtn, {[style.pageBtnActive] : index == pageNum -1})} onClick={
                                             ()=>{
-                                                setPageNum(index + 1)
+                                                setPageNum(index + 1);
+                                                updateDenyRenList();
                                             }
                                         }>{index + 1}</button>
                                     </Fragment>
@@ -177,6 +188,7 @@ function CustomerDenyList() {
                                         <button className= {clsx(style.pageBtn, {[style.pageBtnActive] : index == pageNum -1})} onClick={
                                             ()=>{
                                                 setPageNum(index + 1)
+                                                updateDenyRenList();
                                             }
                                         }>{index + 1}</button>
                                         <span>. . .</span>
@@ -188,6 +200,7 @@ function CustomerDenyList() {
                                 <button className= {clsx(style.pageBtn, {[style.pageBtnActive] : index == pageNum -1})} key={index} onClick={
                                     ()=>{
                                         setPageNum(index + 1)
+                                        updateDenyRenList();
                                     }
                                 }>{index + 1}</button>
                             );

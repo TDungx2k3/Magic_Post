@@ -59,6 +59,31 @@
   margin-bottom: 12px;
 }
 
+.choosePageContainer {
+  margin-top: 12px;
+  margin-bottom: 12px;
+}
+
+.pageBtn {
+  width: 24px;
+  height: 24px;
+  padding: 12px;
+  margin: 0px 8px;
+  box-sizing: content-box;
+  border-radius: 24px;
+}
+
+.pageBtn:hover {
+  cursor: pointer;
+  background-color: rgba(84, 84, 84, .5);
+  color: #fff;
+}
+
+.pageBtnActive {
+  background-color: rgb(84, 84, 84);
+  color: #fff;
+}
+
 @keyframes scaleUp {
   0% {
     transform: scale(1);

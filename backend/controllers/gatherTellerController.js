@@ -457,6 +457,26 @@ class gatherTellerController {
             }
         }
     };
+
+    getGatherUnit = async(req, res) => {
+        let oId = req.query.order_id;
+        let validateOIdRs = Joi.number().positive().required().validate(oId);
+        if(validateOIdRs.error) {
+            console.log(validateOIdRs.error);
+        }
+        else {
+            let toTrans = await Order.findAll({
+                attributes: ["receiver_address"],
+                where: {
+                    order_id: oId,
+                }
+            });
+            toTrans = toTrans[0].receiver_address.split("#")[1];
+            // console.log(toTrans[0].receiver_address.split("#")[1]);
+            let toGather = await this.getToGatherStep3(toTrans);
+            res.json(toGather);
+        }
+    }
 };
 
 module.exports = new gatherTellerController();

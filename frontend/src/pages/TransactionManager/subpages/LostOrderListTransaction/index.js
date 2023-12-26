@@ -11,8 +11,29 @@ function LostOrderListTransaction() {
     const navigate = useNavigate();
     const userInfo = useContext(LoginContext)
 
+    const [lostOrderRenList, setLostOrderRenList] = useState([]);
     const [lostOrderList, setLostOrderList] = useState([]);
     const [isFetchedData, setIsFetchedData] = useState(false);
+
+    const maxItemsInOnePage = 5;
+    let cnt = lostOrderList.length;
+    let numOfPages = Math.ceil(cnt / maxItemsInOnePage);
+    const [pageNum, setPageNum] = useState(0);
+    const [pages, setPages] = useState([]);
+    
+    const updatePages = () => {
+        let tmpPages = [];
+        for(let i = 0; i < numOfPages; i++) {
+            tmpPages.push(i);
+        }
+        setPages(tmpPages);
+    }
+
+    const updateRenList = () => {
+        let tmpList = lostOrderList.slice(maxItemsInOnePage*(pageNum - 1), pageNum*maxItemsInOnePage);
+        // console.log(denyList.slice(pageNum));
+        setLostOrderRenList(tmpList);
+    }
 
     const getLostOrderList = async () => {
         try {
@@ -31,6 +52,11 @@ function LostOrderListTransaction() {
         getLostOrderList();
     }, [isFetchedData]);
 
+    useEffect(() => {
+        updateRenList();
+        updatePages();
+    }, [pageNum, lostOrderList])
+
     const handleBack = () => {
         navigate("/transaction-manager");
     }
@@ -40,8 +66,8 @@ function LostOrderListTransaction() {
             <Header />
 
             <div className={clsx(style.container)}>
-                {lostOrderList && lostOrderList.length > 0 ? (
-                    lostOrderList.map((lostOrderList, index) => (
+                {lostOrderRenList && lostOrderRenList.length > 0 ? (
+                    lostOrderRenList.map((lostOrderList, index) => (
                         <div className={clsx(style["sub-container"])} key={index}>
                             <div className={style["customer-container"]}>
                                 <div className={style.sender}>
@@ -132,6 +158,51 @@ function LostOrderListTransaction() {
                             </div>
                         </div>
                     </div>
+                }
+            </div>
+
+            <div className={clsx(style.choosePageContainer)}>
+                {
+                    pages.map((page, index) => {
+                        if(index == 0 || index == numOfPages - 1
+                        || (index >= (pageNum - 2) && index <= pageNum )) {
+                            if(index == pageNum -2 && pageNum > 3) {
+                                return (
+                                    <Fragment key={index}>
+                                        <span>. . .</span>
+                                        <button className= {clsx(style.pageBtn, {[style.pageBtnActive] : index == pageNum -1})} onClick={
+                                            ()=>{
+                                                setPageNum(index + 1)
+                                                updateRenList();
+                                            }
+                                        }>{index + 1}</button>
+                                    </Fragment>
+                                );
+                            }
+                            else if (index == pageNum && pageNum < numOfPages - 2) {
+                                return (
+                                    <Fragment key={index}>
+                                        <button className= {clsx(style.pageBtn, {[style.pageBtnActive] : index == pageNum -1})} onClick={
+                                            ()=>{
+                                                setPageNum(index + 1)
+                                                updateRenList();
+                                            }
+                                        }>{index + 1}</button>
+                                        <span>. . .</span>
+                                    </Fragment>
+                                );
+                            }
+                            else 
+                            return(
+                                <button className= {clsx(style.pageBtn, {[style.pageBtnActive] : index == pageNum -1})} key={index} onClick={
+                                    ()=>{
+                                        setPageNum(index + 1)
+                                        updateRenList();
+                                    }
+                                }>{index + 1}</button>
+                            );
+                        }
+                    })
                 }
             </div>
 

@@ -12,12 +12,13 @@ function LostOrderListGather() {
     const userInfo = useContext(LoginContext)
 
     const [lostOrderList, setLostOrderList] = useState([]);
+    const [lostOrderRenList, setLostOrderRenList] = useState([]);
     const [isFetchedData, setIsFetchedData] = useState(false);
 
     const maxItemsInOnePage = 5;
     let cnt = lostOrderList.length;
     let numOfPages = Math.ceil(cnt / maxItemsInOnePage);
-    const [pageNum, setPageNum] = useState(1);
+    const [pageNum, setPageNum] = useState(0);
     const [pages, setPages] = useState([]);
     
     const updatePages = () => {
@@ -28,16 +29,21 @@ function LostOrderListGather() {
         setPages(tmpPages);
     }
 
+    const updateRenList = () => {
+        let tmpList = lostOrderList.slice(maxItemsInOnePage*(pageNum - 1), pageNum*maxItemsInOnePage);
+        // console.log(denyList.slice(pageNum));
+        setLostOrderRenList(tmpList);
+    }
+
     const getLostOrderList = async () => {
         try {
             const lostOrderList = await axios.get("http://localhost:8080/gathering-manager/get-lost-order-list",
                 { params: { unit: userInfo.userInfo.uUnit } }
             )
             setLostOrderList(lostOrderList.data[0]);
-            let tmpList = lostOrderList.data[0];
-            cnt = tmpList.length;
-            numOfPages = Math.ceil(cnt / maxItemsInOnePage);
+            setPageNum(1);
             updatePages();
+            updateRenList();
             setIsFetchedData(true);
         }
         catch (err) {
@@ -49,6 +55,11 @@ function LostOrderListGather() {
         getLostOrderList();
     }, [isFetchedData]);
 
+    useEffect(() => {
+        updateRenList();
+        updatePages();
+    }, [pageNum, lostOrderList])
+
     const handleBack = () => {
         navigate("/gather-manager");
     }
@@ -58,8 +69,8 @@ function LostOrderListGather() {
             <Header />
 
             <div className={clsx(style.container)}>
-                {lostOrderList && lostOrderList.length > 0 ? (
-                    lostOrderList.map((lostOrderList, index) => (
+                {lostOrderRenList && lostOrderRenList.length > 0 ? (
+                    lostOrderRenList.map((lostOrderList, index) => (
                         <div className={clsx(style["sub-container"])} key={index}>
                             <div className={style["customer-container"]}>
                                 <div className={style.sender}>
@@ -165,6 +176,7 @@ function LostOrderListGather() {
                                         <button className= {clsx(style.pageBtn, {[style.pageBtnActive] : index == pageNum -1})} onClick={
                                             ()=>{
                                                 setPageNum(index + 1)
+                                                updateRenList();
                                             }
                                         }>{index + 1}</button>
                                     </Fragment>
@@ -176,6 +188,7 @@ function LostOrderListGather() {
                                         <button className= {clsx(style.pageBtn, {[style.pageBtnActive] : index == pageNum -1})} onClick={
                                             ()=>{
                                                 setPageNum(index + 1)
+                                                updateRenList();
                                             }
                                         }>{index + 1}</button>
                                         <span>. . .</span>
@@ -187,6 +200,7 @@ function LostOrderListGather() {
                                 <button className= {clsx(style.pageBtn, {[style.pageBtnActive] : index == pageNum -1})} key={index} onClick={
                                     ()=>{
                                         setPageNum(index + 1)
+                                        updateRenList();
                                     }
                                 }>{index + 1}</button>
                             );

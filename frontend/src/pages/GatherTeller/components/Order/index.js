@@ -12,6 +12,7 @@ function Order(props) {
 
     const moveAction = async() => {
         if(props.data.status === 2) {
+            
             try {
                 await axios
                 .post("http://localhost:8080/gatherTeller/createDeliveryStep3",
@@ -44,25 +45,50 @@ function Order(props) {
 
     const cfSuccess = async() => {
         if(props.data.status === 1) {
-            try {
-                const storedUserInfo = JSON.parse(localStorage.getItem('userInfo'));
-                await axios
-                .post("http://localhost:8080/gatherTeller/confirmSuccessStep1",
-                {
-                    to_unit: storedUserInfo.uUnit,
-                    order_id: props.data.order_id,
-                })
-                .then(() => {
-                    updateFr(props.addition);
-                    
-                })
-            } catch (error) {
-                console.log(error);
+            let gUnit = await axios.get("http://localhost:8080/gatherTeller/getGatherIDNext",
+            {
+                params:{
+                    order_id: props.data.order_id
+                }
+            });
+            const storedUserInfo = JSON.parse(localStorage.getItem('userInfo'));
+            if(gUnit == storedUserInfo.uUnit) {
+                try {
+                    await axios
+                    .post("http://localhost:8080/gatherTeller/confirmSuccessStep3",
+                    {
+                        to_unit: storedUserInfo.uUnit,
+                        order_id: props.data.order_id,
+                    })
+                    .then(() => {
+                        updateFrLost(props.addition);
+                        
+                    })
+                } catch (error) {
+                    console.log(error);
+                }
+            }
+            else {
+                try {
+                
+                    await axios
+                    .post("http://localhost:8080/gatherTeller/confirmSuccessStep1",
+                    {
+                        to_unit: storedUserInfo.uUnit,
+                        order_id: props.data.order_id,
+                    })
+                    .then(() => {
+                        updateFr(props.addition);
+                        
+                    })
+                } catch (error) {
+                    console.log(error);
+                }
             }
         }
         else if(props.data.status === 3) {
+            const storedUserInfo = JSON.parse(localStorage.getItem('userInfo'));
             try {
-                const storedUserInfo = JSON.parse(localStorage.getItem('userInfo'));
                 await axios
                 .post("http://localhost:8080/gatherTeller/confirmSuccessStep3",
                 {
