@@ -6,6 +6,7 @@ import 'aos/dist/aos.css';
 import Home from './pages/Home';
 import Login from './pages/Login';
 import AboutUs from "./pages/AboutUs"
+import APIDev from './pages/APIDev';
 import Leader from './pages/Leader';
 import TransactionManager from './pages/TransactionManager';
 import Chart from './pages/TransactionManager/subpages/Chart';
@@ -139,6 +140,7 @@ function App() {
             <Route path="/leader" element={<Leader />} />
             <Route path="/login" element={<Login />} />
             <Route path="/about-us" element={<AboutUs />} />
+            <Route path='/api-dev' element={<APIDev />}/>
             <Route path='/transaction-manager' element={<TransactionManager />}/>
             <Route path='/transaction-manager/statistic' element={<Chart />}/>
             <Route path='/transaction-manager/deny-list' element={<DenyList />}/>

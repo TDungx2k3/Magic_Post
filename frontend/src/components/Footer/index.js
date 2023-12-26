@@ -51,14 +51,25 @@ function Footer() {
                 <div>
                     Services
                     <div>
-                        <a href="#">Our Services</a>
+                    <RouterLink to = "/"
+                    onClick={() => {
+                        setTimeout(() => {
+                            console.log(2);
+                            scroll.scrollTo(document.getElementById('topService').offsetTop, {
+                                spy: true,
+                                smooth: true,
+                                duration: 500,
+                            });
+                        }, 10);
+                    }}
+                    >Our services</RouterLink>
                     </div>
                 </div>
 
                 <div>
                     Developers
                     <div>
-                        <a href="#">API reference</a>
+                        <RouterLink to = "/api-dev">API reference</RouterLink>
                     </div>
                 </div>
             </div>
