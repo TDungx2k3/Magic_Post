@@ -1,11 +1,12 @@
 .container {
-    --tw-bg-opacity: 1;
     background-color: rgb(235 243 255/var(--tw-bg-opacity));
+    --tw-bg-opacity: 1;
     font-size: 24px;
     font-family: Roboto, sans-serif;
     font-weight: bold;
     margin-top: 2%;
     margin-bottom: 2%;
+    position: relative;
 }
 
 .form-container {
@@ -25,7 +26,6 @@ form {
     display: flex;
     flex-direction: column;
     width: 100%;
-    // margin-left: 20%;
 }
 
 form div {
@@ -95,68 +95,16 @@ form div input {
     animation: scaleUp 0.5s ease forwards;
 }
 
+.add-account:not(:hover) {
+    animation: scaleDown 0.5s ease forwards;
+}
+
 .alert {
+    z-index: 1000;
+    position: fixed;
     top: 0;
-}
-
-.alert-successfully {
-    background-color: aquamarine;
-    height: 100px;
-    width: fit-content;
-    font-size: 18px;
-    font-family: Roboto, sans-serif;
-    font-weight: bold;
-    justify-content: center;
-    align-items: center;
-    display: flex;
-    position: absolute;
-    z-index: 1;
-    border: #000 2px;
-    border-radius: 20px;
-    animation: test 2s ease forwards;
-}
-
-.alert-successfully-hidden {
-    display: none;
-}
-
-.alert-successfully p {
-    margin-left: 20px;
-    margin-right: 2px;
-}
-
-.wrapper {
-    margin-right: 20px;
-}
-
-.checkmark__circle {
-    stroke-dasharray: 166;
-    stroke-dashoffset: 166;
-    stroke-width: 2;
-    stroke-miterlimit: 10;
-    stroke: #7ac142;
-    fill: none;
-    animation: stroke 0.6s cubic-bezier(0.65, 0, 0.45, 1) forwards
-}
-
-.checkmark {
-    width: 36px;
-    height: 36px;
-    border-radius: 50%;
-    display: block;
-    stroke-width: 2;
-    stroke: #fff;
-    stroke-miterlimit: 10;
-    margin: 10% auto;
-    box-shadow: inset 0px 0px 0px #7ac142;
-    animation: fill .4s ease-in-out .4s forwards, scale .3s ease-in-out .9s both
-}
-
-.checkmark__check {
-    transform-origin: 50% 50%;
-    stroke-dasharray: 48;
-    stroke-dashoffset: 48;
-    animation: stroke 0.3s cubic-bezier(0.65, 0, 0.45, 1) 0.8s forwards
+    left: 0;
+    right: 0;
 }
 
 @keyframes stroke {
@@ -190,6 +138,16 @@ form div input {
 
     100% {
         transform: scale(1.1);
+    }
+}
+
+@keyframes scaleDown {
+    0% {
+        transform: scale(1.1);
+    }
+
+    100% {
+        transform: scale(1.0);
     }
 }
 

@@ -12,7 +12,10 @@ function StatisticOrdersReceived(props) {
     const [isGotOrdersReceived, setIsGotOrdersReceived] = useState(false);
 
     const maxItemsInOnePage = 5;
-    let cnt = ordersReceived.length;
+    let cnt;
+    if (ordersReceived !== undefined) {
+        cnt = ordersReceived.length;
+    }
     let numOfPages = Math.ceil(cnt / maxItemsInOnePage);
     const [pageNum, setPageNum] = useState(0);
     const [pages, setPages] = useState([]);
@@ -27,7 +30,10 @@ function StatisticOrdersReceived(props) {
 
     const updateRenList = () => {
         // console.log(accountList);
-        let tmpList = ordersReceived.slice(maxItemsInOnePage*(pageNum-1), maxItemsInOnePage*pageNum);
+        let tmpList;
+        if (ordersReceived !== undefined) {
+            tmpList = ordersReceived.slice(maxItemsInOnePage*(pageNum-1), maxItemsInOnePage*pageNum);
+        }
         // console.log(tmpList);
         setOrdersReceivedRen(tmpList);
     }

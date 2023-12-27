@@ -309,13 +309,13 @@ function CustomerQR() {
                         </>
                       )}
 
-                      {index === mappedDelivery.length - 1 && mappedDelivery[index].deliver_status === 0 && result.order_status !== "lost" &&(
+                      {index !== 0 && index === mappedDelivery.length - 1 && mappedDelivery[index].deliver_status === 0 && result.order_status !== "lost" &&(
                         <>
                           <p><i>{mappedDelivery[index].date}</i>Đơn hàng đang trên đường chuyển đến {mappedDelivery[index].address}</p>
                         </>
                       )}
 
-                      {index === mappedDelivery.length - 1 && mappedDelivery[index].deliver_status === 1 && result.order_status !== "lost" &&(
+                      {index !== 0 && index === mappedDelivery.length - 1 && mappedDelivery[index].deliver_status === 1 && result.order_status !== "lost" &&(
                         <>
                           <p><i>{mappedDelivery[index].date}</i>Đơn hàng đang trên đường chuyển đến {mappedDelivery[index].address}</p>
                           <p><i>{mappedDelivery[index].date}</i>Đơn hàng đã đến {mappedDelivery[index].address}</p>

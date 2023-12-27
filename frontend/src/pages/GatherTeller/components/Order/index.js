@@ -51,8 +51,9 @@ function Order(props) {
                     order_id: props.data.order_id
                 }
             });
+            // console.log(gUnit);
             const storedUserInfo = JSON.parse(localStorage.getItem('userInfo'));
-            if(gUnit == storedUserInfo.uUnit) {
+            if(gUnit.data[0].gather_id == storedUserInfo.uUnit) {
                 try {
                     await axios
                     .post("http://localhost:8080/gatherTeller/confirmSuccessStep3",

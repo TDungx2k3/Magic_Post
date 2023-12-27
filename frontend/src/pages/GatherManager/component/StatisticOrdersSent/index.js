@@ -12,7 +12,11 @@ function StatisticOrdersSent(props) {
     const [isGotOrdersSent, setIsGotOrdersSent] = useState(false);
     
     const maxItemsInOnePage = 5;
-    let cnt = ordersSent.length;
+    console.log(ordersSent);
+    let cnt;
+    if (ordersSent !== undefined) {
+        cnt = ordersSent.length;
+    }
     let numOfPages = Math.ceil(cnt / maxItemsInOnePage);
     const [pageNum, setPageNum] = useState(0);
     const [pages, setPages] = useState([]);
@@ -27,7 +31,10 @@ function StatisticOrdersSent(props) {
 
     const updateRenList = () => {
         // console.log(accountList);
-        let tmpList = ordersSent.slice(maxItemsInOnePage*(pageNum-1), maxItemsInOnePage*pageNum);
+        let tmpList;
+        if (ordersSent !== undefined) {
+            tmpList = ordersSent.slice(maxItemsInOnePage*(pageNum-1), maxItemsInOnePage*pageNum);
+        }
         // console.log(tmpList);
         setOrdersSentRen(tmpList);
     }
@@ -39,6 +46,7 @@ function StatisticOrdersSent(props) {
                     params: { unit: userInfo.userInfo.uUnit }
                 }
             );
+            console.log(tordersSent);
             setOrdersSent(tordersSent.data[0]);
             console.log(tordersSent.data[0]);
             setPageNum(1);

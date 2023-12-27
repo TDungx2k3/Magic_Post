@@ -13,7 +13,10 @@ function StatisticOrdersSent(props) {
     const [isFetchedData, setIsFetchedData] = useState(false);
 
     const maxItemsInOnePage = 5;
-    let cnt = data.length;
+    let cnt = 0;
+    if (data !== undefined) {
+        cnt = data.length;
+    }
     let numOfPages = Math.ceil(cnt / maxItemsInOnePage);
     const [pageNum, setPageNum] = useState(0);
     const [pages, setPages] = useState([]);
@@ -28,7 +31,10 @@ function StatisticOrdersSent(props) {
 
     const updateRenList = () => {
         // console.log(accountList);
-        let tmpList = data.slice(maxItemsInOnePage*(pageNum-1), maxItemsInOnePage*pageNum);
+        let tmpList;
+        if (data !== undefined) {
+            tmpList = data.slice(maxItemsInOnePage*(pageNum-1), maxItemsInOnePage*pageNum);
+        }
         // console.log(tmpList);
         setDataRen(tmpList);
     }
@@ -41,6 +47,7 @@ function StatisticOrdersSent(props) {
                     params: { unit: userInfo.uUnit }
                 }
             );
+            console.log(response.data[0]);
             setData(response.data[0]);
             setPageNum(1);
             updatePages();

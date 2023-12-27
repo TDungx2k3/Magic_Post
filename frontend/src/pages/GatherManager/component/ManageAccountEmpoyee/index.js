@@ -26,10 +26,10 @@ function ManageAccountEmployee(props) {
     let numOfPages = Math.ceil(cnt / maxItemsInOnePage);
     const [pageNum, setPageNum] = useState(0);
     const [pages, setPages] = useState([]);
-    
+
     const updatePages = () => {
         let tmpPages = [];
-        for(let i = 0; i < numOfPages; i++) {
+        for (let i = 0; i < numOfPages; i++) {
             tmpPages.push(i);
         }
         setPages(tmpPages);
@@ -37,7 +37,7 @@ function ManageAccountEmployee(props) {
 
     const updateAccRenList = () => {
         // console.log(accountList);
-        let tmpList = accountList.slice(maxItemsInOnePage*(pageNum-1), maxItemsInOnePage*pageNum);
+        let tmpList = accountList.slice(maxItemsInOnePage * (pageNum - 1), maxItemsInOnePage * pageNum);
         // console.log(tmpList);
         setAccountRenList(tmpList);
     }
@@ -86,64 +86,68 @@ function ManageAccountEmployee(props) {
         updateAccRenList();
         updatePages();
     }, [pageNum, accountList])
- 
+
     return (
         <Fragment>
             <div className={clsx(props.className)}>
                 <div className={clsx(style.container, props.className)}>
-                    {accountRenList.map((account, index) => (
-                        <div className={clsx(style["sub-container"])} key={index}>
-                            <div className={clsx(style["account-container"])}>
-                                <div>
-                                    <label htmlFor="Account ID">Account ID: </label>
-                                    <span>{account.account_id}</span>
-                                </div>
-
-                                <div>
-                                    <label htmlFor="Account Name">Account Name: </label>
-                                    <span>{account.account_name}</span>
-                                </div>
-
-                                <div>
-                                    <label htmlFor="Account Phone">Account Phone: </label>
-                                    <span>{account.account_phone}</span>
-                                </div>
-                            </div>
-
-                            <div className={clsx(style["btns-container"])}>
-                                <div
-                                    id={clsx(style.delete)}
-                                    onClick={() => {
-                                        setConfirmHidden(false);
-                                        setIsHide(false);
-                                        setAccountId(account.account_id);
-                                        console.log(accountId);
-                                    }}
-                                >
-                                    <i className="ti-trash"></i>
-                                </div>
-
-                                <Link to={`/modify-account?account_id=${account.account_id}`}>
-                                    <div id={clsx(style.modify)}>
-                                        <i className="ti-reload"></i>
+                    {accountRenList && accountRenList.length > 0 ? (
+                        accountRenList.map((account, index) => (
+                            <div className={clsx(style["sub-container"])} key={index}>
+                                <div className={clsx(style["account-container"])}>
+                                    <div>
+                                        <label htmlFor="Account ID">Account ID: </label>
+                                        <span>{account.account_id}</span>
                                     </div>
-                                </Link>
+
+                                    <div>
+                                        <label htmlFor="Account Name">Account Name: </label>
+                                        <span>{account.account_name}</span>
+                                    </div>
+
+                                    <div>
+                                        <label htmlFor="Account Phone">Account Phone: </label>
+                                        <span>{account.account_phone}</span>
+                                    </div>
+                                </div>
+
+                                <div className={clsx(style["btns-container"])}>
+                                    <div
+                                        id={clsx(style.delete)}
+                                        onClick={() => {
+                                            setConfirmHidden(false);
+                                            setIsHide(false);
+                                            setAccountId(account.account_id);
+                                            console.log(accountId);
+                                        }}
+                                    >
+                                        <i className="ti-trash"></i>
+                                    </div>
+
+                                    <Link to={`/modify-account?account_id=${account.account_id}`}>
+                                        <div id={clsx(style.modify)}>
+                                            <i className="ti-reload"></i>
+                                        </div>
+                                    </Link>
+                                </div>
                             </div>
-                        </div>
-                    ))}
+                        ))
+                    ) : (
+                        <div>There are no valid accounts</div>
+                    )}
                 </div>
 
                 <div className={clsx(style.choosePageContainer)}>
                     {
                         pages.map((page, index) => {
-                            if(index == 0 || index == numOfPages - 1
-                            || (index >= (pageNum - 2) && index <= pageNum )) {
-                                if(index == pageNum -2 && pageNum > 3) {
+                            if (index == 0 || index == numOfPages - 1
+                                || (index >= (pageNum - 2) && index <= pageNum)) {
+                                if (index == pageNum - 2 && pageNum > 3) {
                                     return (
                                         <Fragment key={index}>
                                             <span>. . .</span>
-                                            <button className= {clsx(style.pageBtn, {[style.pageBtnActive] : index == pageNum -1})} onClick={
-                                                ()=>{
+                                            <button className={clsx(style.pageBtn, { [style.pageBtnActive]: index == pageNum - 1 })} onClick={
+                                                () => {
                                                     setPageNum(index + 1);
                                                     updateAccRenList();
                                                 }
@@ -154,8 +158,8 @@ function ManageAccountEmployee(props) {
                                 else if (index == pageNum && pageNum < numOfPages - 2) {
                                     return (
                                         <Fragment key={index}>
-                                            <button className= {clsx(style.pageBtn, {[style.pageBtnActive] : index == pageNum -1})} onClick={
-                                                ()=>{
+                                            <button className={clsx(style.pageBtn, { [style.pageBtnActive]: index == pageNum - 1 })} onClick={
+                                                () => {
                                                     setPageNum(index + 1);
                                                     updateAccRenList();
                                                 }
@@ -164,15 +168,15 @@ function ManageAccountEmployee(props) {
                                         </Fragment>
                                     );
                                 }
-                                else 
-                                return(
-                                    <button className= {clsx(style.pageBtn, {[style.pageBtnActive] : index == pageNum -1})} key={index} onClick={
-                                        ()=>{
-                                            setPageNum(index + 1);
-                                            updateAccRenList();
-                                        }
-                                    }>{index + 1}</button>
-                                );
+                                else
+                                    return (
+                                        <button className={clsx(style.pageBtn, { [style.pageBtnActive]: index == pageNum - 1 })} key={index} onClick={
+                                            () => {
+                                                setPageNum(index + 1);
+                                                updateAccRenList();
+                                            }
+                                        }>{index + 1}</button>
+                                    );
                             }
                         })
                     }
@@ -214,7 +218,7 @@ function ManageAccountEmployee(props) {
                     </div>
                 </div>
             </div>
-            
+
         </Fragment>
     );
 }

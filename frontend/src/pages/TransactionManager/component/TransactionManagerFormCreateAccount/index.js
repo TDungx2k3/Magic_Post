@@ -143,7 +143,7 @@ function TransactionManagerFormCreateAccount(props) {
                             <span className="font-medium">Create Successfully!</span>
                         </Alert>
                     ) : (
-                        <Alert color="failure" icon={HiInformationCircle} data-aos="fade-down">
+                        <Alert color="failure" icon={HiInformationCircle} className={clsx(style.alert)} data-aos="fade-down">
                             <span className="font-medium">Phone number already exists</span>
                         </Alert>
                     )
@@ -151,6 +151,7 @@ function TransactionManagerFormCreateAccount(props) {
             }
 
             <div className={clsx(style.container, props.className)}>
+
                 <div className={clsx(style["form-container"])}>
                     <form onSubmit={handleIsClickAddAccount}>
                         <div>

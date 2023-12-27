@@ -2,9 +2,9 @@
     float: left;
     text-align: left;
     width: 98.9vw;
-    height: 100vh;
     --tw-bg-opacity: 1;
     background-color: rgb(235 243 255/var(--tw-bg-opacity));
+    padding-bottom: 20px;
 }
 
 .container header {
@@ -99,4 +99,8 @@
 .selectedProvinceName {
     margin-left: 2.3%;
     flex: 1.15;
+}
+
+#finalPrice {
+    font-size: 20px;
 }
