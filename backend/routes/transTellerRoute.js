@@ -13,6 +13,7 @@ router.post("/customerAccept", transactionTellerController.customerAccept);
 router.get("/getPathStart", transactionTellerController.getPathStart);
 router.get("/getPathEnd", transactionTellerController.getPathEnd);
 router.post("/createOrder", transactionTellerController.createOrder);
+router.post("/createOrderStep6", transactionTellerController.createOrderInTran);
 router.get("/getTransactionById", transactionTellerController.getTransactionById);
 router.get("/getOrderById", transactionTellerController.getOrderById);
 router.get("/getDeliveryByOrderId", transactionTellerController.getAllDeliveryByOrderId);

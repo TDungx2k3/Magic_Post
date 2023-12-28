@@ -378,6 +378,51 @@ class transactionTellerController {
         } catch (error) {
             console.log(error);
         };
+    };
+
+    createOrderInTran = async(req, res) => {
+        const orderData = req.body;
+        try {
+            await sequelize.authenticate();
+            await sequelize.sync();
+            await Order.create({
+                customer_name: orderData.customer_name,
+                customer_phone: orderData.customer_phone,
+                receiver_name: orderData.receiver_name,
+                receiver_phone: orderData.receiver_phone,
+                receiver_address: orderData.receiver_address,
+                date: orderData.date,
+                weight: orderData.weight,
+                price: orderData.price,
+                description: orderData.description,
+                order_status: orderData.create_unit,
+                steps: 6,
+            })
+            .then(async () => {
+                const newOrderId = await this.getMaxOrderID();
+                res.json({
+                    returnMessage: "Tạo thành công 1 đơn hàng",
+                    orderId: newOrderId,
+                });
+            })
+            .catch(error => {
+                res.json({
+                    returnMessage: "Lỗi khi tạo đơn hàng" + error.message,
+                    orderId: '',
+                });
+            });
+            const newOID = await this.getMaxOrderID();
+            // console.log(newOID);
+            await Delivery.create({
+                order_id: newOID,
+                from_id: "s",
+                to_id: orderData.create_unit,
+                date: orderData.date,
+                deliver_status: 1
+            })
+        } catch (error) {
+            console.log(error);
+        };
     }
 
 

@@ -221,7 +221,32 @@ function CreateOrderPage() {
     // console.log(paths);
     console.log(inputs);
     try {
-      await axios.post("http://localhost:8080/transTeller/createOrder", inputs)
+      if(storedUserInfo.uUnit === selectedProvince) {
+        await axios.post("http://localhost:8080/transTeller/createOrderStep6", inputs)
+        .then((response) => {
+          alert(response.data.returnMessage);
+          if(response.data.returnMessage === "Tạo thành công 1 đơn hàng") {
+            navigate('/deliveryReceipt', {state: { 
+              customerName: inputs.customer_name, 
+              customerPhone: inputs.customer_phone,
+              customerAddress: paths.transaction_start + ', ' +  paths.gathering_start,
+              weight: inputs.weight,
+              price: inputs.price,
+              receiverName: inputs.receiver_name,
+              receiverAddress: inputs.receiver_address,
+              receiverPhone: inputs.receiver_phone,
+              date: inputs.date,
+              adminName: storedUserInfo.uName,
+              orderId: response.data.orderId,
+            }});
+          }
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+      }
+      else {
+        await axios.post("http://localhost:8080/transTeller/createOrder", inputs)
       .then((response) => {
         alert(response.data.returnMessage);
         if(response.data.returnMessage === "Tạo thành công 1 đơn hàng") {
@@ -244,6 +269,8 @@ function CreateOrderPage() {
       .catch((error) => {
         console.log(error);
       });
+      }
+      
     } catch (err) {
       console.log(err.respone.data);
     }
