@@ -127,7 +127,7 @@ function ManageGather() {
             let maxDateSent = await axios.get("http://localhost:8080/gathering-manager/get-max-date-sent-gather",
                 {
                     params: {
-                        unit: userInfo.userInfo.uUnit
+                        unit: gatherId
                     }
                 }
             );
@@ -135,7 +135,7 @@ function ManageGather() {
             let maxDateReceived = await axios.get("http://localhost:8080/gathering-manager/get-max-date-received-gather",
                 {
                     params: {
-                        unit: userInfo.userInfo.uUnit
+                        unit: gatherId
                     }
                 }
             )
@@ -175,15 +175,18 @@ function ManageGather() {
     }, [isFetchedDateData]);
 
     const fetchDataSentForDate = async (date) => {
+        // console.log(storedUserInfo.uUnit);
         try {
             const response = await axios.get("http://localhost:8080/gathering-manager/get-quantity-orders-sent-in-a-date"
                 , {
                     params: {
                         date,
-                        unit: userInfo.userInfo.uUnit
+                        unit: gatherId
                     }
                 }
             );
+            console.log(date);
+            console.log(response.data);
             return response.data[0]['COUNT(*)'];
         } catch (err) {
             console.log(err);
@@ -197,7 +200,7 @@ function ManageGather() {
                 , {
                     params: {
                         date,
-                        unit: userInfo.userInfo.uUnit
+                        unit: gatherId
                     }
                 }
             );

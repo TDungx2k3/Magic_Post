@@ -46,7 +46,7 @@ function StatisticOrdersSent(props) {
                     params: { unit: userInfo.userInfo.uUnit }
                 }
             );
-            console.log(tordersSent);
+            // console.log(tordersSent.data[0]);
             setOrdersSent(tordersSent.data[0]);
             console.log(tordersSent.data[0]);
             setPageNum(1);

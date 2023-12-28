@@ -203,7 +203,7 @@ function OrderList(props) {
                             orderList.map((order, index) => {
                                 let orderData = {
                                     sender_name: order.customer_name,
-                                    sender_phone: order.custom_phone,
+                                    sender_phone: order.customer_phone,
                                     receiver_name: order.receiver_name,
                                     receiver_phone: order.receiver_phone,
                                     receiver_address: order.receiver_address,

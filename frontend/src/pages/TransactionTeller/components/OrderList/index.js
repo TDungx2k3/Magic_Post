@@ -290,6 +290,7 @@ function OrderList(props) {
                                     order_price: order.price,
                                     order_date: order.deliveries[0].date,
                                     status: order.steps,
+                                    max_delivery: order.deliveries[order.deliveries.length-1].deliver_id,
                                 };
                                 if(index >= (pageNum-1) * maxItemsInOnePage 
                                 && index < (pageNum * maxItemsInOnePage))

@@ -278,47 +278,47 @@ function CustomerQR() {
                     <div key={index}>
                       {index === 0 && (
                         <>
-                          <p><i>{mappedDelivery[index].date}</i>Đơn hàng đã xác nhận tại điểm giao dịch {mappedDelivery[index].address}</p>
+                          <p><i>{mappedDelivery[index].date}</i>Order has been confirmed at the transaction {mappedDelivery[index].address}.</p>
                         </>
                       )}
 
                       {index === mappedDelivery.length - 1 && result.order_status === "lost" && (
                         <>
-                          <p><i>{mappedDelivery[index].date}</i>Đơn hàng đang trên đường chuyển đến {mappedDelivery[index].address}</p>
-                          <p><i>{mappedDelivery[index].date}</i>Đơn hàng bị đã bị thất lạc</p>
+                          <p><i>{mappedDelivery[index].date}</i>Order is on its way to {mappedDelivery[index].address}.</p>
+                          <p><i>{mappedDelivery[index].date}</i>Order has been lost on its way to {mappedDelivery[index].address}.</p>
                         </>
                       )}
 
                       {index !== 0 && mappedDelivery[index].deliver_status === -1 && result.order_status !== "lost" && (
                         <>
-                          <p><i>{mappedDelivery[index].date}</i>Đơn hàng đang trên đường chuyển đến {mappedDelivery[index].address}</p>
-                          <p><i>{mappedDelivery[index].date}</i>Đơn hàng bị từ chối bởi khách hàng</p>
+                          <p><i>{mappedDelivery[index].date}</i>Order is on its way to {mappedDelivery[index].address}.</p>
+                          <p><i>{mappedDelivery[index].date}</i>Order was denied by the customer.</p>
                         </>
                       )}
 
                       {index !== 0 && index !== mappedDelivery.length - 1 && mappedDelivery[index].deliver_status === 0 && (
                         <>
-                          <p><i>{mappedDelivery[index].date}</i>Đơn hàng đang trên đường chuyển đến {mappedDelivery[index].address}</p>
+                          <p><i>{mappedDelivery[index].date}</i>Order is on its way to {mappedDelivery[index].address}.</p>
                         </>
                       )}
 
                       {index !== 0 && index !== mappedDelivery.length - 1 && mappedDelivery[index].deliver_status === 1 && (
                         <>
-                          <p><i>{mappedDelivery[index].date}</i>Đơn hàng đang trên đường chuyển đến {mappedDelivery[index].address}</p>
-                          <p><i>{mappedDelivery[index].date}</i>Đơn hàng đã đến {mappedDelivery[index].address}</p>
+                          <p><i>{mappedDelivery[index].date}</i>Order is on its way to {mappedDelivery[index].address}.</p>
+                          <p><i>{mappedDelivery[index].date}</i>Order has arrived in {mappedDelivery[index].address}.</p>
                         </>
                       )}
 
                       {index !== 0 && index === mappedDelivery.length - 1 && mappedDelivery[index].deliver_status === 0 && result.order_status !== "lost" &&(
                         <>
-                          <p><i>{mappedDelivery[index].date}</i>Đơn hàng đang trên đường chuyển đến {mappedDelivery[index].address}</p>
+                          <p><i>{mappedDelivery[index].date}</i>Order is on its way to {mappedDelivery[index].address}.</p>
                         </>
                       )}
 
                       {index !== 0 && index === mappedDelivery.length - 1 && mappedDelivery[index].deliver_status === 1 && result.order_status !== "lost" &&(
                         <>
-                          <p><i>{mappedDelivery[index].date}</i>Đơn hàng đang trên đường chuyển đến {mappedDelivery[index].address}</p>
-                          <p><i>{mappedDelivery[index].date}</i>Đơn hàng đã đến {mappedDelivery[index].address}</p>
+                          <p><i>{mappedDelivery[index].date}</i>Order is on its way to {mappedDelivery[index].address}.</p>
+                          <p><i>{mappedDelivery[index].date}</i>Order has been delivered to the customer.</p>
                         </>
                       )}
                     </div>

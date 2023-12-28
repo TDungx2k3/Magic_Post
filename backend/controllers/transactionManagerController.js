@@ -152,9 +152,12 @@ class transactionManagerController {
         try {
             const unit = req.query.unit;
 
-            const denyList = await sequelize.query("SELECT `orders`.order_id, `orders`.weight, `orders`.price, `orders`.date, `orders`.customer_name, `orders`.customer_phone, `orders`.receiver_name, `orders`.receiver_phone FROM `orders` JOIN deliveries ON orders.order_id = deliveries.order_id JOIN transactions ON deliveries.from_id = transactions.trans_id WHERE deliveries.from_id = :unit AND deliveries.deliver_status = 0 ORDER BY orders.date DESC",
+            const denyList = await sequelize.query("SELECT `orders`.order_id, `orders`.weight, `orders`.price, `orders`.date, `orders`.customer_name, `orders`.customer_phone, `orders`.receiver_name, `orders`.receiver_phone FROM `orders` JOIN deliveries ON orders.order_id = deliveries.order_id JOIN transactions ON deliveries.from_id = transactions.trans_id WHERE deliveries.from_id = :unit AND deliveries.deliver_status = -1 AND deliveries.to_id = :r ORDER BY orders.date DESC",
             {
-                replacements: { unit: unit }
+                replacements: { 
+                    unit: unit,
+                    r: "r" 
+                }
             });
             res.json(denyList);
         }
@@ -168,8 +171,8 @@ class transactionManagerController {
         try {
             const unit = req.query.unit;
 
-            const lostOrderList = await sequelize.query("SELECT `orders`.order_id, `orders`.weight, `orders`.price, `orders`.date, `orders`.customer_name, `orders`.customer_phone, `orders`.receiver_name, `orders`.receiver_phone FROM `orders` JOIN deliveries ON orders.order_id = deliveries.order_id JOIN transactions ON deliveries.to_id = transactions.trans_id WHERE deliveries.from_id = :unit AND deliveries.deliver_status = -1 ORDER BY orders.date DESC", 
-                { replacements: { unit: unit } 
+            const lostOrderList = await sequelize.query("SELECT `orders`.order_id, `orders`.weight, `orders`.price, `orders`.date, `orders`.customer_name, `orders`.customer_phone, `orders`.receiver_name, `orders`.receiver_phone FROM `orders` JOIN deliveries ON orders.order_id = deliveries.order_id JOIN transactions ON deliveries.to_id = transactions.trans_id WHERE deliveries.from_id = :unit AND deliveries.deliver_status = -1 AND orders.order_status = :lost ORDER BY orders.date DESC", 
+                { replacements: { unit: unit, lost: "lost" } 
             });
             res.json(lostOrderList);
         }

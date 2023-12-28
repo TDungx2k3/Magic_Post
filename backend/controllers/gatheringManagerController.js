@@ -113,7 +113,7 @@ class GatheringManagerController {
   showAllOrdersSent = async (req, res) => {
     const unit = req.query.unit;
     try {
-      const allOrdersSent = await sequelize.query("SELECT `orders`.order_id, `orders`.weight, `orders`.price, `orders`.date, `orders`.customer_name, `orders`.customer_phone, `orders`.receiver_name, `orders`.receiver_phone FROM `orders` JOIN deliveries ON orders.order_id = deliveries.order_id JOIN gatherings ON deliveries.from_id = gatherings.gather_id WHERE deliveries.from_id = :unit AND orders.steps >= 3 ORDER BY orders.date DESC",
+      const allOrdersSent = await sequelize.query("SELECT `orders`.order_id, `orders`.weight, `orders`.price, `orders`.date, `orders`.customer_name, `orders`.customer_phone, `orders`.receiver_name, `orders`.receiver_phone FROM `orders` JOIN deliveries ON orders.order_id = deliveries.order_id JOIN gatherings ON deliveries.from_id = gatherings.gather_id WHERE deliveries.from_id = :unit ORDER BY orders.date DESC",
         {
           replacements: { unit: unit }
         }
@@ -129,7 +129,7 @@ class GatheringManagerController {
   showAllOrdersReceived = async (req, res) => {
     const unit = req.query.unit;
     try {
-      const allOrdersReceived = await sequelize.query("SELECT `orders`.order_id, `orders`.weight, `orders`.price, `orders`.date, `orders`.customer_name, `orders`.customer_phone, `orders`.receiver_name, `orders`.receiver_phone FROM `orders` JOIN deliveries ON orders.order_id = deliveries.order_id JOIN gatherings ON deliveries.to_id = gatherings.gather_id WHERE deliveries.to_id = :unit AND orders.steps >= 4 ORDER BY orders.date DESC",
+      const allOrdersReceived = await sequelize.query("SELECT `orders`.order_id, `orders`.weight, `orders`.price, `orders`.date, `orders`.customer_name, `orders`.customer_phone, `orders`.receiver_name, `orders`.receiver_phone FROM `orders` JOIN deliveries ON orders.order_id = deliveries.order_id JOIN gatherings ON deliveries.to_id = gatherings.gather_id WHERE deliveries.to_id = :unit ORDER BY orders.date DESC",
         {
           replacements: { unit: unit }
         }
@@ -186,7 +186,7 @@ class GatheringManagerController {
                 FROM orders 
                 JOIN deliveries ON orders.order_id = deliveries.order_id 
                 JOIN gatherings ON gatherings.gather_id = deliveries.from_id
-                WHERE orders.date = :date AND gatherings.gather_id = :unit AND orders.steps >= 3
+                WHERE orders.date = :date AND gatherings.gather_id = :unit
             ) AS subquery`,
         {
           replacements: {
@@ -205,6 +205,7 @@ class GatheringManagerController {
     try {
       const date = req.query.date;
       const unit = req.query.unit;
+      console.log("unit  " + unit);
 
       const count = await sequelize.query(
         `SELECT COUNT(*) 
@@ -213,7 +214,7 @@ class GatheringManagerController {
                 FROM orders 
                 JOIN deliveries ON orders.order_id = deliveries.order_id 
                 JOIN gatherings ON gatherings.gather_id = deliveries.to_id
-                WHERE orders.date = :date AND gatherings.gather_id = :unit AND orders.steps >= 4
+                WHERE orders.date = :date AND gatherings.gather_id = :unit
             ) AS subquery`,
         {
           replacements: {

@@ -23,6 +23,7 @@ function CreateOrderPage() {
 
   //Xử lý số điện thoại
   const [isCustomerPhone, setIsCustomerPhone] = useState(true);
+  const [isWeight, setIsWeight] = useState(true);
 
   let phoneInCustomer = document.querySelector("." + style.customer_phone);
 
@@ -37,6 +38,15 @@ function CreateOrderPage() {
     } else {
       phoneInCustomer = document.querySelector("." + style.customer_phone);
       handleCustomerPhoneBlur();
+    }
+  }
+
+  function handleWeightBlur() {
+    if (!isNaN(parseFloat(inputs.weight)) && isFinite(inputs.weight)) {
+      setIsWeight(true);
+    }
+    else {
+      setIsWeight(false);
     }
   }
 
@@ -157,7 +167,7 @@ function CreateOrderPage() {
     receiver_phone: "",
     receiver_address: "",
     date: "",
-    weight: 0,
+    weight: "",
     description: "",
     price: '',
   });
@@ -203,11 +213,12 @@ function CreateOrderPage() {
   function handleErrorBeforeSubmit() {
     handleCustomerPhoneBlur();
     handleReceiverPhoneBlur();
+    handleWeightBlur();
 
     if(inputs.customer_name === '' || inputs.description === '' 
     || inputs.receiver_name === '' || selectedProvince === '' || inputs.receiver_address === "") {
       alert("Please fill all fields");
-    } else if (isCustomerPhone && isReceiverPhone && inputs.customer_phone !== "" 
+    } else if (isCustomerPhone && isReceiverPhone && inputs.customer_phone !== "" && isWeight
     && inputs.receiver_phone !== "" && inputs.receiver_address !== "") {
       inputs.date = new Date().toString();
       inputs.receiver_address += "#" + selectedProvince;
@@ -382,7 +393,13 @@ function CreateOrderPage() {
 
           <div>
             <label htmlFor={style.weight}>Weight:</label>
-            <input className={style.weight} type="text" name="weight" onChange={handleChange}/>
+            <input className={clsx(style.weight, {[style.invalidBorder]: !isWeight,})} type="text" name="weight" 
+              onChange={handleChange}
+              onBlur={handleWeightBlur}
+              onFocus={() => {
+                setIsWeight(true);
+              }}
+            />
           </div>
 
           <div>
