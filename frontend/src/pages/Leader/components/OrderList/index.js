@@ -11,10 +11,10 @@ function OrderList(props) {
 
     const [orderReceivedList, setOrderReceivedList] = useState([]);
     const [orderSentList, setOrderSentList] = useState([]);
-    const [orderList, setOrderList] = useState([1]);
+    const [orderList, setOrderList] = useState([]);
     const [isReceive, setIsReceive] = useState(true);
     const [status, setStatus] = useState(2);
-    const [rerender] = useState(true);
+    const [rerender, setRerender] = useState(true);
     const unit = props.data;
 
     const maxItemsInOnePage = 5;
@@ -43,6 +43,25 @@ function OrderList(props) {
 
     // Lấy order list received
     const getOrderReceivedList = async() => {
+        if(document.querySelector("." + style.dateFrom).value) {
+            try {
+                await axios
+                .get("http://localhost:8080/leader/getOrderReceivedList",
+                {
+                    params: {
+                        unit: unit,
+                        date: document.querySelector("." + style.dateFrom).value,
+                    }
+                })
+                .then((res) => {
+                    console.log(res.data);
+                    setOrderReceivedList(res.data);
+                })
+            } catch (error) {
+                console.log(error);
+            }
+        }
+        else
         try {
             await axios
             .get("http://localhost:8080/leader/getOrderReceivedList",
@@ -63,6 +82,25 @@ function OrderList(props) {
 
     // Lấy order list sent
     const getOrderSentList = async() => {
+        if(document.querySelector("." + style.dateFrom).value) {
+            try {
+                await axios
+                .get("http://localhost:8080/leader/getOrderSentList",
+                {
+                    params: {
+                        unit: unit,
+                        date: document.querySelector("." + style.dateFrom).value,
+                    }
+                })
+                .then((res) => {
+                    console.log(res.data);
+                    setOrderSentList(res.data);
+                })
+            } catch (error) {
+                console.log(error);
+            }
+        }
+        else
         try {
             await axios
             .get("http://localhost:8080/leader/getOrderSentList",
@@ -83,8 +121,10 @@ function OrderList(props) {
 
     // Cập nhật order list
     const updateOrderList = async() => {
+        console.log("o" );
+        console.log(orderSentList);
         if (isReceive) {
-            if(status) {
+            if(status === 0) {
                 let tmpOrderList = [];
                 for(let i = 0; i < orderReceivedList.length; i++) {
                     if(orderReceivedList[i].deliver_status === 1) {
@@ -96,7 +136,7 @@ function OrderList(props) {
                 updatePages();
                 setOrderList(tmpOrderList);
             }
-            else {
+            else if(status === 1) {
                 let tmpOrderList = [];
                 for(let i = 0; i < orderReceivedList.length; i++) {
                     if(orderReceivedList[i].deliver_status === 0) {
@@ -110,7 +150,7 @@ function OrderList(props) {
             }
         } 
         else {
-            if(status) {
+            if(status === 0) {
                 let tmpOrderList = [];
                 for(let i = 0; i < orderSentList.length; i++) {
                     if(orderSentList[i].deliver_status === 1) {
@@ -122,7 +162,8 @@ function OrderList(props) {
                 updatePages();
                 setOrderList(tmpOrderList);
             }
-            else {
+            else if(status === 1) {
+                console.log("ship");
                 let tmpOrderList = [];
                 for(let i = 0; i < orderSentList.length; i++) {
                     if(orderSentList[i].deliver_status === 0) {
@@ -183,8 +224,12 @@ function OrderList(props) {
                     <div className={clsx(style.functionContainer)}>
                         <div className={clsx(style.dateFilter)}>
                             <input type="date" className={clsx(style.dateFrom)}/>
-                            <input type="date" className={clsx(style.dateTo)}/>
-                            <div className={clsx(style.filterBtn)}>Filter</div>
+                            {/* <input type="date" className={clsx(style.dateTo)}/> */}
+                            <div className={clsx(style.filterBtn)}
+                            onClick={() => {
+                                setRerender(!rerender)
+                            }}
+                            >Filter</div>
                         </div>
 
                         <div className={clsx(style.statusNav)}>

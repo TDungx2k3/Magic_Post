@@ -32,6 +32,8 @@ function TransactionList(props) {
     for(let i = 0; i < numOfPages; i++) {
         pages.push(i+1);
     }
+
+    
     return (
         <Fragment>
             <div className={clsx(style.transactionListContainer)}>
@@ -41,13 +43,13 @@ function TransactionList(props) {
                         navigate("/createTransaction?gather_id=" + props.data[0].gather_id)
                     }}
                     >
-                        <i className= "ti-plus"></i>
+                        <i className= "ti-plus"> Create Transaction</i>
                     </div>
 
-                    <div className={clsx(style.searchBar)}>
+                    {/* <div className={clsx(style.searchBar)}>
                         <i className= "ti-search"></i>
-                        <input type="text" placeholder="Search..."/>
-                    </div>
+                        <input className={clsx(style.searchIn)} type="text" placeholder="Search..."/>
+                    </div> */}
                 </div>
 
                 {

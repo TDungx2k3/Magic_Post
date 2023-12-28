@@ -36,13 +36,13 @@ function GatherList() {
             <div className={clsx(style.gatherListContainer)}>
                 <div className={clsx(style.functionContainer)}>
                     <Link to = '/createGather' className={clsx(style.addBtn)}>
-                        <i className= "ti-plus"></i>
+                        <i className= "ti-plus"> Create Gather</i>
                     </Link>
 
-                    <div className={clsx(style.searchBar)}>
+                    {/* <div className={clsx(style.searchBar)}>
                         <i className= "ti-search"></i>
                         <input type="text" placeholder="Search..."/>
-                    </div>
+                    </div> */}
                 </div>
 
                 {
