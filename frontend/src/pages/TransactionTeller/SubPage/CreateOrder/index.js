@@ -14,6 +14,11 @@ function CreateOrderPage() {
     const storedOutTime = new Date(JSON.parse(localStorage.getItem('outTime')));
     const storedIsLogin = JSON.parse(localStorage.getItem('isLogin'));
     const storedUserInfo = JSON.parse(localStorage.getItem('userInfo'));
+
+    // Cuộn lên đầu trang khi chuyển đến một trang mới
+    useEffect(() => {
+      window.scrollTo(0, 0);
+    }, []);
     
     // Check user có phải là nhân viên điểm giao dịch hay không
     let cnt = 0;
