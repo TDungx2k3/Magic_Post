@@ -10,6 +10,7 @@ function Order(props) {
     
     const navigate = useNavigate();
 
+    // Chuyển đơn hàng đi khỏi điểm giao dịch
     const moveAction = async() => {
         if(props.data.status === 0) {
             try {
@@ -43,6 +44,7 @@ function Order(props) {
         }
     }
 
+    // Xác nhận đơn hàng đã đến điểm giao dịch
     const cfSuccess = async() => {
         try {
             const storedUserInfo = JSON.parse(localStorage.getItem('userInfo'));
@@ -61,6 +63,7 @@ function Order(props) {
         }
     };
 
+    // Xử lý khách hàng chấp nhận đơn hàng
     const customerAccept = async() => {
         try {
             await axios
@@ -78,6 +81,7 @@ function Order(props) {
         }
     };
 
+    // Xử lý đơn hàng bị mất
     const lostOrder = async() => {
         
         await axios
@@ -93,6 +97,7 @@ function Order(props) {
         
     };
 
+    // Xử lý đơn hàng bị từ chối bởi khách hàng
     const cusDeny = async() => {
         await axios
         .post("http://localhost:8080/gatherTeller/customerDeny",

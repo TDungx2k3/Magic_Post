@@ -9,10 +9,34 @@ import { LoginContext } from "../../../../App";
 import { useNavigate } from "react-router-dom";
 
 function CreateOrderPage() {
-
-  const storedUserInfo = JSON.parse(localStorage.getItem('userInfo'));
-
   const navigate = useNavigate();
+    let nowTime = new Date();
+    const storedOutTime = new Date(JSON.parse(localStorage.getItem('outTime')));
+    const storedIsLogin = JSON.parse(localStorage.getItem('isLogin'));
+    const storedUserInfo = JSON.parse(localStorage.getItem('userInfo'));
+    
+    // Check user có phải là nhân viên điểm giao dịch hay không
+    let cnt = 0;
+    useEffect(() => {
+        if((!storedIsLogin 
+            || nowTime - storedOutTime > 3600000 
+            || storedUserInfo.uRole != "3") // Sau do chuyen thanh 3
+            && cnt === 0
+            ) {
+            cnt ++;
+            alert("You have to login with Transaction Teller account before access this page!");
+            navigate("/login");
+            localStorage.setItem('isLogin', JSON.stringify(false));
+            localStorage.setItem('userInfo', JSON.stringify({
+                uId : "",
+                uName : "",
+                uPhone : "",
+                uPassword : "",
+                uRole: "",
+                uUnit: ""
+            }));
+        }
+    }, [1])
 
   // Giá, địa chỉ chọn mốc, bỏ ngày gửi
   // 
@@ -27,6 +51,7 @@ function CreateOrderPage() {
 
   let phoneInCustomer = document.querySelector("." + style.customer_phone);
 
+  // Check lỗi customer phone
   function handleCustomerPhoneBlur() {
     if (phoneInCustomer) {
       var phoneno = /^\d{10}$/;
@@ -41,6 +66,7 @@ function CreateOrderPage() {
     }
   }
 
+  // Check lỗi weight 
   function handleWeightBlur() {
     if (!isNaN(parseFloat(inputs.weight)) && isFinite(inputs.weight)) {
       setIsWeight(true);
@@ -54,6 +80,7 @@ function CreateOrderPage() {
 
   let phoneInReceiver = document.querySelector("." + style.receiver_phone);
 
+  // Check lỗi receiver phone
   function handleReceiverPhoneBlur() {
     if (phoneInReceiver) {
       var phoneno = /^\d{10}$/;
@@ -82,18 +109,6 @@ function CreateOrderPage() {
           console.log(error);
         });
   
-        // await axios.get("http://localhost:8080/transTeller/getPathEnd", {params : {
-        //   trans_id: selectedProvince,
-        // }}).then((response) => {
-        //   if(response.data.message === "Hợp lệ"){
-        //     paths.transaction_end = response.data.transactionEnd;
-        //     paths.gathering_end = response.data.gatherEnd;
-        //   } else {
-        //     alert(response.data.message);
-        //   }
-        // }).catch((error) => {
-        //   console.log(error);
-        // });
       } catch (err) {
         console.log(err.respone.data);
       }
@@ -227,6 +242,7 @@ function CreateOrderPage() {
     }
   }
 
+  // Tạo order
   const handleSubmit = async (e) => {
     //await handlePath();
     // console.log(paths);

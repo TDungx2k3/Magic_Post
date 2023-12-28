@@ -13,6 +13,7 @@ function ToCustomer() {
     const storedIsLogin = JSON.parse(localStorage.getItem('isLogin'));
     const storedUserInfo = JSON.parse(localStorage.getItem('userInfo'));
     
+    // Check user có phải là nhân viên điểm giao dịch hay không
     let cnt = 0;
     useEffect(() => {
         if((!storedIsLogin 

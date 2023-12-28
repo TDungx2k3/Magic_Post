@@ -10,6 +10,7 @@ function Order(props) {
     
     const navigate = useNavigate();
 
+    // Chuyển đơn hàng đi
     const moveAction = async() => {
         if(props.data.status === 2) {
             
@@ -43,6 +44,7 @@ function Order(props) {
         }
     }
 
+    // Xác nhận đơn hàng đến điểm tập kết
     const cfSuccess = async() => {
         if(props.data.status === 1) {
             let gUnit = await axios.get("http://localhost:8080/gatherTeller/getGatherIDNext",
@@ -107,6 +109,7 @@ function Order(props) {
         
     };
 
+    // Đơn hàng đã bị thất lạc
     const lostOrder = async() => {
         
         await axios
@@ -122,6 +125,7 @@ function Order(props) {
         
     };
 
+    // Đơn hàng đã bị từ chối bởi khách hàng
     const cusDeny = async() => {
         await axios
         .post("http://localhost:8080/gatherTeller/customerDeny",

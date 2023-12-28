@@ -12,6 +12,7 @@ function GatherList() {
 
     const [rerender] = useState(true);
 
+    // Lấy tất cả điểm tập kết
     const getAllGathers = async(e) => {
         try {
             await axios
@@ -25,6 +26,7 @@ function GatherList() {
         }
     }
 
+    // Thực hiện hàm khi load trang
     useEffect(() => {
         getAllGathers();
     }, [rerender]);

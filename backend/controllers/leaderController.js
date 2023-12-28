@@ -29,6 +29,7 @@ const { Order } = require('../models/ordersModel');
 //     foreignKey: 'role_id',
 // });
 class LeaderController {
+    // chuẩn hóa tên điểm tập kết
     gatherNameNormalize = (name) => {
         
         const tenChuanHoa = name.replace(/\s+/g, " ").trim();
@@ -36,6 +37,7 @@ class LeaderController {
         return tenChuanHoa.charAt(0).toUpperCase() + tenChuanHoa.slice(1);
     };
 
+    // chuẩn hóa tên người
     managerNameNormalize = (name) => {
         // Chia tách tên thành các từ
         name = name.replace(/\s+/g, " ").trim();
@@ -54,6 +56,7 @@ class LeaderController {
         return rs;
     };
 
+    // lấy tất cả dữ liệu về các điểm tập kết
     showAllGathers = async (req, res) => {
         try {
             await sequelize.authenticate();
@@ -73,6 +76,7 @@ class LeaderController {
         }
     };
 
+    // lấy thông tin điểm tập kết với id
     getGatherInfoWithID = async (req, res) => {
         let validateRs = Joi.string().required().pattern(/g\d/).validate(req.query.gather_id);
         if(validateRs.error)
@@ -104,6 +108,7 @@ class LeaderController {
         
     };
 
+    // cập nhật điểm tập kết
     updateGather = async (req, res) => {
         let gName = req.body.gather_name;
         let gId = req.body.gather_id;
@@ -141,6 +146,7 @@ class LeaderController {
         
     };
 
+    // cập nhật trưởng điểm
     updateManager = async(req, res) => {
         let mPhone = req.body.manager_phone;
         let mName = req.body.manager_name;
@@ -181,6 +187,7 @@ class LeaderController {
         }
     };
 
+    // cập nhật password
     updateManagerPassword = async(req, res) => {
         console.log(req.body);
         let mId = "" + req.body.manager_id;
@@ -222,11 +229,12 @@ class LeaderController {
         }
     };
 
+    // đếm số điện thoại xuât hiện
     countPhoneNumber = async(req, res) => {
         let aPhone = req.query.account_phone;
         let validateAPhoneRs = Joi.string().required().pattern(/^0\d+$/).length(10).validate(aPhone);
         if(validateAPhoneRs.error) {
-            console.log(error);
+            console.log(validateAPhoneRs.error);
         }
         else {
             try {
@@ -247,6 +255,7 @@ class LeaderController {
         }  
     };
 
+    // lấy id của acc mới được tạo
     getNewestAId = async(req, res) => {
         try {
             await sequelize.authenticate();
@@ -259,6 +268,7 @@ class LeaderController {
         }
     }
 
+    // tạo trưởng điểm tập kết mới
     createGatherManager = async(req, res) => {
         let mPhone = req.body.manager_phone;
         let mName = req.body.manager_name;
@@ -301,6 +311,7 @@ class LeaderController {
         
     };
 
+    // cập nhật tài khaonr trong điểm tập kết
     updateAccountInGather = async(req, res) => {
         let gId = req.body.gather_id;
         let aId = req.body.account_id;
@@ -333,6 +344,7 @@ class LeaderController {
         }
     };
 
+    // cập nhật nơi làm việc của nhân viên
     updateUnitInAccount = async(req, res) => {
         let unit = req.body.unit;
         let aId = req.body.account_id;
@@ -365,6 +377,7 @@ class LeaderController {
         }
     };
 
+    // lấy gather mới nhất
     getMaxGatherId = async (req, res) => {
         try {
             await sequelize.authenticate();
@@ -382,6 +395,7 @@ class LeaderController {
         }
     };
 
+    // tạo điểm tập kết mới
     createGather = async (req, res) => {
         // console.log("create gather");
         let gId = req.body.gather_id;
@@ -409,6 +423,7 @@ class LeaderController {
         
     };
 
+    // lấy tất cả trưởng điểm tập kết
     showAllGatherManagers = async (req, res) => {
         try {
             await sequelize.authenticate();
@@ -429,6 +444,7 @@ class LeaderController {
         }
     };
 
+    // lấy tất cả điểm giao dịch với gather_id
     showAllTrans = async (req, res) => {
         let gId = req.query.gather_id;
         let validateGIdRs = Joi.string().regex(/^g\d+$/).required().validate(gId);
@@ -460,6 +476,7 @@ class LeaderController {
         
     };
 
+    // lấy id của điểm giao dịch mới tạo
     getMaxTranId = async (req, res) => {
         try {
             await sequelize.authenticate();
@@ -476,6 +493,7 @@ class LeaderController {
         }
     };
 
+    // tạo ra điểm giao dịch mới
     createTran = async (req, res) => {
         let temp;
         temp = await this.getMaxTranId();
@@ -499,6 +517,7 @@ class LeaderController {
         
     };
 
+    // lấy thông tin trưởng điểm giao dịch và điểm giao dịch
     showAllTranManagers = async (req, res) => {
         try {
             await sequelize.authenticate();
@@ -519,6 +538,7 @@ class LeaderController {
         }
     };
 
+    // lấy thông tin điểm giao dịch với id
     getTransactionInfoWithID = async (req, res) => {
         let tId = req.query.trans_id;
         let validateTIdRs = Joi.string().regex(/^t\d+$/).required().validate(tId);
@@ -549,6 +569,7 @@ class LeaderController {
         
     };
 
+    // cập nhật điểm giao dịch
     updateTransaction = async (req, res) => {
         // console.log(req.body);
         let tId = req.body.trans_id;
@@ -580,6 +601,7 @@ class LeaderController {
         
     };
 
+    // tạo ra điểm giao dịch mới
     createTransaction = async (req, res) => {
         let tId = req.body.transaction_id;
         let tName = req.body.transaction_name;
@@ -612,6 +634,7 @@ class LeaderController {
         
     };
 
+    // tạo ra trưởng điểm giao dịch mới
     createTransactionManager = async(req, res) => {
         let mPhone = req.body.manager_phone;
         let mName = req.body.manager_name;
@@ -653,6 +676,7 @@ class LeaderController {
         
     };
 
+    // cập nhật tài khoản trong điểm giao dịch
     updateAccountInTransaction = async(req, res) => {
         let aId = req.body.account_id;
         let tId = req.body.transaction_id;
@@ -684,6 +708,7 @@ class LeaderController {
         }
     };
 
+    // lấy các nhân viên theo nơi đang làm
     getEmployeesInUnit = async(req, res) => {
         let unit = req.query.unit;
         let validateUnitRs = Joi.string().regex(/^[gt]\d+$/).required().validate(unit);
@@ -714,6 +739,7 @@ class LeaderController {
         }
     };
 
+    // lấy tất cả nhữn đơn hàng đến theo ngày
     getToOrdersWithUnit = async(req, res) => {
         let unit = req.query.unit;
         let date = req.query.date;
@@ -747,6 +773,7 @@ class LeaderController {
         }
     };
 
+    // lấy tất cả những đơn hàng đến điểm đó
     getFromOrdersWithUnit = async(req, res) => {
         let unit = req.query.unit;
         let date = req.query.date;
@@ -780,6 +807,7 @@ class LeaderController {
         }
     };
 
+    // lấy ngày lớn nhất trong csdl
     getMaxDate = async (req, res) => {
         try {
             const maxDate = await Order.max('date');
@@ -790,6 +818,7 @@ class LeaderController {
         }
     };
 
+    // đếm số lượng đơn hàng trong 1 ngày
     countOrdersInADate = async (req, res) => {
         try {
             const ordersInADate = await Order.count({

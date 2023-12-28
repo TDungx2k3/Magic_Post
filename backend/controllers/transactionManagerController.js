@@ -7,27 +7,45 @@ const bcrypt = require('bcrypt');
 const Joi = require('joi');
 
 class transactionManagerController {
+
+    // tạo tào khoản nhân viên
     createAccountEmployee = async (req, res) => {
         const data = req.body;
-        const saltRounds = 10;
-        const plaintextPassword = data.accountPassword;
-        bcrypt.hash(plaintextPassword, saltRounds, (err, hash) => {
-            if (err) {
-                console.error('Error hashing password:', err);
-            } else {
-                data.accountPassword = hash;
-            }
-            Account.create({
-                account_name: data.accountName,
-                account_phone: data.accountPhone,
-                account_password: data.accountPassword,
-                role_id: 3,
-                unit: data.unit,
+        let aPhone = req.body.accountPhone;
+        let mPass = req.body.accountPassword;
+        let unit = req.body.unit;
+        let validateUnitRs = Joi.string().regex(/^[gt]\d+$/).required().validate(unit);
+        let validateAPassRs = Joi.string().required().min(6).max(30).validate(mPass)
+        let validateAPhoneRs = Joi.string().required().pattern(/^0\d+$/).length(10).validate(aPhone);
+        if(validateAPassRs.error
+        || validateUnitRs.error
+        || validateAPhoneRs.error) {
+            console.log(validateAPassRs.error);
+            console.log(validateUnitRs.error);
+            console.log(validateAPhoneRs.error);
+        }
+        else {
+            const saltRounds = 10;
+            const plaintextPassword = data.accountPassword;
+            bcrypt.hash(plaintextPassword, saltRounds, (err, hash) => {
+                if (err) {
+                    console.error('Error hashing password:', err);
+                } else {
+                    data.accountPassword = hash;
+                }
+                Account.create({
+                    account_name: data.accountName,
+                    account_phone: aPhone,
+                    account_password: hash,
+                    role_id: 3,
+                    unit: unit,
+                });
             });
-        });
-        res.send();
+            res.send();
+        }
     };
 
+    // lấy tất cả đơn hàng nhận
     showAllOrderReceived = async (req, res) => {
         try {
             const data = req.query.unit
@@ -45,6 +63,7 @@ class transactionManagerController {
         }
     };
 
+    // lấy tất cả đơn hàng chuyển đi
     showAllOrderSent = async (req, res) => {
         try {
             const data = req.query.unit
@@ -62,6 +81,7 @@ class transactionManagerController {
         }
     };
 
+    // lấy ngày gần nhất
     getMaxDateSent = async (req, res) => {
         const unit = req.query.unit;
         try {
@@ -78,6 +98,7 @@ class transactionManagerController {
         }
     };
 
+    // lấy ngày nhận gần nhất
     getMaxDateReceived = async (req, res) => {
         const unit = req.query.unit;
         try {
@@ -93,6 +114,7 @@ class transactionManagerController {
         }
     };
 
+    // đếm số đơn hàng gửi trong 1 ngày
     countOrderSentInADate = async (req, res) => {
         try {
             const date = req.query.date;
@@ -120,6 +142,7 @@ class transactionManagerController {
         }
     };
 
+    // đếm số đơn hàng nhận được trong 1 ngày
     countOrderReceivedInADate = async (req, res) => {
         try {
             const date = req.query.date;
@@ -148,6 +171,7 @@ class transactionManagerController {
         }
     };
 
+    // lấy danh sách khách từ chối
     showDenyList = async (req, res) => {
         try {
             const unit = req.query.unit;
@@ -167,6 +191,7 @@ class transactionManagerController {
         }
     };
 
+    // lấy danh sách đơn hàng mất
     showLostOrderList = async (req, res) => {
         try {
             const unit = req.query.unit;

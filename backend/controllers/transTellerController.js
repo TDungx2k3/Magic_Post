@@ -32,6 +32,7 @@ Transaction.belongsTo(Gathering, {
 
 class transactionTellerController {
 
+    // chỉnh ngày theo đúng format
     formatDate = (date) => {
         const year = date.getFullYear();
         const month = String(date.getMonth() + 1).padStart(2, '0'); 
@@ -39,6 +40,8 @@ class transactionTellerController {
     
         return `${year}-${month}-${day}`;
     };
+
+    // lấy tất cả đơn hàng chuyển đến khách hàng
     getAllToCustomerOrder = async(req, res) => {
         let tId = req.query.unit;
         let validateTIdRs = Joi.string().regex(/^t\d+$/).required().validate(tId);
@@ -72,6 +75,7 @@ class transactionTellerController {
         }
     };
 
+    // lấy tất cả đơn khách gửi
     getAllFromCustomerOrder = async(req, res) => {
         let tId = req.query.unit;
         let validateTIdRs = Joi.string().regex(/^t\d+$/).required().validate(tId);
@@ -105,6 +109,7 @@ class transactionTellerController {
         }
     };
 
+    // lấy đơn chuyển từ điểm giao dịch đến điểm tập kết đầu 
     getToGatherStep1 = async(tId) => {
         try {
             await sequelize.authenticate();
@@ -122,6 +127,7 @@ class transactionTellerController {
         };
     }
 
+    // chuyển từ điểm giao dịch đến điểm tập kết đầu 
     transToGatherStep1 = async(req, res) => {
         let tId = req.body.unit;
         let oId = req.body.order_id;
@@ -158,6 +164,7 @@ class transactionTellerController {
         }
     };
 
+    // Xác nhận đã đến thành công khi chuyển từ điểm tập kết đến điểm giao dịch đích
     confirmSuccessStep5 = async(req, res) => {
         let tId = req.body.to_unit;
         let oId = req.body.order_id;
@@ -199,6 +206,7 @@ class transactionTellerController {
         }
     }
 
+    // chuyển đến tay người dùng
     transToCustomerStep7 = async(req, res) => {
         let tId = req.body.unit;
         let oId = req.body.order_id;
@@ -235,6 +243,7 @@ class transactionTellerController {
         }
     };
 
+    // xác nhận đơn chuyển đến tay khách thành công
     customerAccept = async(req, res) => {
         let oId = req.body.order_id;
         let validateOIdRs = Joi.number().positive().required().validate(oId);
@@ -272,7 +281,7 @@ class transactionTellerController {
         }
     }
 
-
+    // lấy đường đi ban đầu
     getPathStart = async (req, res) => {
         //let transactionId = req.query.unit;
         let transactionId = req.query.unit;
@@ -297,6 +306,7 @@ class transactionTellerController {
         };
     }
 
+    // lấy đường đi cuối
     getPathEnd = async (req, res) => {
         let receiverTransId = req.query.trans_id;
         try {
@@ -326,6 +336,7 @@ class transactionTellerController {
         };
     };
 
+    // lấy đơn có id lớn nhất
     getMaxOrderID = async() => {
         try {
             const maxOID = await Order.max("order_id");
@@ -335,6 +346,7 @@ class transactionTellerController {
         }
     }
 
+    // tạo ra đơn hàng
     createOrder = async (req, res) => {
         const orderData = req.body;
         try {
@@ -380,8 +392,30 @@ class transactionTellerController {
         };
     };
 
+    // tạo đơn hàng khi cùng điểm giao dịch
     createOrderInTran = async(req, res) => {
         const orderData = req.body;
+        let cPhone = orderData.customer_phone;
+        let validateCPhoneRs = Joi.string().required().pattern(/^0\d+$/).length(10).validate(cPhone);
+        let rPhone = orderData.receiver_phone;
+        let validateRPhoneRs = Joi.string().required().pattern(/^0\d+$/).length(10).validate(rPhone);
+        let date = orderData.date;
+        let validateDateRs = Joi.date().format('YYYY-MM-DD').validate(date);
+        let weight = orderData.weight;
+        let validateWeightRs = Joi.number().required().validate(weight);
+        let price = orderData.price;
+        let validatePriceRs = Joi.number().required().validate(price);
+        console.log(validateDateRs);
+        if(validateCPhoneRs.error
+        || validateRPhoneRs.error
+        || validateWeightRs.error
+        || validatePriceRs.error) {
+            console.log(validateCPhoneRs.error);
+            console.log(validateRPhoneRs.error);
+            console.log(validateWeightRs.error);
+            console.log(validatePriceRs.error);
+        }
+        else
         try {
             await sequelize.authenticate();
             await sequelize.sync();
@@ -425,7 +459,7 @@ class transactionTellerController {
         };
     }
 
-
+    // lấy tất cả điểm tập kết
     showAllGathers = async (req, res) => {
         try {
             await sequelize.authenticate();
@@ -439,6 +473,7 @@ class transactionTellerController {
         }
     };
 
+    // lấy tất cả điểm giao dịch thuộc điểm tập kết
     showAllTransactionsByGather = async (req, res) => {
         const data = req.query.gather_id;
         try {
@@ -457,6 +492,7 @@ class transactionTellerController {
         }
     };
 
+    // lấy thông tin điểm giao dịch qua id
     getTransactionById = async (req, res) => {
         const data = req.query.transaction_id;
         try {
@@ -475,6 +511,7 @@ class transactionTellerController {
         }
     }
 
+    // lấy thông tin đơn hàng qua id
     getOrderById = async (req, res) => {
         const data = req.query.order_id;
         try {
@@ -503,6 +540,7 @@ class transactionTellerController {
         }
     }
 
+    // lấy thông tin của các vận chuyển của đơn hàng
     getAllDeliveryByOrderId = async (req, res) => {
         const data = req.query.order_id;
         try {
@@ -521,6 +559,7 @@ class transactionTellerController {
         }
     }
 
+    // lấy thônt itn điểm giao dịch
     getTransNameById = async (req, res) => {
         const data = req.query.trans_id;
         try {
@@ -539,6 +578,7 @@ class transactionTellerController {
         }
     }
 
+    // lấy thông tin điểm tập kết 
     getGatherNameById = async (req, res) => {
         const data = req.query.gather_id;
         try {
@@ -557,6 +597,7 @@ class transactionTellerController {
         }
     };
 
+    // xử lý khi mất đơn hàng
     lostOrder = async(req, res) => {
         let dId = req.body.deliver_id;
         let oId = req.body.order_id;
@@ -596,6 +637,7 @@ class transactionTellerController {
         }
     };
 
+    // xử lý khi khách hàng từ chối
     customerDeny = async(req, res) => {
         let dId = req.body.deliver_id;
         let oId = req.body.order_id;

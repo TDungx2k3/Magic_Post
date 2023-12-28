@@ -26,6 +26,7 @@ const bcrypt = require('bcrypt');
 // })
 
 class GatheringManagerController {
+  // tạo tài khoản nhân viên
   createAccountEmployee = async (req, res) => {
     const data = await req.body;
     Account.create({
@@ -38,6 +39,7 @@ class GatheringManagerController {
     });
   };
 
+  // lấy thông tin tất cả hân viên của đơn vị
   showAllEmployee = async (req, res) => {
     const data = req.query;
     try {
@@ -56,12 +58,18 @@ class GatheringManagerController {
     }
   }
 
-  // Chưa test
+  // Xóa tài khoản
   deleteAccountEmployee = async (req, res) => {
+    let aId = req.body.account_id;
+    let validateAIdRs = Joi.string().required().pattern(/^\d+$/).validate(aId);
+    if(validateAIdRs.error) {
+      console.log(validateAIdRs.error);
+    }
+    else
     try {
       await Account.destroy({
         where: {
-          account_id: req.body.account_id,
+          account_id: aId,
         }
       });
       res.send();
@@ -70,18 +78,27 @@ class GatheringManagerController {
     }
   }
 
+  // cập nhật tài khoản
   updateAccountEmployee = async (req, res) => {
     const data = req.body;
-
+    let aPhone = req.body.account_phone;
+    let mPass = req.body.account_password;
+    let validateAPassRs = Joi.string().required().min(6).max(30).validate(mPass)
+    let validateAPhoneRs = Joi.string().required().pattern(/^0\d+$/).length(10).validate(aPhone);
+    if(validateAPhoneRs.error || validateAPassRs.error) {
+      console.log(validateAPhoneRs.error);
+      console.log(validateAPassRs.error);
+    }
+    else 
     try {
       const saltRounds = 10;
-      const plaintextPassword = data.account_password;
+      const plaintextPassword = mPass;
 
       const hash = await bcrypt.hash(plaintextPassword, saltRounds);
 
       await Account.update({
         account_name: data.account_name,
-        account_phone: data.account_phone,
+        account_phone: aPhone,
         account_password: hash
       }, {
         where: {
@@ -95,6 +112,7 @@ class GatheringManagerController {
     }
   };
 
+  // Lấy thông tin tài khoản theo id
   getDefaultAccountById = async (req, res) => {
     const data = req.query;
     try {
@@ -110,6 +128,7 @@ class GatheringManagerController {
     }
   }
 
+  // lấy thông tin tất cả đơn hàng gửi đi
   showAllOrdersSent = async (req, res) => {
     const unit = req.query.unit;
     try {
@@ -126,6 +145,7 @@ class GatheringManagerController {
     }
   }
 
+  // lấy thông tin tất cả đơn hàng nhận về
   showAllOrdersReceived = async (req, res) => {
     const unit = req.query.unit;
     try {
@@ -142,6 +162,7 @@ class GatheringManagerController {
     }
   }
 
+  // lấy ngày gửi gần nhất
   getMaxDateSent = async (req, res) => {
     const unit = req.query.unit;
     try {
@@ -158,6 +179,7 @@ class GatheringManagerController {
     }
   };
 
+  // lấy ngày nhận gần nhất
   getMaxDateReceived = async (req, res) => {
     const unit = req.query.unit;
     try {
@@ -174,6 +196,7 @@ class GatheringManagerController {
     }
   };
 
+  // đếm số lương đơn hàng theo ngày
   countOrderSentInADate = async (req, res) => {
     try {
       const date = req.query.date;
@@ -201,6 +224,7 @@ class GatheringManagerController {
     }
   }
 
+  // đếm số đơn nhận theo ngày của đơn vị
   countOrderReceivedInADate = async (req, res) => {
     try {
       const date = req.query.date;
@@ -230,6 +254,7 @@ class GatheringManagerController {
     }
   }
 
+  // lấy danh sách tập khách hàng từ chối nhận
   getCustomerDenyList = async (req, res) => {
     try {
       const unit = req.query.unit;
@@ -248,6 +273,7 @@ class GatheringManagerController {
     }
   }
 
+  // lấy tập đơn hàng bị mất
   getLostOrderList = async (req, res) => {
     try {
       const unit = req.query.unit;
@@ -264,25 +290,40 @@ class GatheringManagerController {
     }
   }
 
+  // tạo tài khoản
   createAccount = async (req, res) => {
-    const data = req.body;
-    const saltRounds = 10;
-    const plaintextPassword = data.accountPassword;
-    bcrypt.hash(plaintextPassword, saltRounds, (err, hash) => {
-      if (err) {
-        console.error('Error hashing password:', err);
-      } else {
-        data.accountPassword = hash;
-      }
-      Account.create({
-        account_name: data.accountName,
-        account_phone: data.accountPhone,
-        account_password: data.accountPassword,
-        role_id: 6,
-        unit: data.unit,
+    let aPhone = req.body.accountPhone;
+    let mPass = req.body.accountPassword;
+    let validateAPassRs = Joi.string().required().min(6).max(30).validate(mPass)
+    let validateAPhoneRs = Joi.string().required().pattern(/^0\d+$/).length(10).validate(aPhone);
+    if(validateAPassRs.error || validateAPhoneRs.error) {
+      console.log(validateAPassRs.error);
+      console.log(validateAPhoneRs.error);
+
+    }
+    else
+    try {
+      const saltRounds = 10;
+      const plaintextPassword = data.accountPassword;
+      bcrypt.hash(plaintextPassword, saltRounds, (err, hash) => {
+        if (err) {
+          console.error('Error hashing password:', err);
+        } else {
+          data.accountPassword = hash;
+        }
+        Account.create({
+          account_name: req.body.accountName,
+          account_phone: aPhone,
+          account_password: hash,
+          role_id: 6,
+          unit: data.unit,
+        });
       });
-    });
-    res.send();
+      res.send();
+    } catch (error) {
+      console.log(error);
+    }
+    
   };
 }
 

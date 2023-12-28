@@ -6,6 +6,7 @@ import axios from "axios";
 
 
 function CreateTransaction() {
+    // Lấy thông tin đăng nhập
     const navigate = useNavigate();
     let nowTime = new Date();
     const storedOutTime = new Date(JSON.parse(localStorage.getItem('outTime')));
@@ -15,6 +16,7 @@ function CreateTransaction() {
     const location = useLocation();
     const gatherId = new URLSearchParams(location.search).get("gather_id");
     
+    // Xử lý lỗi
     const [rerender] = useState(true);
     const [options, setOptions] = useState(1);
     const [transactionNameErr, setTransactionNameErr] = useState("");
@@ -22,6 +24,7 @@ function CreateTransaction() {
     const [managerPhoneErr, setManagerPhoneErr] = useState("");
     const [newPasswordErr, setNewPasswordErr] = useState("");
 
+    // Lưu thông tin điểm giao dịch
     const [transactionInfo, setTransactionInfo] = useState(
         {
             transaction_name: "",
@@ -32,6 +35,7 @@ function CreateTransaction() {
         }
     );
 
+    // Chuẩn hóa tên điểm giao dịch
     const transNameNormalize = (name) => {
         
         const tenChuanHoa = name.replace(/\s+/g, " ").trim();
@@ -40,6 +44,7 @@ function CreateTransaction() {
     };
 
 
+    // Check tên điểm giao dịch
     const checkTransactionName = () => {
         let tName = document.querySelector("." + style.transactionNameContainer + " input").value;
         // console.log(gName);
@@ -51,6 +56,7 @@ function CreateTransaction() {
         }
     };
 
+    // Chuẩn hóa tên người quản lý
     const managerNameNormalize = (name) => {
         // Chia tách tên thành các từ
         name = name.replace(/\s+/g, " ").trim();
@@ -69,6 +75,7 @@ function CreateTransaction() {
         return rs;
     };
 
+    // Check tên người quản lý
     const checkManagerName = () => {
         let mName = document.querySelector("." + style.nameContainer + " input").value;
         // console.log(gName);
@@ -80,6 +87,7 @@ function CreateTransaction() {
         }
     };
 
+    // Check số điện thoại
     const checkManagerPhone = () => {
         let mPhone = document.querySelector("." + style.phoneContainer + " input").value;
         // console.log(gName);
@@ -92,6 +100,7 @@ function CreateTransaction() {
         }
     };
 
+    // Check password
     const checkNewPassword = () => {
         let newPwd = document.querySelector("." + style.newPasswordContainer + " input").value;
         if(!(newPwd === "")) {
@@ -104,6 +113,7 @@ function CreateTransaction() {
         }
     };
 
+    // Tạo điểm giao dịch mới
     const createTransaction = async(tId, tName, mId, gId) => {
         // console.log("cg");
         try {
@@ -120,6 +130,7 @@ function CreateTransaction() {
         }
     };
 
+    // Tạo tài khoản quản lý điểm giao dịch
     const createTransactionManager = async(mName, mPhone) => {
         // console.log("cgm");
         try {
@@ -136,6 +147,7 @@ function CreateTransaction() {
         // console.log("cgme");
     }
 
+    // Cập nhật password tài khoản
     const updateManagerPassword = async(newMId, newPwd) => {
         // console.log(newMId);
         // console.log(newPwd);
@@ -151,6 +163,7 @@ function CreateTransaction() {
         }
     };
     
+    // Xử lý nhập liệu inputs
     const handleChange = (e) => {
         setTransactionInfo((prev) => {
             return {
@@ -160,6 +173,7 @@ function CreateTransaction() {
         });
     };
 
+    // Đếm số lượng tài khoản qua số điện thoại
     const checkCntPhone = async(e) => {
         try {
             const res = await axios.get("http://localhost:8080/leader/getCntPhone",
@@ -175,6 +189,7 @@ function CreateTransaction() {
         }
     };
 
+    // Lấy account ID mới nhất
     const getNewestAID = async() => {
         try {
             const res = await axios.get("http://localhost:8080/leader/getNewestAId",);
@@ -184,6 +199,7 @@ function CreateTransaction() {
         }
     };
 
+    // Lấy ID điểm giao dịch mới nhất
     const getNewTransactionId = async() => {
         try {
             const res = await axios.get("http://localhost:8080/leader/getMaxTransactionId",);
@@ -193,6 +209,7 @@ function CreateTransaction() {
         }
     };
 
+    // Xử lý tạo Điểm giao dịch
     const handleSubmit = async(e) => {
         
         checkTransactionName();
@@ -246,6 +263,7 @@ function CreateTransaction() {
         }
     };
     
+    // Check user có phải là leader hay không
     let cnt = 0;
     useEffect(() => {
         if((!storedIsLogin 
