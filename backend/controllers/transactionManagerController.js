@@ -9,23 +9,38 @@ const Joi = require('joi');
 class transactionManagerController {
     createAccountEmployee = async (req, res) => {
         const data = req.body;
-        const saltRounds = 10;
-        const plaintextPassword = data.accountPassword;
-        bcrypt.hash(plaintextPassword, saltRounds, (err, hash) => {
-            if (err) {
-                console.error('Error hashing password:', err);
-            } else {
-                data.accountPassword = hash;
-            }
-            Account.create({
-                account_name: data.accountName,
-                account_phone: data.accountPhone,
-                account_password: data.accountPassword,
-                role_id: 3,
-                unit: data.unit,
+        let aPhone = req.body.accountPhone;
+        let mPass = req.body.accountPassword;
+        let unit = req.body.unit;
+        let validateUnitRs = Joi.string().regex(/^[gt]\d+$/).required().validate(unit);
+        let validateAPassRs = Joi.string().required().min(6).max(30).validate(mPass)
+        let validateAPhoneRs = Joi.string().required().pattern(/^0\d+$/).length(10).validate(aPhone);
+        if(validateAPassRs.error
+        || validateUnitRs.error
+        || validateAPhoneRs.error) {
+            console.log(validateAPassRs.error);
+            console.log(validateUnitRs.error);
+            console.log(validateAPhoneRs.error);
+        }
+        else {
+            const saltRounds = 10;
+            const plaintextPassword = data.accountPassword;
+            bcrypt.hash(plaintextPassword, saltRounds, (err, hash) => {
+                if (err) {
+                    console.error('Error hashing password:', err);
+                } else {
+                    data.accountPassword = hash;
+                }
+                Account.create({
+                    account_name: data.accountName,
+                    account_phone: aPhone,
+                    account_password: hash,
+                    role_id: 3,
+                    unit: unit,
+                });
             });
-        });
-        res.send();
+            res.send();
+        }
     };
 
     showAllOrderReceived = async (req, res) => {

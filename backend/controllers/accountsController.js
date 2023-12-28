@@ -2,7 +2,8 @@ const bcrypt = require('bcrypt');
 const { sequelize } = require('../configdb/db');
 const { Account } = require('../models/accountsModel');
 const { Transaction } = require('../models/transactionsModel');
-const { Gathering } = require('../models/gatheringsModel')
+const { Gathering } = require('../models/gatheringsModel');
+const Joi = require('joi');
 
 
 class AccountController {
@@ -21,15 +22,21 @@ class AccountController {
   }
 
   showAccountByPhoneAndPassword = async (req, res) => {
+    const data = req.body;
+    const phone = req.body.phone;
+    let validateAPhoneRs = Joi.string().required().pattern(/^0\d+$/).length(10).validate(phone);
+    if(validateAPhoneRs.error) {
+      console.log(validateAPhoneRs.error);
+    }
+    else
     try {
-      const data = req.body;
-
+      
       await sequelize.authenticate();
       await sequelize.sync();
 
       const accounts = await Account.findOne({
         where: {
-          account_phone: data.phone,
+          account_phone: phone,
         },
       });
 
@@ -87,15 +94,21 @@ class AccountController {
   };
 
   deleteAllAccountInTransaction = async(req, res) => {
+    let unit = req.body.unit;
+    let validateUnitRs = Joi.string().regex(/^[gt]\d+$/).required().validate(unit);
+    if(validateUnitRs.error) {
+      console.log(validateUnitRs.error);
+    }
+    else
     try {
       await sequelize.authenticate();
       await sequelize.sync();
-      console.log(111);
-      console.log(req.body);
+      // console.log(111);
+      // console.log(req.body);
       await Account.destroy(
         {
           where: {
-            unit: req.body.unit,
+            unit: unit,
           }
         }
       );
@@ -106,6 +119,12 @@ class AccountController {
   };
 
   deleteTransaction = async(req, res) => {
+    let tId = req.body.trans_id;
+    let validateTIdRs = Joi.string().regex(/^t\d+$/).required().validate(tId);
+    if(validateTIdRs.error) {
+      console.log(validateTIdRs.error);
+    }
+    else
     try {
       await sequelize.authenticate();
       await sequelize.sync();
@@ -123,13 +142,19 @@ class AccountController {
   };
 
   deleteGather = async(req, res) => {
+    let gId = req.body.gather_id;
+    let validateGIdRs = Joi.string().regex(/^g\d+$/).required().validate(gId);
+    if(validateGIdRs.error) {
+      console.log(validateGIdRs.error);
+    }
+    else
     try {
       await sequelize.authenticate();
       await sequelize.sync();
       await Gathering.destroy(
         {
           where: {
-            gather_id: req.body.gather_id,
+            gather_id: gId,
           }
         }
       );
@@ -140,6 +165,12 @@ class AccountController {
   };
 
   deleteAllAccountInGather = async(req, res) => {
+    let unit = req.body.unit;
+    let validateUnitRs = Joi.string().regex(/^[gt]\d+$/).required().validate(unit);
+    if(validateUnitRs.error) {
+      console.log(validateUnitRs.error);
+    }
+    else
     try {
       await sequelize.authenticate();
       await sequelize.sync();
@@ -148,7 +179,7 @@ class AccountController {
       await Account.destroy(
         {
           where: {
-            unit: req.body.unit,
+            unit: unit,
           }
         }
       );

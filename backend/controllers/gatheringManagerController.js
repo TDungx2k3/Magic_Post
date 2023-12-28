@@ -58,10 +58,16 @@ class GatheringManagerController {
 
   // Chưa test
   deleteAccountEmployee = async (req, res) => {
+    let aId = req.body.account_id;
+    let validateAIdRs = Joi.string().required().pattern(/^\d+$/).validate(aId);
+    if(validateAIdRs.error) {
+      console.log(validateAIdRs.error);
+    }
+    else
     try {
       await Account.destroy({
         where: {
-          account_id: req.body.account_id,
+          account_id: aId,
         }
       });
       res.send();
@@ -72,16 +78,24 @@ class GatheringManagerController {
 
   updateAccountEmployee = async (req, res) => {
     const data = req.body;
-
+    let aPhone = req.body.account_phone;
+    let mPass = req.body.account_password;
+    let validateAPassRs = Joi.string().required().min(6).max(30).validate(mPass)
+    let validateAPhoneRs = Joi.string().required().pattern(/^0\d+$/).length(10).validate(aPhone);
+    if(validateAPhoneRs.error || validateAPassRs.error) {
+      console.log(validateAPhoneRs.error);
+      console.log(validateAPassRs.error);
+    }
+    else 
     try {
       const saltRounds = 10;
-      const plaintextPassword = data.account_password;
+      const plaintextPassword = mPass;
 
       const hash = await bcrypt.hash(plaintextPassword, saltRounds);
 
       await Account.update({
         account_name: data.account_name,
-        account_phone: data.account_phone,
+        account_phone: aPhone,
         account_password: hash
       }, {
         where: {
@@ -265,24 +279,38 @@ class GatheringManagerController {
   }
 
   createAccount = async (req, res) => {
-    const data = req.body;
-    const saltRounds = 10;
-    const plaintextPassword = data.accountPassword;
-    bcrypt.hash(plaintextPassword, saltRounds, (err, hash) => {
-      if (err) {
-        console.error('Error hashing password:', err);
-      } else {
-        data.accountPassword = hash;
-      }
-      Account.create({
-        account_name: data.accountName,
-        account_phone: data.accountPhone,
-        account_password: data.accountPassword,
-        role_id: 6,
-        unit: data.unit,
+    let aPhone = req.body.accountPhone;
+    let mPass = req.body.accountPassword;
+    let validateAPassRs = Joi.string().required().min(6).max(30).validate(mPass)
+    let validateAPhoneRs = Joi.string().required().pattern(/^0\d+$/).length(10).validate(aPhone);
+    if(validateAPassRs.error || validateAPhoneRs.error) {
+      console.log(validateAPassRs.error);
+      console.log(validateAPhoneRs.error);
+
+    }
+    else
+    try {
+      const saltRounds = 10;
+      const plaintextPassword = data.accountPassword;
+      bcrypt.hash(plaintextPassword, saltRounds, (err, hash) => {
+        if (err) {
+          console.error('Error hashing password:', err);
+        } else {
+          data.accountPassword = hash;
+        }
+        Account.create({
+          account_name: req.body.accountName,
+          account_phone: aPhone,
+          account_password: hash,
+          role_id: 6,
+          unit: data.unit,
+        });
       });
-    });
-    res.send();
+      res.send();
+    } catch (error) {
+      console.log(error);
+    }
+    
   };
 }
 

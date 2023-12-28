@@ -226,7 +226,7 @@ class LeaderController {
         let aPhone = req.query.account_phone;
         let validateAPhoneRs = Joi.string().required().pattern(/^0\d+$/).length(10).validate(aPhone);
         if(validateAPhoneRs.error) {
-            console.log(error);
+            console.log(validateAPhoneRs.error);
         }
         else {
             try {
