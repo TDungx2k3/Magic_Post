@@ -20,7 +20,8 @@ import Chart from "../../components/Chart";
 function Home() {
     const { isLogin, setIsLogin, userInfo } = useContext(LoginContext);
 
-    const getMatchesInfo = async (e) => {
+    // Lấy tất cả thông tin tài khoản người dùng
+    const getAccountInfo = async (e) => {
         try {
             await axios.get("http://localhost:8080/account/showAllAccounts")
             .then((response) => {
@@ -49,7 +50,7 @@ function Home() {
                     <div className={clsx(style.col1)}>
                         <div className={clsx(style.subCol)}>
                             <img src= {parcelsIcon} alt="" className={clsx(style.imgIcon)} />
-                            <div className={clsx(style.info)} onClick={getMatchesInfo}>
+                            <div className={clsx(style.info)} onClick={getAccountInfo}>
                                 <h2>1.6+ million</h2>
                                 <p>parcel since inception</p>
                             </div>

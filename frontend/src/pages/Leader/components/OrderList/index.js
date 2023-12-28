@@ -13,7 +13,7 @@ function OrderList(props) {
     const [orderSentList, setOrderSentList] = useState([]);
     const [orderList, setOrderList] = useState([1]);
     const [isReceive, setIsReceive] = useState(true);
-    const [status, setStatus] = useState(true);
+    const [status, setStatus] = useState(2);
     const [rerender] = useState(true);
     const unit = props.data;
 
@@ -23,6 +23,7 @@ function OrderList(props) {
     const [pageNum, setPageNum] = useState(1);
     const [pages, setPages] = useState([]);
     
+    // Cập nhật phân trang
     const updatePages = () => {
         let tmpPages = [];
         for(let i = 0; i < numOfPages; i++) {
@@ -31,6 +32,7 @@ function OrderList(props) {
         setPages(tmpPages);
     }
 
+    // format ngày giờ
     function formatDate(date) {
         const year = date.getFullYear();
         const month = String(date.getMonth() + 1).padStart(2, '0'); 
@@ -39,6 +41,7 @@ function OrderList(props) {
         return `${year}-${month}-${day}`;
     };
 
+    // Lấy order list received
     const getOrderReceivedList = async() => {
         try {
             await axios
@@ -58,6 +61,7 @@ function OrderList(props) {
         }
     };
 
+    // Lấy order list sent
     const getOrderSentList = async() => {
         try {
             await axios
@@ -77,6 +81,7 @@ function OrderList(props) {
         }
     };
 
+    // Cập nhật order list
     const updateOrderList = async() => {
         if (isReceive) {
             if(status) {
@@ -133,12 +138,14 @@ function OrderList(props) {
         console.log(orderList);
     };
 
+    // Cập nhật thông tin mỗi khi load trang
     useEffect(() => {
         getOrderReceivedList();
         getOrderSentList();
         updateOrderList();
     }, [rerender]);
 
+    // Cập nhật order list khi bấm vào từng mục
     useEffect(() => {
         updateOrderList();
         console.log(orderList);
@@ -151,7 +158,7 @@ function OrderList(props) {
                     <div className={clsx(style.orderReceivedNav, {[style.orderNavActive] : isReceive})}
                     onClick={() => {
                         setIsReceive(true);
-                        setStatus(true);
+                        setStatus(2);
                         setPageNum(1);
                         updateOrderList();
                     }}
@@ -162,7 +169,7 @@ function OrderList(props) {
                     <div className={clsx(style.orderSentNav, {[style.orderNavActive] : !isReceive})}
                     onClick={() => {
                         setIsReceive(false);
-                        setStatus(true);
+                        setStatus(2);
                         setPageNum(1);
                         updateOrderList();
                     }}
@@ -181,16 +188,16 @@ function OrderList(props) {
                         </div>
 
                         <div className={clsx(style.statusNav)}>
-                            <div className={clsx(style.inInventoryStatus, {[style.statusNavActive] : status === true})}
+                            <div className={clsx(style.inInventoryStatus, {[style.statusNavActive] : status === 0})}
                             onClick={() => {
-                                setStatus(true);
+                                setStatus(0);
                                 setPageNum(1);
                                 updateOrderList();
                             }}
-                            >In inventory</div>
-                            <div className={clsx(style.shippingStatus, {[style.statusNavActive] : status === false})}
+                            >Done</div>
+                            <div className={clsx(style.shippingStatus, {[style.statusNavActive] : status === 1})}
                             onClick={() => {
-                                setStatus(false);
+                                setStatus(1);
                                 setPageNum(1);
                                 updateOrderList();
                             }}

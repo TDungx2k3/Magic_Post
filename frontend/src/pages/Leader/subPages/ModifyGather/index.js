@@ -7,6 +7,7 @@ import { LoginContext } from "../../../../App";
 
 function ModifyGather() {
 
+    // Lấy thông tin đăng nhập
     const navigate = useNavigate();
     const location = useLocation();
     let nowTime = new Date();
@@ -17,6 +18,7 @@ function ModifyGather() {
     const gatherId = new URLSearchParams(location.search).get("gather_id");
     // console.log(gatherId);
     
+    // Xử lý lỗi
     const [rerender] = useState(true);
     const [options, setOptions] = useState(1);
     const [gatherNameErr, setGatherNameErr] = useState("");
@@ -24,6 +26,7 @@ function ModifyGather() {
     const [managerPhoneErr, setManagerPhoneErr] = useState("");
     const [newPasswordErr, setNewPasswordErr] = useState("");
 
+    // Lưu thông tin điểm tập kết
     const [gatherInfo, setGatherInfo] = useState(
         {
             account_id: "",
@@ -33,6 +36,7 @@ function ModifyGather() {
         }
     );
 
+    // Lấy thông tin điểm tập kết
     const getGatherData = async(e) => {
         try {
             await axios
@@ -52,6 +56,7 @@ function ModifyGather() {
         }
     };
 
+    // Chuẩn hóa tên điểm tập kết
     const gatherNameNormalize = (name) => {
         
         const tenChuanHoa = name.replace(/\s+/g, " ").trim();
@@ -59,6 +64,7 @@ function ModifyGather() {
         return tenChuanHoa.charAt(0).toUpperCase() + tenChuanHoa.slice(1);
     };
 
+    // Check tên điểm tập kết
     const checkGatherName = () => {
         let gName = document.querySelector("." + style.gatherNameContainer + " input").value;
         // console.log(gName);
@@ -70,6 +76,7 @@ function ModifyGather() {
         }
     };
 
+    // Chuẩn hóa tên người quản lý điểm tập kết
     const managerNameNormalize = (name) => {
         // Chia tách tên thành các từ
         name = name.replace(/\s+/g, " ").trim();
@@ -88,6 +95,7 @@ function ModifyGather() {
         return rs;
     }
 
+    // Check tên người quản lý
     const checkManagerName = () => {
         let mName = document.querySelector("." + style.nameContainer + " input").value;
         // console.log(gName);
@@ -99,6 +107,7 @@ function ModifyGather() {
         }
     };
 
+    // Check số điện thoại
     const checkManagerPhone = () => {
         let mPhone = document.querySelector("." + style.phoneContainer + " input").value;
         // console.log(gName);
@@ -111,6 +120,7 @@ function ModifyGather() {
         }
     };
 
+    // Check password
     const checkNewPassword = () => {
         let newPwd = document.querySelector("." + style.newPasswordContainers + " input").value;
         console.log(newPwd);
@@ -124,6 +134,7 @@ function ModifyGather() {
         }
     };
 
+    // Cập nhật điểm tập kết
     const updateGather = async(gName) => {
         try {
             await axios.post("http://localhost:8080/leader/updateGather",
@@ -137,6 +148,7 @@ function ModifyGather() {
         }
     };
 
+    // Cập nhật tài khoản quản lý
     const updateManager = async(mName, mPhone) => {
         try {
             await axios.post("http://localhost:8080/leader/updateManager",
@@ -151,6 +163,7 @@ function ModifyGather() {
         }
     }
 
+    // Cập nhật password
     const updateManagerPassword = async(newPwd) => {
         try {
             await axios.post("http://localhost:8080/leader/updateManagerPassword",
@@ -164,6 +177,7 @@ function ModifyGather() {
         }
     }
 
+    // Đếm số lượng account theo phone
     const checkCntPhone = async(e) => {
         try {
             const res = await axios.get("http://localhost:8080/leader/getCntPhone",
@@ -179,6 +193,7 @@ function ModifyGather() {
         }
     }
 
+    // Xử lý sửa thông tin điểm tập kết
     const handleSubmit = async(e) => {
         let gName = document.querySelector("." + style.gatherNameContainer + " input").value;
         let mName = document.querySelector("." + style.nameContainer + " input").value;
@@ -209,6 +224,8 @@ function ModifyGather() {
             navigate("/leader");
         }
     }
+
+    // Check user có phải là leader hay không
     let cnt = 0;
     useEffect(() => {
         getGatherData();
