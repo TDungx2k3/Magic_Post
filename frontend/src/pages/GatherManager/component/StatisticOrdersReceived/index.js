@@ -7,11 +7,11 @@ import { LoginContext } from "../../../../App";
 function StatisticOrdersReceived(props) {
     const userInfo = useContext(LoginContext);
 
-    const [ordersReceived, setOrdersReceived] = useState([]);
-    const [ordersReceivedRen, setOrdersReceivedRen] = useState([]);
-    const [isGotOrdersReceived, setIsGotOrdersReceived] = useState(false);
+    const [ordersReceived, setOrdersReceived] = useState([]); // Mảng để lưu các đơn hàng mà điểm tập kết nhận
+    const [ordersReceivedRen, setOrdersReceivedRen] = useState([]); // Mảng để lưu các đơn hàng mà điểm tập kết gửi đi
+    const [isGotOrdersReceived, setIsGotOrdersReceived] = useState(false); // Check xem đã get được data các đơn hàng nhận được chưa
 
-    const maxItemsInOnePage = 5;
+    const maxItemsInOnePage = 5; // Chỉ render ra 5 order trong 1 trang
     let cnt;
     if (ordersReceived !== undefined) {
         cnt = ordersReceived.length;
@@ -20,6 +20,7 @@ function StatisticOrdersReceived(props) {
     const [pageNum, setPageNum] = useState(0);
     const [pages, setPages] = useState([]);
     
+    // Dùng để cập nhật mảnrg pages
     const updatePages = () => {
         let tmpPages = [];
         for(let i = 0; i < numOfPages; i++) {
@@ -28,6 +29,7 @@ function StatisticOrdersReceived(props) {
         setPages(tmpPages);
     };
 
+    // Dùng để hiển thị các order đã nhận, hiển thị trong trang thứ i
     const updateRenList = () => {
         // console.log(accountList);
         let tmpList;
@@ -38,6 +40,7 @@ function StatisticOrdersReceived(props) {
         setOrdersReceivedRen(tmpList);
     }
 
+    // Hàm này để get data order mà điểm tập kết nhận được từ database
     const getOrdersReceived = async () => {
         try {
             const tordersReceived = await axios.get("http://localhost:8080/gathering-manager/all-orders-received",
@@ -46,7 +49,7 @@ function StatisticOrdersReceived(props) {
                 }
             );
             setOrdersReceived(tordersReceived.data[0]);
-            console.log(tordersReceived.data[0]);
+            // console.log(tordersReceived.data[0]);
             setPageNum(1);
             updatePages();
             updateRenList();
@@ -77,24 +80,24 @@ function StatisticOrdersReceived(props) {
                                     <div className={style.sender}>
                                         <div>
                                             <label>Sender Name: </label>
-                                            <span>{ordersReceived.customer_name || "N/A"}</span>
+                                            <span>{ordersReceived.customer_name}</span>
                                         </div>
 
                                         <div>
                                             <label>Sender Phone: </label>
-                                            <span>{ordersReceived.customer_phone || "N/A"}</span>
+                                            <span>{ordersReceived.customer_phone}</span>
                                         </div>
                                     </div>
 
                                     <div className={clsx(style.receiver)}>
                                         <div>
                                             <label>Receiver Name: </label>
-                                            <span>{ordersReceived.receiver_name || "N/A"}</span>
+                                            <span>{ordersReceived.receiver_name}</span>
                                         </div>
 
                                         <div>
                                             <label>Receiver Phone: </label>
-                                            <span>{ordersReceived.receiver_phone || "N/A"}</span>
+                                            <span>{ordersReceived.receiver_phone}</span>
                                         </div>
                                     </div>
                                 </div>
@@ -102,65 +105,24 @@ function StatisticOrdersReceived(props) {
                                 <div className={clsx(style["order-container"])}>
                                     <div>
                                         <label htmlFor="Weight">Weight: </label>
-                                        <span>{ordersReceived.weight || "N/A"} kg</span>
+                                        <span>{ordersReceived.weight} kg</span>
                                     </div>
 
                                     <div>
                                         <label htmlFor="Price">Price: </label>
-                                        <span>{ordersReceived.price || "N/A"} $</span>
+                                        <span>{ordersReceived.price} VND</span>
                                     </div>
 
                                     <div>
                                         <label htmlFor="Date">Date: </label>
-                                        <span>{ordersReceived.date || "N/A"}</span>
+                                        <span>{ordersReceived.date}</span>
                                     </div>
                                 </div>
                             </div>
                         ))
                     ) : (
-                        <div className={clsx(style["sub-container"])}>
-                            <div className={style["customer-container"]}>
-                                <div className={style.sender}>
-                                    <div>
-                                        <label>Sender Name: </label>
-                                        <span>{"N/A"}</span>
-                                    </div>
-
-                                    <div>
-                                        <label>Sender Phone: </label>
-                                        <span>{"N/A"}</span>
-                                    </div>
-                                </div>
-
-                                <div className={clsx(style.receiver)}>
-                                    <div>
-                                        <label>Receiver Name: </label>
-                                        <span>{"N/A"}</span>
-                                    </div>
-
-                                    <div>
-                                        <label>Receiver Phone: </label>
-                                        <span>{"N/A"}</span>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div className={clsx(style["order-container"])}>
-                                <div>
-                                    <label htmlFor="Weight">Weight: </label>
-                                    <span>{"N/A"} kg</span>
-                                </div>
-
-                                <div>
-                                    <label htmlFor="Price">Price: </label>
-                                    <span>{"N/A"} $</span>
-                                </div>
-
-                                <div>
-                                    <label htmlFor="Date">Date: </label>
-                                    <span>{"N/A"}</span>
-                                </div>
-                            </div>
+                        <div id={clsx(style["no-order"])}>
+                            There are no valid orders
                         </div>
                     )}
                 </div>

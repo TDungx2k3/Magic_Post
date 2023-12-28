@@ -12,13 +12,15 @@ const Chart = () => {
     const navigate = useNavigate();
     const userInfo = useContext(LoginContext);
 
-    const [isFetchedDateData, setIsFetchedDateData] = useState(false);
-    const [dates, setDates] = useState([]);
+    const [isFetchedDateData, setIsFetchedDateData] = useState(false); // Check xem đã get được dữ liệu ngày chưa
+    const [dates, setDates] = useState([]); // Dùng để lưu lại các ngày, trong project là lấy 7 ngày gần nhất có đơn
 
     const [rerender, setRerender] = useState(false);
 
+    // Dùng để get dữ liệu ngày trong database
     const handleDateData = async () => {
         try {
+            // Lấy ra ngày gần đây nhất mà điểm tập kết gửi hàng đi
             let maxDateSent = await axios.get("http://localhost:8080/gathering-manager/get-max-date-sent-gather",
                 {
                     params: {
@@ -27,6 +29,7 @@ const Chart = () => {
                 }
             );
 
+            // Lấy ra ngày gần nhất mà điểm tập kết nhận hàng
             let maxDateReceived = await axios.get("http://localhost:8080/gathering-manager/get-max-date-received-gather",
                 {
                     params: {
@@ -35,6 +38,7 @@ const Chart = () => {
                 }
             )
 
+            // Để handle ra max date mà điểm tập kết nhận hoặc gửi hàng, nếu điểm tập kết nào không nhận và gửi hàng lần nào thì set thành ngày hiện tại
             if (maxDateReceived.data[0][0]["MAX(orders.date)"] === null && maxDateSent.data[0][0]["MAX(orders.date)"] !== null) {
                 maxDateReceived.data[0][0]["MAX(orders.date)"] = maxDateSent.data[0][0]["MAX(orders.date)"];
             } else if (maxDateReceived.data[0][0]["MAX(orders.date)"] !== null && maxDateSent.data[0][0]["MAX(orders.date)"] === null) {
@@ -51,6 +55,7 @@ const Chart = () => {
 
             setIsFetchedDateData(true);
 
+            // Các biến bên dưới để lấy ra 6 ngày gần nhất so với maxDate
             const dateMinusOneDay = subDays(maxDate, 1);
             const dateMinusTwoDays = subDays(maxDate, 2);
             const dateMinusThreeDays = subDays(maxDate, 3);
@@ -69,6 +74,7 @@ const Chart = () => {
         handleDateData();
     }, [isFetchedDateData]);
 
+    // Get số lượng đơn hàng mà điểm giao dịch đã gửi đi theo 1 ngày chỉ định
     const fetchDataSentForDate = async (date) => {
         try {
             const response = await axios.get("http://localhost:8080/gathering-manager/get-quantity-orders-sent-in-a-date"
@@ -86,6 +92,7 @@ const Chart = () => {
         }
     }
 
+    // Get số lượng đơn hàng mà điểm giao dịch đã nhận theo 1 ngày chỉ định
     const fetchDataReceivedForDate = async (date) => {
         try {
             const response = await axios.get("http://localhost:8080/gathering-manager/get-quantity-orders-received-in-a-date"
@@ -124,14 +131,15 @@ const Chart = () => {
         fetchData();
     }, [dates]);
 
+    // Khi bấm vào nút back thì quay lại trang gather-manager
     const handleBack = () => {
         navigate("/gather-manager");
     }
 
-    const [dataSent, setDataSent] = useState([]);
-    const [dataReceived, setDataReceived] = useState([]);
+    const [dataSent, setDataSent] = useState([]); // Mảng này dùng để lưu số lượng đơn hàng mà điểm tập kết gửi đi theo từng ngày
+    const [dataReceived, setDataReceived] = useState([]); // Mảng này dùng để lưu số lượng đơn hàng mà điểm tập kết nhận theo từng ngày
 
-    const [allDataReady, setAllDataReady] = useState(false);
+    const [allDataReady, setAllDataReady] = useState(false); // Check xem tất cả data đã được get thành công hết chưa
 
     const [chartData, setChartData] = useState({
         series: [
@@ -158,9 +166,11 @@ const Chart = () => {
                 width: 2,
                 colors: ['transparent']
             },
+            // Trục x của biểu đồ
             xaxis: {
                 categories: ['', '', '', '', '', '', ''],
             },
+            // Trục y của biểu đồ
             yaxis: {
                 title: {
                     text: 'Items'
@@ -186,7 +196,6 @@ const Chart = () => {
             const newChartData = {
                 series: [
                     { name: 'Quantity Orders Sent', data: dataSent },
-                    // { name: 'Quantity Orders Received', data: [10, 5, 1, 8, 7, 10, 11] },
                     { name: 'Quantity Orders Received', data: dataReceived },
                 ],
                 options: {

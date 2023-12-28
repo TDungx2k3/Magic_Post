@@ -6,7 +6,7 @@ import axios from "axios";
 import { Link } from "react-router-dom";
 
 function ModifyAccountEmployee() {
-    const [accountId, setAccountId] = useState();
+    const [accountId, setAccountId] = useState(); // Lưu account id của tài khoản cần sửa hiện tại
     const location = useLocation();
 
     useEffect(() => {
@@ -15,12 +15,14 @@ function ModifyAccountEmployee() {
         setAccountId(account_id);
     }, [location.search]);
 
+    // Lưu giá trị của các input cho name, phone, password
     const [inputs, setInputs] = useState({
         accountName: "",
         accountPhone: "",
         accountPassword: "",
     });
 
+    // Lưu lại sự thay đổi của các input trên
     const handleChange = (e) => {
         setInputs((prev) => {
             return {
@@ -30,10 +32,11 @@ function ModifyAccountEmployee() {
         });
     };
 
-    const [errorForName, setErrorForName] = useState(false);
-    const [errorForPhone, setErrorForPhone] = useState(false);
-    const [errorForPassword, setErrorForPassword] = useState(false);
+    const [errorForName, setErrorForName] = useState(false); // Check ẩn hiện error cho name
+    const [errorForPhone, setErrorForPhone] = useState(false); // Check ẩn hiện error cho phone
+    const [errorForPassword, setErrorForPassword] = useState(false); // Check ẩn hiện error cho password
 
+    // Handle error cho name, nếu input name rỗng thì hiện error
     const handleErrorForName = () => {
         if (inputs.accountName === "") {
             setErrorForName(true);
@@ -42,6 +45,7 @@ function ModifyAccountEmployee() {
         }
     };
 
+    // Handle error cho phone, nếu input phone là rỗng hoặc không đỦ 10 kí tự hoặc không bắt đầu bằng 0 thì hiện error
     const handleErrorForPhone = () => {
         const phonePattern = /^\d{10}$/;
 
@@ -52,6 +56,7 @@ function ModifyAccountEmployee() {
         }
     };
 
+    // Handle error cho password, nếu input password là rỗNg hoặc có độ dài < 6 thì hiện error
     const handleErrorForPassword = () => {
         if (inputs.accountPassword === "" || inputs.accountPassword.length < 6) {
             setErrorForPassword(true);
@@ -60,6 +65,7 @@ function ModifyAccountEmployee() {
         }
     };
 
+    // Handle bấm submit
     const handleSubmit = () => {
         handleErrorForName();
         handleErrorForPhone();
@@ -67,7 +73,7 @@ function ModifyAccountEmployee() {
         updateInfo();
     }
 
-    // Tối nay làm nốt check nếu sđt mới bị trùng với sđt của mấy tk khác, chỉ cho phép đổi sđt là số khác hoặc giữ nguyên số cũ
+    // Cập nhật thông tin tài khoản mới lên database
     const updateInfo = async () => {
         try {
             const thisPhone = await axios.get("http://localhost:8080/gathering-manager/get-employee-by-id", {
@@ -102,7 +108,6 @@ function ModifyAccountEmployee() {
                         phone: inputs.accountPhone
                     }
                 });
-                console.log(checkDuplicate);
                 if (checkDuplicate.data.message === "Phone number does not exist") {
                     if (inputs.accountName !== "" && inputs.accountPhone !== "" && inputs.accountPassword !== "" && errorForName === false && errorForPhone === false && errorForPassword === false) {
                         axios.post("http://localhost:8080/gathering-manager/update-account-by-id", {

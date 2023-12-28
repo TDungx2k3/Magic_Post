@@ -9,24 +9,23 @@ import { Link } from "react-router-dom";
 
 function ManageAccountEmployee(props) {
     const navigate = useNavigate();
-    const [confirmHidden, setConfirmHidden] = useState(true);
-    const [isHide, setIsHide] = useState(true);
-    const [hasFetchedData, setHasFetchedData] = useState(false);
+    const [confirmHidden, setConfirmHidden] = useState(true); // Dùng để check alert lúc bấm xoá tài khoản của nhân viên xem liệu có muốn xoá không
+    const [isHide, setIsHide] = useState(true); // Dùng để check khi bấm vào ẩn đi cái alert trên
+    const [hasFetchedData, setHasFetchedData] = useState(false); // Dùng để check xem đã fetch được account của nhân viên chưa
 
     const { userInfo } = useContext(LoginContext);
-    console.log(userInfo.uUnit);
-    const [accountList, setAccountList] = useState([]);
-    const [accountRenList, setAccountRenList] = useState([]);
-    const [rerender, setRerender] = useState(true);
+    const [accountList, setAccountList] = useState([]); // Dùng để lưu account nhân viên
+    const [accountRenList, setAccountRenList] = useState([]); // Dùng để lưu account nhân viên ở trang thứ i
 
-    const [accountId, setAccountId] = useState();
+    const [accountId, setAccountId] = useState(); // Lưu account id
 
-    const maxItemsInOnePage = 5;
+    const maxItemsInOnePage = 5; // Phân trang, trong 1 trang có tối đa 5 item
     let cnt = accountList.length;
     let numOfPages = Math.ceil(cnt / maxItemsInOnePage);
     const [pageNum, setPageNum] = useState(0);
     const [pages, setPages] = useState([]);
 
+    // Hàm này tạo 1 mảng các trang, sau đó cho vào mảng pages
     const updatePages = () => {
         let tmpPages = [];
         for (let i = 0; i < numOfPages; i++) {
@@ -35,6 +34,7 @@ function ManageAccountEmployee(props) {
         setPages(tmpPages);
     };
 
+    // Hàm này để khi bấm vào trang nào thì sẽ render ra tài khoản nhân viên
     const updateAccRenList = () => {
         // console.log(accountList);
         let tmpList = accountList.slice(maxItemsInOnePage * (pageNum - 1), maxItemsInOnePage * pageNum);
@@ -42,6 +42,7 @@ function ManageAccountEmployee(props) {
         setAccountRenList(tmpList);
     }
 
+    // Hàm này để get tất cả tài khoản của nhân viên thuộc điểm giao dịch hiện tại, sau đó set vào mảng accountList
     const getAllAccounts = async () => {
         try {
             const response = await axios.get("http://localhost:8080/gathering-manager/get-all-employee", {
@@ -53,13 +54,14 @@ function ManageAccountEmployee(props) {
             setPageNum(1);
             updatePages();
             updateAccRenList();
-            console.log(response.data);
+            // console.log(response.data);
             setHasFetchedData(true);
         } catch (error) {
             console.log(error);
         }
     }
 
+    // Hàm này để xoá tài khoản của nhân viên
     const deleteAccountById = async (accountId) => {
         try {
             await axios.post("http://localhost:8080/gathering-manager/delete-account-by-id", {
@@ -70,13 +72,6 @@ function ManageAccountEmployee(props) {
             console.log(err);
         }
     }
-
-    // useEffect(() => {
-    //     if (!hasFetchedData) {
-    //         getAllAccounts();
-    //         setRerender(false);
-    //     }
-    // }, [rerender, hasFetchedData]);
 
     useEffect(() => {
         getAllAccounts();
@@ -118,7 +113,7 @@ function ManageAccountEmployee(props) {
                                             setConfirmHidden(false);
                                             setIsHide(false);
                                             setAccountId(account.account_id);
-                                            console.log(accountId);
+                                            // console.log(accountId);
                                         }}
                                     >
                                         <i className="ti-trash"></i>
@@ -133,7 +128,7 @@ function ManageAccountEmployee(props) {
                             </div>
                         ))
                     ) : (
-                        <div>There are no valid accounts</div>
+                        <div id={clsx(style["no-account"])}>There are no valid accounts</div>
                     )}
                 </div>
 
@@ -198,7 +193,7 @@ function ManageAccountEmployee(props) {
                             <div className={clsx(style.yesBtn)}
                                 onClick={async (e) => {
                                     if (window.confirm("Do you want to delete this account?")) {
-                                        console.log(accountId);
+                                        // console.log(accountId);
                                         await deleteAccountById(accountId);
                                         setConfirmHidden(true);
                                         navigate("/");

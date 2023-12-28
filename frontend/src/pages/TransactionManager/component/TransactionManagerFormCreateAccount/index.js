@@ -5,24 +5,24 @@ import { LoginContext } from "../../../../App";
 import axios from "axios";
 import { Alert } from 'flowbite-react';
 import { HiInformationCircle } from 'react-icons/hi';
-import Aos from "aos";
-// Call API được rồi, nma gần như mới là test, vì chưa lấy unit nên đang để unit defalt là "test, còn lại gần như ok"
 
 function TransactionManagerFormCreateAccount(props) {
     const { userInfo } = useContext(LoginContext);
 
+    // Input để lưu các name, phone, password
     const [inputs, setInputs] = useState({
         accountName: "",
         accountPhone: "",
         accountPassword: "",
     });
 
-    const [errorForName, setErrorForName] = useState(false);
-    const [errorForPhone, setErrorForPhone] = useState(false);
-    const [errorForPassword, setErrorForPassword] = useState(false);
+    const [errorForName, setErrorForName] = useState(false); // Check error cho name
+    const [errorForPhone, setErrorForPhone] = useState(false); // Check error cho phone
+    const [errorForPassword, setErrorForPassword] = useState(false); // Check error cho password
 
-    const [isClickAddAccount, setIsClickAddAccount] = useState(false);
+    const [isClickAddAccount, setIsClickAddAccount] = useState(false); // Check xem bấm vào nút add account không
 
+    // Handle xử lý sự kiện bấm vào add account
     const handleIsClickAddAccount = async () => {
         setIsClickAddAccount(true);
         handleErrorForName();
@@ -33,6 +33,7 @@ function TransactionManagerFormCreateAccount(props) {
         }
     };
 
+    // Handle xử lý error cho name, nếu input name rỗng thì hiện error
     const handleErrorForName = () => {
         if (inputs.accountName === "") {
             setErrorForName(true);
@@ -41,6 +42,7 @@ function TransactionManagerFormCreateAccount(props) {
         }
     };
 
+    // Handle xử lý error cho phone, nếu input rỗng hoặc không đủ 10 chữ số hoặc không bắt đầu bằng 0 thì hiện error
     const handleErrorForPhone = () => {
         const phonePattern = /^\d{10}$/;
 
@@ -51,6 +53,7 @@ function TransactionManagerFormCreateAccount(props) {
         }
     };
 
+    // Handle error cho password, nếu input rỗNg hoặc độ dài < 6 thì hiện error
     const handleErrorForPassword = () => {
         if (inputs.accountPassword === "" || inputs.accountPassword.length < 6) {
             setErrorForPassword(true);
@@ -59,6 +62,7 @@ function TransactionManagerFormCreateAccount(props) {
         }
     };
 
+    // Để cập nhật input name, phone, password khi có thay đổi
     const handleChange = (e) => {
         setInputs((prev) => {
             return {
@@ -68,9 +72,10 @@ function TransactionManagerFormCreateAccount(props) {
         });
     };
 
-    const [alertVisible, setAlertVisible] = useState(false);
-    const [checkIsSuccess, setCheckIsSuccess] = useState(true);
+    const [alertVisible, setAlertVisible] = useState(false); // Handle xem có hiện alert không
+    const [checkIsSuccess, setCheckIsSuccess] = useState(true); // Handle xem hiện alert succcess hay failure
 
+    // Hàm này để thực hiện tạo tài khoản cho nhân viên tại điểm giao dịch, ban đầu check xem số điện thoại có trùng không, trùng thì alert failure, nếu  không thì mới cho tạo thành công và hiện alert success
     const handleGetData = async () => {
         try {
             const response = await axios.get("http://localhost:8080/account/countAccountByPhoneNumber", {
@@ -86,7 +91,7 @@ function TransactionManagerFormCreateAccount(props) {
                 setTimeout(() => {
                     setAlertVisible(false);
                 }, 1500);
-                // alert("Phone number already exists");
+
                 setInputs((prevInputs) => {
                     return {
                         ...prevInputs,
@@ -107,7 +112,7 @@ function TransactionManagerFormCreateAccount(props) {
                     setTimeout(() => {
                         setAlertVisible(false);
                     }, 1500);
-                    // alert("Create Successfully");
+
                     setInputs((prevInputs) => {
                         return {
                             ...prevInputs,
@@ -119,7 +124,6 @@ function TransactionManagerFormCreateAccount(props) {
                     document.getElementsByName("accountName")[0].value = "";
                     document.getElementsByName("accountPhone")[0].value = "";
                     document.getElementsByName("accountPassword")[0].value = "";
-                    // setCheckIsCreateSuccess(true);
                 }
             }
         }
@@ -128,6 +132,7 @@ function TransactionManagerFormCreateAccount(props) {
         }
     }
 
+    // Bấm enter = click Add Account
     const handleEnterKey = (event) => {
         if (event.key === "Enter") {
             handleIsClickAddAccount();

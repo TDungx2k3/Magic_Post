@@ -12,30 +12,31 @@ function DenyList() {
     const userInfo = useContext(LoginContext);
     console.log(userInfo.userInfo.uUnit);
 
-    const [denyList, setDenyList] = useState([]);
-    const [denyRenList, setDenyRenList] = useState([]);
-    const [isFetchedData, setIsFetchedData] = useState(false);
+    const [denyList, setDenyList] = useState([]); // Lưu danh sách khách hàng deny
+    const [denyRenList, setDenyRenList] = useState([]); // Lưu danh sách khách hàng deny sẽ được render trong trang thứ i
+    const [isFetchedData, setIsFetchedData] = useState(false); // Check xem đã get được danh sách khách deny chưa
 
     const maxItemsInOnePage = 5;
     let cnt = denyList.length;
     let numOfPages = Math.ceil(cnt / maxItemsInOnePage);
     const [pageNum, setPageNum] = useState(0);
     const [pages, setPages] = useState([]);
-    
+
     const updatePages = () => {
         let tmpPages = [];
-        for(let i = 0; i < numOfPages; i++) {
+        for (let i = 0; i < numOfPages; i++) {
             tmpPages.push(i);
         }
         setPages(tmpPages);
     };
 
     const updateDenyRenList = () => {
-        let tmpDenyList = denyList.slice(maxItemsInOnePage*(pageNum - 1), pageNum*maxItemsInOnePage);
+        let tmpDenyList = denyList.slice(maxItemsInOnePage * (pageNum - 1), pageNum * maxItemsInOnePage);
         // console.log(denyList.slice(pageNum));
         setDenyRenList(tmpDenyList);
     }
 
+    // Get danh sách khách hàng deny
     const getDenyList = async () => {
         try {
             const denyOList = await axios.get("http://localhost:8080/transaction-manager/get-deny-list",
@@ -58,13 +59,14 @@ function DenyList() {
         getDenyList();
     }, [isFetchedData]);
 
-        useEffect(() => {
-            updateDenyRenList();
-            updatePages();
-        }, [pageNum, denyList])
+    useEffect(() => {
+        updateDenyRenList();
+        updatePages();
+    }, [pageNum, denyList])
 
     console.log(denyList);
 
+    // Bấm nút back để quay về trang transaction-manager
     const handleBack = () => {
         navigate("/transaction-manager");
     }
@@ -81,24 +83,24 @@ function DenyList() {
                                 <div className={style.sender}>
                                     <div>
                                         <label>Sender Name: </label>
-                                        <span>{denyList.customer_name || "N/A"}</span>
+                                        <span>{denyList.customer_name}</span>
                                     </div>
 
                                     <div>
                                         <label>Sender Phone: </label>
-                                        <span>{denyList.customer_phone || "N/A"}</span>
+                                        <span>{denyList.customer_phone}</span>
                                     </div>
                                 </div>
 
                                 <div className={clsx(style.receiver)}>
                                     <div>
                                         <label>Receiver Name: </label>
-                                        <span>{denyList.receiver_name || "N/A"}</span>
+                                        <span>{denyList.receiver_name}</span>
                                     </div>
 
                                     <div>
                                         <label>Receiver Phone: </label>
-                                        <span>{denyList.receiver_phone || "N/A"}</span>
+                                        <span>{denyList.receiver_phone}</span>
                                     </div>
                                 </div>
                             </div>
@@ -106,80 +108,41 @@ function DenyList() {
                             <div className={clsx(style["order-container"])}>
                                 <div>
                                     <label htmlFor="Weight">Weight: </label>
-                                    <span>{denyList.weight || "N/A"} kg</span>
+                                    <span>{denyList.weight} kg</span>
                                 </div>
 
                                 <div>
                                     <label htmlFor="Price">Price: </label>
-                                    <span>{denyList.price || "N/A"} $</span>
+                                    <span>{denyList.price} VND</span>
                                 </div>
 
                                 <div>
                                     <label htmlFor="Date">Date: </label>
-                                    <span>{denyList.date || "N/A"}</span>
+                                    <span>{denyList.date}</span>
                                 </div>
                             </div>
                         </div>
                     )
                     )) :
-                    <div className={clsx(style["sub-container"])}>
-                        <div className={style["customer-container"]}>
-                            <div className={style.sender}>
-                                <div>
-                                    <label>Sender Name: </label>
-                                    <span>{"N/A"}</span>
-                                </div>
-
-                                <div>
-                                    <label>Sender Phone: </label>
-                                    <span>{"N/A"}</span>
-                                </div>
-                            </div>
-
-                            <div className={clsx(style.receiver)}>
-                                <div>
-                                    <label>Receiver Name: </label>
-                                    <span>{"N/A"}</span>
-                                </div>
-
-                                <div>
-                                    <label>Receiver Phone: </label>
-                                    <span>{"N/A"}</span>
-                                </div>
-                            </div>
+                    (
+                        <div id={clsx(style["no-customer"])}>
+                            There are no valid customers
                         </div>
-
-                        <div className={clsx(style["order-container"])}>
-                            <div>
-                                <label htmlFor="Weight">Weight: </label>
-                                <span>{"N/A"} kg</span>
-                            </div>
-
-                            <div>
-                                <label htmlFor="Price">Price: </label>
-                                <span>{"N/A"} $</span>
-                            </div>
-
-                            <div>
-                                <label htmlFor="Date">Date: </label>
-                                <span>{"N/A"}</span>
-                            </div>
-                        </div>
-                    </div>
+                    )
                 }
             </div>
 
             <div className={clsx(style.choosePageContainer)}>
                 {
                     pages.map((page, index) => {
-                        if(index == 0 || index == numOfPages - 1
-                        || (index >= (pageNum - 2) && index <= pageNum )) {
-                            if(index == pageNum -2 && pageNum > 3) {
+                        if (index == 0 || index == numOfPages - 1
+                            || (index >= (pageNum - 2) && index <= pageNum)) {
+                            if (index == pageNum - 2 && pageNum > 3) {
                                 return (
                                     <Fragment key={index}>
                                         <span>. . .</span>
-                                        <button className= {clsx(style.pageBtn, {[style.pageBtnActive] : index == pageNum -1})} onClick={
-                                            ()=>{
+                                        <button className={clsx(style.pageBtn, { [style.pageBtnActive]: index == pageNum - 1 })} onClick={
+                                            () => {
                                                 setPageNum(index + 1);
                                                 updateDenyRenList();
                                             }
@@ -190,8 +153,8 @@ function DenyList() {
                             else if (index == pageNum && pageNum < numOfPages - 2) {
                                 return (
                                     <Fragment key={index}>
-                                        <button className= {clsx(style.pageBtn, {[style.pageBtnActive] : index == pageNum -1})} onClick={
-                                            ()=>{
+                                        <button className={clsx(style.pageBtn, { [style.pageBtnActive]: index == pageNum - 1 })} onClick={
+                                            () => {
                                                 setPageNum(index + 1)
                                                 updateDenyRenList();
                                             }
@@ -200,15 +163,15 @@ function DenyList() {
                                     </Fragment>
                                 );
                             }
-                            else 
-                            return(
-                                <button className= {clsx(style.pageBtn, {[style.pageBtnActive] : index == pageNum -1})} key={index} onClick={
-                                    ()=>{
-                                        setPageNum(index + 1)
-                                        updateDenyRenList();
-                                    }
-                                }>{index + 1}</button>
-                            );
+                            else
+                                return (
+                                    <button className={clsx(style.pageBtn, { [style.pageBtnActive]: index == pageNum - 1 })} key={index} onClick={
+                                        () => {
+                                            setPageNum(index + 1)
+                                            updateDenyRenList();
+                                        }
+                                    }>{index + 1}</button>
+                                );
                         }
                     })
                 }

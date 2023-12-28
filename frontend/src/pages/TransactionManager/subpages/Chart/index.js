@@ -12,11 +12,12 @@ const Chart = () => {
     const navigate = useNavigate();
     const userInfo = useContext(LoginContext);
 
-    const [isFetchedDateData, setIsFetchedDateData] = useState(false);
-    const [dates, setDates] = useState([]);
+    const [isFetchedDateData, setIsFetchedDateData] = useState(false); // Check xem đã get được max date sent và received chưa
+    const [dates, setDates] = useState([]); // Mảng để lưu 7 ngày gần nhất mà điểm giao dịch gửi hoặc nhận hàng, nếu không có thì max date sẽ là ngày hiện tại
 
     const [rerender, setRerender] = useState(false);
 
+    // Lấy ra ngày lớn nhất mà điểm giao dịch gửi và nhận đơn hàng, nếU không có thì set thành ngày hiện tại, sau đó lấy max trong 2 ngày làm max date, rồi lưu 7 ngày gần nhất tính từ max date vào mảng dates
     const handleDateData = async () => {
         try {
             let maxDateSent = await axios.get("http://localhost:8080/transaction-manager/get-max-date-sent-transaction",
@@ -46,15 +47,9 @@ const Chart = () => {
                 maxDateReceived.data[0][0]["MAX(orders.date)"] = new Date();
             }
 
-            console.log(maxDateSent.data[0][0]["MAX(orders.date)"]);
-            console.log(maxDateReceived.data[0][0]["MAX(orders.date)"]);
-
             maxDateSent = new Date(maxDateSent.data[0][0]["MAX(orders.date)"]);
             maxDateReceived = new Date(maxDateReceived.data[0][0]["MAX(orders.date)"]);
-            console.log(maxDateSent);
-            console.log(maxDateReceived);
             let maxDate = max([maxDateSent, maxDateReceived]);
-            console.log(maxDate);
 
             setIsFetchedDateData(true);
 
@@ -76,6 +71,7 @@ const Chart = () => {
         handleDateData();
     }, [isFetchedDateData]);
 
+    // Đếm số lượng đơn hàng mà điểm giao dịch gửi đi theo từng ngày
     const fetchDataSentForDate = async (date) => {
         try {
             const response = await axios.get("http://localhost:8080/transaction-manager/count-order-sent-by-date"
@@ -93,6 +89,7 @@ const Chart = () => {
         }
     }
 
+    // Đếm số lượng đơn hàng mà điểm giao dịch nhận theo ngày
     const fetchDataReceivedForDate = async (date) => {
         try {
             const response = await axios.get("http://localhost:8080/transaction-manager/count-order-received-by-date"
@@ -129,19 +126,20 @@ const Chart = () => {
         // Đặt allDataReady thành true để hiển thị biểu đồ
         setAllDataReady(true);
     };
+
     useEffect(() => {
         fetchData();
     }, [dates]);
 
+    // Bấm nút back thì quay về trang transaction-manager
     const handleBack = () => {
         navigate("/transaction-manager");
     }
 
-    const [dataSent, setDataSent] = useState([]);
-    const [dataReceived, setDataReceived] = useState([]);
+    const [dataSent, setDataSent] = useState([]); // Lưu các đơn hàng mà điểm giao dịch gửi đi
+    const [dataReceived, setDataReceived] = useState([]); // Lưu các đơn hàng mà điểm giao dịch nhận
 
-    const [allDataReady, setAllDataReady] = useState(false);
-    console.log(dataReceived);
+    const [allDataReady, setAllDataReady] = useState(false); // Check xem tất cả dữ liệu đã sẵn sàng chưa để render ra chart
 
     const [chartData, setChartData] = useState({
         series: [
