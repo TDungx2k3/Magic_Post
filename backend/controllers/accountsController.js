@@ -22,21 +22,17 @@ class AccountController {
 
   showAccountByPhoneAndPassword = async (req, res) => {
     try {
-      //console.log(req);
       const data = req.body;
-      // const data = req.params;
 
       await sequelize.authenticate();
       await sequelize.sync();
-      // data.phone = '0000000000';
-      // data.password = '$2b$10$3AEdMMUzqghpbv6XHUVwFOHPsauqSnCp3/yTFc0SEbAZOSpmiIkyW';
+
       const accounts = await Account.findOne({
         where: {
           account_phone: data.phone,
         },
       });
-      //.then((accounts) => { return res.json(accounts) });
-      // return accounts.toJSON();
+
       if(accounts) {
         bcrypt.compare(data.password, accounts.account_password, (err, result) => {
           if (err) {

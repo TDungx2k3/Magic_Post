@@ -125,7 +125,8 @@ function CreateOrderPage() {
           }})
             .then(response => {
               //console.log(response.data);
-              setProvinces(response.data);
+              const sortedProvinces = response.data.sort((a, b) => a.trans_name.localeCompare(b.trans_name));
+              setProvinces(sortedProvinces);
             })
             .catch(error => {
               console.error('Error fetching provinces:', error);
