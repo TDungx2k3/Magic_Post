@@ -32,6 +32,7 @@ Transaction.belongsTo(Gathering, {
 
 class gatherTellerController {
 
+    // chuyển định dạng ngày
     formatDate = (date) => {
         const year = date.getFullYear();
         const month = String(date.getMonth() + 1).padStart(2, '0'); 
@@ -39,6 +40,8 @@ class gatherTellerController {
     
         return `${year}-${month}-${day}`;
     };
+
+    // lấy tất cả đơn chuyển đến điểm giao dịch
     getAllToTransactionOrder = async(req, res) => {
         let gId = req.query.unit;
         let validateGIdRs = Joi.string().regex(/^g\d+$/).required().validate(gId);
@@ -75,6 +78,7 @@ class gatherTellerController {
         }
     };
 
+    // lấy tất cả đơn chuyển từ điểm giao dịch đầu
     getAllFromTransactionOrder = async(req, res) => {
         let gId = req.query.unit;
         let validateGIdRs = Joi.string().regex(/^g\d+$/).required().validate(gId);
@@ -111,6 +115,7 @@ class gatherTellerController {
         }
     };
 
+    // lấy điểm tập kết đầu
     getToGatherStep3 = async(tId) => {
         try {
             await sequelize.authenticate();
@@ -128,7 +133,7 @@ class gatherTellerController {
         };
     }
 
-    //
+    // chuyển đơn đến điểm tập kết đầu
     gatherToGatherStep3 = async(req, res) => {
         let gId = req.body.unit;
         let oId = req.body.order_id;
@@ -173,6 +178,7 @@ class gatherTellerController {
         }
     };
 
+    // chuyển đơn đến điểm giao dịch đích
     gatherToTransStep5 = async(req, res) => {
         let gId = req.body.unit;
         let oId = req.body.order_id;
@@ -215,6 +221,7 @@ class gatherTellerController {
         }
     };
 
+    // xác nhận thành công đơn hàng
     confirmSuccessStep1 = async(req, res) => {
         let gId = req.body.to_unit;
         let oId = req.body.order_id;
@@ -256,6 +263,7 @@ class gatherTellerController {
         }
     };
 
+    // xác nhận đơn hàng đến thành công
     confirmSuccessStep3 = async(req, res) => {
         let gId = req.body.to_unit;
         let oId = req.body.order_id;
@@ -298,6 +306,7 @@ class gatherTellerController {
     };
 
 
+    // lấy đường đi đầu
     getPathStart = async (req, res) => {
         //let transactionId = req.query.unit;
         let transactionId = req.query.unit;
@@ -322,6 +331,7 @@ class gatherTellerController {
         };
     }
 
+    // lấy đường đi đích
     getPathEnd = async (req, res) => {
         let receiverAddress = req.query.address;
         try {
@@ -351,6 +361,7 @@ class gatherTellerController {
         };
     }
 
+    // tạo ra đơn hàng
     createOrder = async (req, res) => {
         const orderData = req.body;
         let cPhone = orderData.customer_phone;
@@ -400,6 +411,7 @@ class gatherTellerController {
         };
     };
 
+    // xử lý khi mất đơn hàng
     lostOrder = async(req, res) => {
         let dId = req.body.deliver_id;
         let oId = req.body.order_id;
@@ -439,6 +451,7 @@ class gatherTellerController {
         }
     };
 
+    // xử lý khi bị khách hàng từ chối
     customerDeny = async(req, res) => {
         let dId = req.body.deliver_id;
         let oId = req.body.order_id;
@@ -478,6 +491,7 @@ class gatherTellerController {
         }
     };
 
+    // lấy thông tin điểm tập kết
     getGatherUnit = async(req, res) => {
         let oId = req.query.order_id;
         let validateOIdRs = Joi.number().positive().required().validate(oId);

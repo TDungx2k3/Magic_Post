@@ -26,6 +26,7 @@ const bcrypt = require('bcrypt');
 // })
 
 class GatheringManagerController {
+  // tạo tài khoản nhân viên
   createAccountEmployee = async (req, res) => {
     const data = await req.body;
     Account.create({
@@ -38,6 +39,7 @@ class GatheringManagerController {
     });
   };
 
+  // lấy thông tin tất cả hân viên của đơn vị
   showAllEmployee = async (req, res) => {
     const data = req.query;
     try {
@@ -56,7 +58,7 @@ class GatheringManagerController {
     }
   }
 
-  // Chưa test
+  // Xóa tài khoản
   deleteAccountEmployee = async (req, res) => {
     let aId = req.body.account_id;
     let validateAIdRs = Joi.string().required().pattern(/^\d+$/).validate(aId);
@@ -76,6 +78,7 @@ class GatheringManagerController {
     }
   }
 
+  // cập nhật tài khoản
   updateAccountEmployee = async (req, res) => {
     const data = req.body;
     let aPhone = req.body.account_phone;
@@ -109,6 +112,7 @@ class GatheringManagerController {
     }
   };
 
+  // Lấy thông tin tài khoản theo id
   getDefaultAccountById = async (req, res) => {
     const data = req.query;
     try {
@@ -124,6 +128,7 @@ class GatheringManagerController {
     }
   }
 
+  // lấy thông tin tất cả đơn hàng gửi đi
   showAllOrdersSent = async (req, res) => {
     const unit = req.query.unit;
     try {
@@ -140,6 +145,7 @@ class GatheringManagerController {
     }
   }
 
+  // lấy thông tin tất cả đơn hàng nhận về
   showAllOrdersReceived = async (req, res) => {
     const unit = req.query.unit;
     try {
@@ -156,6 +162,7 @@ class GatheringManagerController {
     }
   }
 
+  // lấy ngày gửi gần nhất
   getMaxDateSent = async (req, res) => {
     const unit = req.query.unit;
     try {
@@ -172,6 +179,7 @@ class GatheringManagerController {
     }
   };
 
+  // lấy ngày nhận gần nhất
   getMaxDateReceived = async (req, res) => {
     const unit = req.query.unit;
     try {
@@ -188,6 +196,7 @@ class GatheringManagerController {
     }
   };
 
+  // đếm số lương đơn hàng theo ngày
   countOrderSentInADate = async (req, res) => {
     try {
       const date = req.query.date;
@@ -215,6 +224,7 @@ class GatheringManagerController {
     }
   }
 
+  // đếm số đơn nhận theo ngày của đơn vị
   countOrderReceivedInADate = async (req, res) => {
     try {
       const date = req.query.date;
@@ -244,6 +254,7 @@ class GatheringManagerController {
     }
   }
 
+  // lấy danh sách tập khách hàng từ chối nhận
   getCustomerDenyList = async (req, res) => {
     try {
       const unit = req.query.unit;
@@ -262,6 +273,7 @@ class GatheringManagerController {
     }
   }
 
+  // lấy tập đơn hàng bị mất
   getLostOrderList = async (req, res) => {
     try {
       const unit = req.query.unit;
@@ -278,6 +290,7 @@ class GatheringManagerController {
     }
   }
 
+  // tạo tài khoản
   createAccount = async (req, res) => {
     let aPhone = req.body.accountPhone;
     let mPass = req.body.accountPassword;

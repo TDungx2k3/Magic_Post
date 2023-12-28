@@ -7,6 +7,7 @@ const Joi = require('joi');
 
 
 class AccountController {
+  // Lấy tất cả nhân viên
   showAllAccounts = async (req, res) => {
     try {
       // Wait for the synchronization process to finish
@@ -21,6 +22,7 @@ class AccountController {
     }
   }
 
+  // lấy acc qua sđt và mật khẩu
   showAccountByPhoneAndPassword = async (req, res) => {
     const data = req.body;
     const phone = req.body.phone;
@@ -67,6 +69,7 @@ class AccountController {
     }
   }
 
+  // đếm số tài khoản qua số điện thoại
   async countAccountByPhoneNumber(req, res) {
     try {
       await sequelize.authenticate();
@@ -93,6 +96,7 @@ class AccountController {
     }
   };
 
+  // xóa tất cả tài khoản của điểm giao dịch
   deleteAllAccountInTransaction = async(req, res) => {
     let unit = req.body.unit;
     let validateUnitRs = Joi.string().regex(/^[gt]\d+$/).required().validate(unit);
@@ -118,6 +122,7 @@ class AccountController {
     }
   };
 
+  // xóa điểm giao dịch
   deleteTransaction = async(req, res) => {
     let tId = req.body.trans_id;
     let validateTIdRs = Joi.string().regex(/^t\d+$/).required().validate(tId);
@@ -141,6 +146,7 @@ class AccountController {
     }
   };
 
+  // xóa điểm tập kết
   deleteGather = async(req, res) => {
     let gId = req.body.gather_id;
     let validateGIdRs = Joi.string().regex(/^g\d+$/).required().validate(gId);
@@ -164,6 +170,7 @@ class AccountController {
     }
   };
 
+  // xóa tất cả tài khoản trong điểm tập kết
   deleteAllAccountInGather = async(req, res) => {
     let unit = req.body.unit;
     let validateUnitRs = Joi.string().regex(/^[gt]\d+$/).required().validate(unit);

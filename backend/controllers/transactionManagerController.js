@@ -7,6 +7,8 @@ const bcrypt = require('bcrypt');
 const Joi = require('joi');
 
 class transactionManagerController {
+
+    // tạo tào khoản nhân viên
     createAccountEmployee = async (req, res) => {
         const data = req.body;
         let aPhone = req.body.accountPhone;
@@ -43,6 +45,7 @@ class transactionManagerController {
         }
     };
 
+    // lấy tất cả đơn hàng nhận
     showAllOrderReceived = async (req, res) => {
         try {
             const data = req.query.unit
@@ -60,6 +63,7 @@ class transactionManagerController {
         }
     };
 
+    // lấy tất cả đơn hàng chuyển đi
     showAllOrderSent = async (req, res) => {
         try {
             const data = req.query.unit
@@ -77,6 +81,7 @@ class transactionManagerController {
         }
     };
 
+    // lấy ngày gần nhất
     getMaxDateSent = async (req, res) => {
         const unit = req.query.unit;
         try {
@@ -93,6 +98,7 @@ class transactionManagerController {
         }
     };
 
+    // lấy ngày nhận gần nhất
     getMaxDateReceived = async (req, res) => {
         const unit = req.query.unit;
         try {
@@ -108,6 +114,7 @@ class transactionManagerController {
         }
     };
 
+    // đếm số đơn hàng gửi trong 1 ngày
     countOrderSentInADate = async (req, res) => {
         try {
             const date = req.query.date;
@@ -135,6 +142,7 @@ class transactionManagerController {
         }
     };
 
+    // đếm số đơn hàng nhận được trong 1 ngày
     countOrderReceivedInADate = async (req, res) => {
         try {
             const date = req.query.date;
@@ -163,6 +171,7 @@ class transactionManagerController {
         }
     };
 
+    // lấy danh sách khách từ chối
     showDenyList = async (req, res) => {
         try {
             const unit = req.query.unit;
@@ -182,6 +191,7 @@ class transactionManagerController {
         }
     };
 
+    // lấy danh sách đơn hàng mất
     showLostOrderList = async (req, res) => {
         try {
             const unit = req.query.unit;
