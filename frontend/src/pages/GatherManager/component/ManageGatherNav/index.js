@@ -3,40 +3,46 @@ import style from "./ManageGatherNav.module.scss";
 import { useState } from "react";
 
 function ManageGatherNav({ onClickManageAccountEmployee, onClickStatisticOrdersSent, onClickStatisticOrdersReceived }) {
+    // Hàm này để handle xem có click vào ManageAccountEmployee không, nếu bấm vào thì sẽ render ra component ManageAccountEmployee
     const handleManageAccountEmployeeClick = () => {
         if (onClickManageAccountEmployee) {
             onClickManageAccountEmployee();
         }
     };
 
+    // Hàm này để handle xem có click vào StatisticOrdersSent không, nếu bấm vào thì sẽ render ra component StatisticOrdersSent
     const handleStatisticOrdersSentClick = () => {
         if (onClickStatisticOrdersSent) {
             onClickStatisticOrdersSent();
         }
     }
 
+    // Hàm này để handle xem có click vào StatisticOrdersReceived không, nếu bấm vào thì sẽ render ra component StatisticOrdersReceived
     const handleStatisticOrdersReceivedClick = () => {
         if (onClickStatisticOrdersReceived) {
             onClickStatisticOrdersReceived();
         }
     }
 
-    const [isClickManageAccountEmployee, setIsClickManageAccountEmpoyee] = useState(true);
-    const [isClickStatisticOrdersSent, setIsClickStatisticOrdersSent] = useState(false);
-    const [isClickStatisticOrdersReceived, setIsClickStatisticOrdersReceived] = useState(false);
+    const [isClickManageAccountEmployee, setIsClickManageAccountEmpoyee] = useState(true); // Để kiểm tra xem có click vào ManageAccountEmployee
+    const [isClickStatisticOrdersSent, setIsClickStatisticOrdersSent] = useState(false); // Để kiểm tra xem có click vào StatisticOrdersSent
+    const [isClickStatisticOrdersReceived, setIsClickStatisticOrdersReceived] = useState(false); // Để kiểm tra xem có click vào StatisticOrdersReceived
 
+    // Khi bấm vào ManageAccountEmployee thì set ClickManageAccountEmployee thành true và 2 cái còn lại thành false
     const handleIsClickManageAccountEmployee = () => {
         setIsClickManageAccountEmpoyee(true);
         setIsClickStatisticOrdersSent(false);
         setIsClickStatisticOrdersReceived(false);
     }
 
+    // Khi bấm vào StatisticOrdersSent thì set StatisticOrdersSent thành true và 2 cái còn lại thành false
     const handleIsClickStatisticOrdersSent = () => {
         setIsClickStatisticOrdersSent(true);
         setIsClickManageAccountEmpoyee(false);
         setIsClickStatisticOrdersReceived(false);
     }
 
+    // Khi bấm vào StatisticOrdersReceived thì set StatisticOrdersReceived thành true và 2 cái còn lại thành false
     const handleIsClickStatisticOrdersReceived = () => {
         setIsClickStatisticOrdersReceived(true);
         setIsClickStatisticOrdersSent(false);

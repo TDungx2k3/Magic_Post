@@ -11,9 +11,9 @@ function LostOrderListTransaction() {
     const navigate = useNavigate();
     const userInfo = useContext(LoginContext)
 
-    const [lostOrderRenList, setLostOrderRenList] = useState([]);
-    const [lostOrderList, setLostOrderList] = useState([]);
-    const [isFetchedData, setIsFetchedData] = useState(false);
+    const [lostOrderRenList, setLostOrderRenList] = useState([]); // Lưu danh sách order sẽ render ở trang thứ i
+    const [lostOrderList, setLostOrderList] = useState([]); // Lưu danh sách tất cả các order bị mất
+    const [isFetchedData, setIsFetchedData] = useState(false); // Check xem đã get được danh sách order bị mất từ database chưa
 
     const maxItemsInOnePage = 5;
     let cnt = lostOrderList.length;
@@ -21,6 +21,7 @@ function LostOrderListTransaction() {
     const [pageNum, setPageNum] = useState(0);
     const [pages, setPages] = useState([]);
     
+    // Lưu các trang vào mảng pages
     const updatePages = () => {
         let tmpPages = [];
         for(let i = 0; i < numOfPages; i++) {
@@ -29,12 +30,14 @@ function LostOrderListTransaction() {
         setPages(tmpPages);
     }
 
+    // Lưu danh sách các order bị mất sẽ được render vào mảng lostOrderRenList
     const updateRenList = () => {
         let tmpList = lostOrderList.slice(maxItemsInOnePage*(pageNum - 1), pageNum*maxItemsInOnePage);
         // console.log(denyList.slice(pageNum));
         setLostOrderRenList(tmpList);
     }
 
+    // Get danh sách tất cả các order bị mất
     const getLostOrderList = async () => {
         try {
             const lostOrderList = await axios.get("http://localhost:8080/transaction-manager/get-lost-order-list",
@@ -57,6 +60,7 @@ function LostOrderListTransaction() {
         updatePages();
     }, [pageNum, lostOrderList])
 
+    // Bấm nút back để quay về trang transaction-manager
     const handleBack = () => {
         navigate("/transaction-manager");
     }
@@ -73,24 +77,24 @@ function LostOrderListTransaction() {
                                 <div className={style.sender}>
                                     <div>
                                         <label>Sender Name: </label>
-                                        <span>{lostOrderList.customer_name || "N/A"}</span>
+                                        <span>{lostOrderList.customer_name}</span>
                                     </div>
 
                                     <div>
                                         <label>Sender Phone: </label>
-                                        <span>{lostOrderList.customer_phone || "N/A"}</span>
+                                        <span>{lostOrderList.customer_phone}</span>
                                     </div>
                                 </div>
 
                                 <div className={clsx(style.receiver)}>
                                     <div>
                                         <label>Receiver Name: </label>
-                                        <span>{lostOrderList.receiver_name || "N/A"}</span>
+                                        <span>{lostOrderList.receiver_name}</span>
                                     </div>
 
                                     <div>
                                         <label>Receiver Phone: </label>
-                                        <span>{lostOrderList.receiver_phone || "N/A"}</span>
+                                        <span>{lostOrderList.receiver_phone}</span>
                                     </div>
                                 </div>
                             </div>
@@ -98,66 +102,27 @@ function LostOrderListTransaction() {
                             <div className={clsx(style["order-container"])}>
                                 <div>
                                     <label htmlFor="Weight">Weight: </label>
-                                    <span>{lostOrderList.weight || "N/A"} kg</span>
+                                    <span>{lostOrderList.weight} kg</span>
                                 </div>
 
                                 <div>
                                     <label htmlFor="Price">Price: </label>
-                                    <span>{lostOrderList.price || "N/A"} $</span>
+                                    <span>{lostOrderList.price} VND</span>
                                 </div>
 
                                 <div>
                                     <label htmlFor="Date">Date: </label>
-                                    <span>{lostOrderList.date || "N/A"}</span>
+                                    <span>{lostOrderList.date}</span>
                                 </div>
                             </div>
                         </div>
                     )
                     )) :
-                    <div className={clsx(style["sub-container"])}>
-                        <div className={style["customer-container"]}>
-                            <div className={style.sender}>
-                                <div>
-                                    <label>Sender Name: </label>
-                                    <span>{"N/A"}</span>
-                                </div>
-
-                                <div>
-                                    <label>Sender Phone: </label>
-                                    <span>{"N/A"}</span>
-                                </div>
-                            </div>
-
-                            <div className={clsx(style.receiver)}>
-                                <div>
-                                    <label>Receiver Name: </label>
-                                    <span>{"N/A"}</span>
-                                </div>
-
-                                <div>
-                                    <label>Receiver Phone: </label>
-                                    <span>{"N/A"}</span>
-                                </div>
-                            </div>
+                    (
+                        <div id={clsx(style["no-order"])}>
+                            There are no valid orders
                         </div>
-
-                        <div className={clsx(style["order-container"])}>
-                            <div>
-                                <label htmlFor="Weight">Weight: </label>
-                                <span>{"N/A"} kg</span>
-                            </div>
-
-                            <div>
-                                <label htmlFor="Price">Price: </label>
-                                <span>{"N/A"} $</span>
-                            </div>
-
-                            <div>
-                                <label htmlFor="Date">Date: </label>
-                                <span>{"N/A"}</span>
-                            </div>
-                        </div>
-                    </div>
+                    )
                 }
             </div>
 

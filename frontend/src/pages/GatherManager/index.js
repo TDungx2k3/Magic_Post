@@ -11,10 +11,11 @@ import { useState } from "react";
 import { Link } from "react-router-dom";
 
 function GatherManager() {
-    const [isClickManageAccountEmployee, setIsClickManageAccountEmployee] = useState(true);
-    const [isClickStatisticOrdersSent, setIsClickStatisticOrdersSent] = useState(false);
-    const [isClickStatisticOrdersReceived, setIsClickStatisticOrdersReceived] = useState(false);
+    const [isClickManageAccountEmployee, setIsClickManageAccountEmployee] = useState(true); // Check xem bấm vào nav ManageAccountEmployee không, default là true để khi vào trang lần đầu sẽ hiển thị nav này
+    const [isClickStatisticOrdersSent, setIsClickStatisticOrdersSent] = useState(false); // Check xem bấm vào nav StatisticOrdersSent không
+    const [isClickStatisticOrdersReceived, setIsClickStatisticOrdersReceived] = useState(false); // Check xem bấm vào nav StatisticOrdersReceived không
 
+    // Handle click vào nav ManageAccountEmployee, nếu bấm vào thì sẽ set 2 nav kia thành false
     const handleIsClickManageAccountEmployee = () => {
         setIsClickManageAccountEmployee(true);
         if (isClickStatisticOrdersSent === true) {
@@ -25,6 +26,7 @@ function GatherManager() {
         }
     };
 
+    // Handle click vào nav StatisticOrdersSent, nếu bấm vào thì sẽ set 2 nav kia thành false
     const handleIsClickStatisticOrdersSent = () => {
         setIsClickStatisticOrdersSent(true);
         if (isClickManageAccountEmployee === true) {
@@ -35,6 +37,7 @@ function GatherManager() {
         }
     }
 
+    // Handle click vào nav StatisticOrdersReceived, nếu bấm vào thì sẽ set 2 nav kia thành false
     const handleIsClickStatisticOrdersReceived = () => {
         setIsClickStatisticOrdersReceived(true);
         if (isClickManageAccountEmployee === true) {

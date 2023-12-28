@@ -11,9 +11,9 @@ function CustomerDenyList() {
     const navigate = useNavigate();
     const userInfo = useContext(LoginContext);
 
-    const [denyList, setDenyList] = useState([]);
-    const [denyRenList, setDenyRenList] = useState([]);
-    const [isFetchedData, setIsFetchedData] = useState(false);
+    const [denyList, setDenyList] = useState([]); // Lưu danh sách các khách hàng từ chối nhận hàng
+    const [denyRenList, setDenyRenList] = useState([]); // Lưu danh sách các khách hàng từ chối nhận hàng trong trang thứ i
+    const [isFetchedData, setIsFetchedData] = useState(false); // Check xem đã get được dữ liệu khách hàng deny từ data base chưa
 
     const maxItemsInOnePage = 5;
     let cnt = denyList.length;
@@ -21,6 +21,7 @@ function CustomerDenyList() {
     const [pageNum, setPageNum] = useState(0);
     const [pages, setPages] = useState([]);
     
+    // Set các trang vào mảng pages
     const updatePages = () => {
         let tmpPages = [];
         for(let i = 0; i < numOfPages; i++) {
@@ -29,11 +30,13 @@ function CustomerDenyList() {
         setPages(tmpPages);
     };
 
+    // Cập nhật danh sách các khách từ chối nhận hàng trong trang thứ i
     const updateDenyRenList = () => {
         let tmpDenyList = denyList.slice(maxItemsInOnePage*(pageNum - 1), pageNum*maxItemsInOnePage);
         setDenyRenList(tmpDenyList);
     }
 
+    // Get danh sách các khách hàng từ chối nhận hàng
     const getDenyList = async () => {
         try {
             const denyOList = await axios.get("http://localhost:8080/gathering-manager/get-customer-deny-list",
@@ -60,6 +63,7 @@ function CustomerDenyList() {
         updatePages();
     }, [pageNum, denyList])
 
+    // Bấm nút back thì chuyển về trang gather-manager
     const handleBack = () => {
         navigate("/gather-manager");
     }
@@ -76,24 +80,24 @@ function CustomerDenyList() {
                                 <div className={style.sender}>
                                     <div>
                                         <label>Sender Name: </label>
-                                        <span>{denyRenList.customer_name || "N/A"}</span>
+                                        <span>{denyRenList.customer_name}</span>
                                     </div>
 
                                     <div>
                                         <label>Sender Phone: </label>
-                                        <span>{denyRenList.customer_phone || "N/A"}</span>
+                                        <span>{denyRenList.customer_phone}</span>
                                     </div>
                                 </div>
 
                                 <div className={clsx(style.receiver)}>
                                     <div>
                                         <label>Receiver Name: </label>
-                                        <span>{denyRenList.receiver_name || "N/A"}</span>
+                                        <span>{denyRenList.receiver_name}</span>
                                     </div>
 
                                     <div>
                                         <label>Receiver Phone: </label>
-                                        <span>{denyRenList.receiver_phone || "N/A"}</span>
+                                        <span>{denyRenList.receiver_phone}</span>
                                     </div>
                                 </div>
                             </div>
@@ -101,66 +105,25 @@ function CustomerDenyList() {
                             <div className={clsx(style["order-container"])}>
                                 <div>
                                     <label htmlFor="Weight">Weight: </label>
-                                    <span>{denyRenList.weight || "N/A"} kg</span>
+                                    <span>{denyRenList.weight} kg</span>
                                 </div>
 
                                 <div>
                                     <label htmlFor="Price">Price: </label>
-                                    <span>{denyRenList.price || "N/A"} $</span>
+                                    <span>{denyRenList.price} VND</span>
                                 </div>
 
                                 <div>
                                     <label htmlFor="Date">Date: </label>
-                                    <span>{denyRenList.date || "N/A"}</span>
+                                    <span>{denyRenList.date}</span>
                                 </div>
                             </div>
                         </div>
                     )
                     )) :
-                    <div className={clsx(style["sub-container"])}>
-                        <div className={style["customer-container"]}>
-                            <div className={style.sender}>
-                                <div>
-                                    <label>Sender Name: </label>
-                                    <span>{"N/A"}</span>
-                                </div>
-
-                                <div>
-                                    <label>Sender Phone: </label>
-                                    <span>{"N/A"}</span>
-                                </div>
-                            </div>
-
-                            <div className={clsx(style.receiver)}>
-                                <div>
-                                    <label>Receiver Name: </label>
-                                    <span>{"N/A"}</span>
-                                </div>
-
-                                <div>
-                                    <label>Receiver Phone: </label>
-                                    <span>{"N/A"}</span>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div className={clsx(style["order-container"])}>
-                            <div>
-                                <label htmlFor="Weight">Weight: </label>
-                                <span>{"N/A"} kg</span>
-                            </div>
-
-                            <div>
-                                <label htmlFor="Price">Price: </label>
-                                <span>{"N/A"} $</span>
-                            </div>
-
-                            <div>
-                                <label htmlFor="Date">Date: </label>
-                                <span>{"N/A"}</span>
-                            </div>
-                        </div>
-                    </div>
+                    (
+                        <div id={clsx(style["no-account"])}>There are no valid accounts</div>
+                    )
                 }
             </div>
 

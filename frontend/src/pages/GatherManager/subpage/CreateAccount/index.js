@@ -13,18 +13,20 @@ function TransactionManagerFormCreateAccount(props) {
 
     const navigate = useNavigate();
 
+    // Lưu các thông tin trong các input
     const [inputs, setInputs] = useState({
         accountName: "",
         accountPhone: "",
         accountPassword: "",
     });
 
-    const [errorForName, setErrorForName] = useState(false);
-    const [errorForPhone, setErrorForPhone] = useState(false);
-    const [errorForPassword, setErrorForPassword] = useState(false);
+    const [errorForName, setErrorForName] = useState(false); // Handle error cho name
+    const [errorForPhone, setErrorForPhone] = useState(false); // Handle error cho phone
+    const [errorForPassword, setErrorForPassword] = useState(false); // Handle error cho password
 
     const [isClickAddAccount, setIsClickAddAccount] = useState(false);
 
+    // Handle xem đã click vào tạo tài khoản chưa
     const handleIsClickAddAccount = async () => {
         setIsClickAddAccount(true);
         handleErrorForName();
@@ -35,6 +37,7 @@ function TransactionManagerFormCreateAccount(props) {
         }
     };
 
+    // Handle error cho name, check nếu input name rỗng thì sẽ hiển thị ra error cho name
     const handleErrorForName = () => {
         if (inputs.accountName === "") {
             setErrorForName(true);
@@ -43,6 +46,7 @@ function TransactionManagerFormCreateAccount(props) {
         }
     };
 
+    // Handle error cho phone, check nếu input phone không đúng định dạng là 10 số hoặc rỗng hoặc không bắt đầu bằng số 0 thì sẽ hiển thị ra error cho phone
     const handleErrorForPhone = () => {
         const phonePattern = /^\d{10}$/;
 
@@ -53,6 +57,7 @@ function TransactionManagerFormCreateAccount(props) {
         }
     };
 
+    // Handle error cho password, check nếu input password rỗng hoặc có độ dài < 6 thì hiển thị ra error cho password
     const handleErrorForPassword = () => {
         if (inputs.accountPassword === "" || inputs.accountPassword.length < 6) {
             setErrorForPassword(true);
@@ -61,6 +66,7 @@ function TransactionManagerFormCreateAccount(props) {
         }
     };
 
+    // Để lấy được giá trị tại các ô input
     const handleChange = (e) => {
         setInputs((prev) => {
             return {
@@ -70,17 +76,20 @@ function TransactionManagerFormCreateAccount(props) {
         });
     };
 
-    const [alertVisible, setAlertVisible] = useState(false);
-    const [checkIsSuccess, setCheckIsSuccess] = useState(true);
+    const [alertVisible, setAlertVisible] = useState(false); // Handle việc ẩn hiện của alert
+    const [checkIsSuccess, setCheckIsSuccess] = useState(true); // Handle việc hiển thị alert thành công hay thất bại
 
+    // Handle form submit
     const handleGetData = async () => {
         try {
+            // Đếm tài khoản mà có số điện thoại là số điện thoại theo input không
             const response = await axios.get("http://localhost:8080/account/countAccountByPhoneNumber", {
                 params: {
                     phone: inputs.accountPhone
                 }
             });
 
+            // Nếu response bên trên trả về là "Phone number exists" và các error là true thì sẽ hiển thị ra alert
             if (response.data.message === "Phone number exists" && errorForName === false && errorForPhone === false && errorForPassword === false) {
                 setCheckIsSuccess(false);
                 setAlertVisible(true);
@@ -88,7 +97,7 @@ function TransactionManagerFormCreateAccount(props) {
                 setTimeout(() => {
                     setAlertVisible(false);
                 }, 1500);
-                // alert("Phone number already exists");
+
                 setInputs((prevInputs) => {
                     return {
                         ...prevInputs,
@@ -101,6 +110,7 @@ function TransactionManagerFormCreateAccount(props) {
                 document.getElementsByName("accountPhone")[0].value = "";
                 document.getElementsByName("accountPassword")[0].value = "";
             } else {
+                // Nếu response là "Phone number does not exist" và các error là false thì sẽ alert thành công"
                 if (response.data.message === "Phone number does not exist" && inputs.accountName !== "" && inputs.accountPhone !== "" && inputs.accountPassword !== "") {
                     await axios.post("http://localhost:8080/gathering-manager/create-account-for-employee", { ...inputs, unit: userInfo.uUnit });
                     setCheckIsSuccess(true);
@@ -109,7 +119,7 @@ function TransactionManagerFormCreateAccount(props) {
                     setTimeout(() => {
                         setAlertVisible(false);
                     }, 1500);
-                    // alert("Create Successfully");
+
                     setInputs((prevInputs) => {
                         return {
                             ...prevInputs,
@@ -121,7 +131,6 @@ function TransactionManagerFormCreateAccount(props) {
                     document.getElementsByName("accountName")[0].value = "";
                     document.getElementsByName("accountPhone")[0].value = "";
                     document.getElementsByName("accountPassword")[0].value = "";
-                    // setCheckIsCreateSuccess(true);
                 }
             }
         }
@@ -130,12 +139,14 @@ function TransactionManagerFormCreateAccount(props) {
         }
     }
 
+    // Bấm enter = bấm Add Account
     const handleEnterKey = (event) => {
         if (event.key === "Enter") {
             handleIsClickAddAccount();
         }
     };
 
+    // Bấm back thì navigate về trang gather-manager
     const handleClickBackButton = () => {
         navigate("/gather-manager");
     }

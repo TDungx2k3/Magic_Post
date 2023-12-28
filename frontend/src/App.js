@@ -124,13 +124,6 @@ function App() {
     } 
   }, []);
 
-  // useEffect(() => {
-  //   localStorage.setItem('isLogin', JSON.stringify(isLogin));
-  //   localStorage.setItem('userInfo', JSON.stringify(userInfo));
-  //   console.log(isLogin);
-  //   console.log(userInfo);
-  // }, [isLogin, userInfo]);
-
   return (
     <LoginContext.Provider value={{isLogin, setIsLogin, userInfo, setUserInfo}}>
       <div className="App">
