@@ -10,6 +10,7 @@ function Gather(props) {
     const [confirmHidden, setConfirmHidden] = useState(true);
     const [isHide, setIsHide] = useState(true);
 
+    // Xóa tất cả tài khoản nhân viên thuộc về gather này
     const deleteAllAccountInGather = async() => {
         try {
             await axios.post("http://localhost:8080/account/deleteAllAccountInTransaction",
@@ -22,6 +23,7 @@ function Gather(props) {
         }
     };
 
+    // Xóa điểm tập kết
     const deleteGather = async() => {
         try {
             await axios.post("http://localhost:8080/account/deleteGather",

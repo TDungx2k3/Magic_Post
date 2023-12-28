@@ -15,6 +15,7 @@ function Leader() {
     const storedIsLogin = JSON.parse(localStorage.getItem('isLogin'));
     const storedUserInfo = JSON.parse(localStorage.getItem('userInfo'));
 
+    // Check user có phải là leader hay không
     let cnt = 0;
     useEffect(() => {
         if ((!storedIsLogin

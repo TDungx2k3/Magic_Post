@@ -8,6 +8,7 @@ import jsQR, { QRCodeReader } from 'jsqr';
 import QRCode from "qrcode.react";
 
 function CustomerQR() {
+  // Xử lý thông tin chi tiết đơn hàng
   const [orderIdCode, setOrderIdCode] = useState("");
   const [result, setResult] = useState('');
   const [delivery, setDelivery] = useState('');
@@ -192,13 +193,11 @@ function CustomerQR() {
   // search text code
   const handleSubmit = (e) => {
     e.preventDefault();
-    //setResult('');
-    // Xử lý dữ liệu ở đây, ví dụ: gửi dữ liệu đến server
-    //console.log("User entered:",  orderIdCode);
     fetchOrderData();
     clearInputQRField();
   };
 
+  // fetch order data
   const fetchOrderData = async () => {
     try {
       await axios

@@ -9,8 +9,8 @@ function TransactionList(props) {
     const navigate = useNavigate();
     const maxItemsInOnePage = 5;
     let transactionList = props.data;
-    // console.log(typeof(transactionList));
-    // console.log(transactionList);
+
+    // Sắp xếp các điểm giao dịch theo bảng chữ cái
     transactionList.sort((a, b) => {
         const nameA = a.trans_name.toUpperCase();
         const nameB = b.trans_name.toUpperCase();
@@ -23,8 +23,8 @@ function TransactionList(props) {
             return 0;
         }
     });
-    // console.log(transactionList);
-    // console.log(transactionList);
+
+    // Phân trang
     let cnt = transactionList.length;
     let numOfPages = Math.ceil(cnt / maxItemsInOnePage);
     const [pageNum, setPageNum] = useState(1);

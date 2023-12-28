@@ -19,7 +19,7 @@ function APIDev() {
             </div>
 
             <div className={clsx(style.info)}>
-                <h2>Backend Framework: Node.js với Express</h2>
+                <h2>Backend Framework: Node.js with Express</h2>
                 <p>
                 NodeJS is a platform built on “V8 Javascript engine” written in c++ and Javascript. This platform was developed by Ryan Lienhart Dahl in 2009.
                 </p>

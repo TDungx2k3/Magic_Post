@@ -7,7 +7,8 @@ import axios from "axios";
 function Transaction(props) {
 
     const navigate = useNavigate();
-    // console.log(props.data.transactionId);
+
+    // Xóa tất cả tài khoản nhân viên thuộc về transaction này
     const deleteAllAccountInTransaction = async() => {
         try {
             await axios.post("http://localhost:8080/account/deleteAllAccountInTransaction",
@@ -20,6 +21,7 @@ function Transaction(props) {
         }
     };
 
+    // Xóa điểm giao dịch
     const deleteTransaction = async() => {
         try {
             await axios.post("http://localhost:8080/account/deleteTransaction",

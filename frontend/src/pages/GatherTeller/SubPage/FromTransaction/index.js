@@ -14,6 +14,8 @@ function FromCustomer() {
     const storedUserInfo = JSON.parse(localStorage.getItem('userInfo'));
     
     let cnt = 0;
+
+    // Lấy thông tin đăng nhập, check nếu user là nhân viên điểm giao dịch
     useEffect(() => {
         if((!storedIsLogin 
             || nowTime - storedOutTime > 3600000 

@@ -34,6 +34,7 @@ function ManageGather() {
         }
     );
 
+    // Lấy thông tin điểm tập kết
     const getGatherInfo = async(e) => {
         try {
             await axios
@@ -53,6 +54,7 @@ function ManageGather() {
         }
     }
 
+    // Lấy tất cả điểm giao dịch theo điểm tập kết
     const getAllTransactionsWithGatherId = async(e) => {
         try {
             await axios
@@ -72,6 +74,7 @@ function ManageGather() {
         }
     };
 
+    // Lấy tất cả tài khoản theo đơn vị
     const getAllEmployees = async(e) => {
         try {
             await axios
@@ -90,6 +93,8 @@ function ManageGather() {
             console.log(error);
         }
     }
+
+    // Check nếu user là leader hay không
     let cnt = 0;
     useEffect(() => {
         getGatherInfo();
@@ -122,6 +127,7 @@ function ManageGather() {
 
     const [rerenderChart, setRerenderChart] = useState(false);
 
+    // Lấy thông tin ngày tháng
     const handleDateData = async () => {
         try {
             let maxDateSent = await axios.get("http://localhost:8080/gathering-manager/get-max-date-sent-gather",
@@ -174,6 +180,7 @@ function ManageGather() {
         handleDateData();
     }, [isFetchedDateData]);
 
+    // Lấy data gửi theo ngày
     const fetchDataSentForDate = async (date) => {
         // console.log(storedUserInfo.uUnit);
         try {
@@ -194,6 +201,7 @@ function ManageGather() {
         }
     }
 
+    // Lấy data nhận được theo ngày
     const fetchDataReceivedForDate = async (date) => {
         try {
             const response = await axios.get("http://localhost:8080/gathering-manager/get-quantity-orders-received-in-a-date"
@@ -237,6 +245,7 @@ function ManageGather() {
 
     const [allDataReady, setAllDataReady] = useState(false);
 
+    // Tạo Chart 
     const [chartData, setChartData] = useState({
         series: [
             { name: 'Quantity Orders Sent', data: ['', '', '', '', '', '', ''] },
@@ -283,6 +292,7 @@ function ManageGather() {
         }
     });
 
+    // Cập nhật dữ liệu cho Chart
     useEffect(() => {
         // Chỉ chạy khi tất cả data đã sẵn sàng
         if (allDataReady) {

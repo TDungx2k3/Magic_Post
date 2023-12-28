@@ -9,9 +9,9 @@ export const OrderListStatusContext = createContext();
 function OrderList(props) {
     
     const [re, setRe] = useState(true);
-    const [allOrdersList, setAllOrdersList] = useState([]);
-    const [orderList, setOrderList] = useState([]);
-    const [status, setStatus] = useState(-1);
+    const [allOrdersList, setAllOrdersList] = useState([]); // Tập tất cả các order liên quan đến gather
+    const [orderList, setOrderList] = useState([]); // Tập các order hiển thị ra
+    const [status, setStatus] = useState(-1); // Điều hướng navigation
     const [rerender] = useState(true);
     const unit = props.data.unit;
     const isTo = props.data.status;
@@ -22,6 +22,7 @@ function OrderList(props) {
     const [pageNum, setPageNum] = useState(1);
     const [pages, setPages] = useState([]);
     
+    // Cập nhật phân trang
     const updatePages = () => {
         let tmpPages = [];
         for(let i = 0; i < numOfPages; i++) {
@@ -30,6 +31,7 @@ function OrderList(props) {
         setPages(tmpPages);
     }
 
+    // Format Date
     function Date(date) {
         const year = date.getFullYear();
         const month = String(date.getMonth() + 1).padStart(2, '0');
@@ -38,6 +40,7 @@ function OrderList(props) {
         return `${year}-${month}-${day}`;
     };
 
+    // Lấy tất cả đơn hàng đến hoặc đi khỏi điểm giao dịch
     const getAllOrders = async() => {
         if(isTo) {
             try {
@@ -78,6 +81,7 @@ function OrderList(props) {
         }
     }
 
+    // Update những order hiện thị ra khi chọn trang khác
     const updateOrderList = () => {
         if (isTo) {
             if(status === 0) {
@@ -158,6 +162,7 @@ function OrderList(props) {
         }
     };
 
+    // Tìm kiếm đơn hàng theo ID hoặc customer's phone
     const handleSearch = () => {
         let oIdInp = document.querySelector("." + style.searchID).value;
         let phoneInp = document.querySelector("." + style.searchPhone).value;
@@ -192,16 +197,19 @@ function OrderList(props) {
         // setRe(!re);
     }
 
+    // Cập nhật order list
     useEffect(() => {
         getAllOrders();
         updateOrderList();
     }, [rerender]);
 
+    // Cập nhật order list theo từng trang
     useEffect(() => {
         
         updateOrderList();
     }, [status]);
 
+    // Update frontend biến mất order khi bấm vào lost order
     const updateFrLost = (id) => {
         let tmp = allOrdersList;
         const storedUserInfo = JSON.parse(localStorage.getItem('userInfo'));
@@ -216,6 +224,7 @@ function OrderList(props) {
         setRe(!re);
     }
 
+    // Update frontend biến mất order khi bấm vào move hoặc confirm
     const updateFr = (id) => {
         console.log(id);
         let tmp = allOrdersList;
@@ -233,6 +242,7 @@ function OrderList(props) {
     }
 
 
+    // Cập nhật order list
     useEffect(() => {
         // console.log(1);
         updateOrderList();

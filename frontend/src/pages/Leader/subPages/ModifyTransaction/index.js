@@ -7,6 +7,7 @@ import { LoginContext } from "../../../../App";
 
 function ModifyTransaction() {
 
+    // Lưu thông tin đăng nhập
     const navigate = useNavigate();
     const location = useLocation();
     let nowTime = new Date();
@@ -16,6 +17,7 @@ function ModifyTransaction() {
     
     const transId = new URLSearchParams(location.search).get("trans_id");
     
+    // Xử lý lỗi
     const [rerender] = useState(true);
     const [options, setOptions] = useState(1);
     const [transNameErr, setTransNameErr] = useState("");
@@ -23,6 +25,7 @@ function ModifyTransaction() {
     const [managerPhoneErr, setManagerPhoneErr] = useState("");
     const [newPasswordErr, setNewPasswordErr] = useState("");
 
+    // Lưu thông tin điểm giao dịch
     const [transInfo, setTransInfo] = useState(
         {
             account_id: "",
@@ -33,6 +36,7 @@ function ModifyTransaction() {
         }
     );
 
+    // Lấy thông tin điểm giao dịch
     const getTransData = async(e) => {
         try {
             await axios
@@ -52,6 +56,7 @@ function ModifyTransaction() {
         }
     };
 
+    // Chuẩn hóa tên điểm giao dịch
     const transNameNormalize = (name) => {
         
         const tenChuanHoa = name.replace(/\s+/g, " ").trim();
@@ -59,6 +64,7 @@ function ModifyTransaction() {
         return tenChuanHoa.charAt(0).toUpperCase() + tenChuanHoa.slice(1);
     };
 
+    // Check tên điểm giao dịch
     const checkTransName = () => {
         let tName = document.querySelector("." + style.transNameContainer + " input").value;
         // console.log(gName);
@@ -70,6 +76,7 @@ function ModifyTransaction() {
         }
     };
 
+    // Chuẩn hóa tên người quản lý điểm giao dịch
     const managerNameNormalize = (name) => {
         // Chia tách tên thành các từ
         name = name.replace(/\s+/g, " ").trim();
@@ -88,6 +95,7 @@ function ModifyTransaction() {
         return rs;
     };
 
+    // Check tên người quản lý
     const checkManagerName = () => {
         let mName = document.querySelector("." + style.nameContainer + " input").value;
         // console.log(gName);
@@ -99,6 +107,7 @@ function ModifyTransaction() {
         }
     };
 
+    // Check số điện thoại
     const checkManagerPhone = () => {
         let mPhone = document.querySelector("." + style.phoneContainer + " input").value;
         // console.log(gName);
@@ -111,6 +120,7 @@ function ModifyTransaction() {
         }
     };
 
+    // Check password
     const checkNewPassword = () => {
         let newPwd = document.querySelector("." + style.newPasswordContainer + " input").value;
         if(!(newPwd === "")) {
@@ -123,6 +133,7 @@ function ModifyTransaction() {
         }
     };
 
+    // Cập nhật thông tin điểm giao dịch
     const updateTrans = async(tName) => {
         try {
             await axios.post("http://localhost:8080/leader/updateTransaction",
@@ -136,6 +147,7 @@ function ModifyTransaction() {
         }
     };
 
+    // Cập nhật thông tin người quản lý
     const updateManager = async(mName, mPhone) => {
         try {
             await axios.post("http://localhost:8080/leader/updateManager",
@@ -150,6 +162,7 @@ function ModifyTransaction() {
         }
     }
 
+    // Cập nhật password
     const updateManagerPassword = async(newPwd) => {
         try {
             await axios.post("http://localhost:8080/leader/updateManagerPassword",
@@ -163,6 +176,7 @@ function ModifyTransaction() {
         }
     }
 
+    // Đếm số lượng tài khoản theo số điện thoại
     const checkCntPhone = async(e) => {
         try {
             const res = await axios.get("http://localhost:8080/leader/getCntPhone",
@@ -178,7 +192,7 @@ function ModifyTransaction() {
         }
     }
 
-
+    // Xử lý sửa thông tin điểm giao dịch
     const handleSubmit = async(e) => {
         let tName = document.querySelector("." + style.transNameContainer + " input").value;
         let mName = document.querySelector("." + style.nameContainer + " input").value;

@@ -34,6 +34,7 @@ function ManageTransaction() {
         }
     );
 
+    // Lấy thông tin điểm giao dịch
     const getTransInfo = async(e) => {
         try {
             await axios
@@ -53,6 +54,7 @@ function ManageTransaction() {
         }
     }
 
+    // Lấy thông tin tất cả tài khoản
     const getAllEmployees = async(e) => {
         try {
             await axios
@@ -71,6 +73,8 @@ function ManageTransaction() {
             console.log(error);
         }
     }
+
+    // Check user có phải là leader hay không
     let cnt = 0;
     useEffect(() => {
         getTransInfo();
@@ -104,6 +108,7 @@ function ManageTransaction() {
 
     const [rerenderInChart, setRerenderInChart] = useState(false);
 
+    // Xử lý ngày
     const handleDateData = async () => {
         try {
             let maxDateSent = await axios.get("http://localhost:8080/transaction-manager/get-max-date-sent-transaction",
@@ -159,10 +164,12 @@ function ManageTransaction() {
         }
     }
 
+    // Gọi hàm xử lý ngày
     useEffect(() => {
         handleDateData();
     }, [isFetchedDateData]);
 
+    // Fetch thông tin đơn hàng gửi theo ngày
     const fetchDataSentForDate = async (date) => {
         try {
             const response = await axios.get("http://localhost:8080/transaction-manager/count-order-sent-by-date"
@@ -180,6 +187,7 @@ function ManageTransaction() {
         }
     }
 
+    // Fetch thông tin đơn hàng nhận theo ngày
     const fetchDataReceivedForDate = async (date) => {
         try {
             const response = await axios.get("http://localhost:8080/transaction-manager/count-order-received-by-date"
@@ -230,6 +238,7 @@ function ManageTransaction() {
     const [allDataReady, setAllDataReady] = useState(false);
     console.log(dataReceived);
 
+    // Tạo Chart
     const [chartData, setChartData] = useState({
         series: [
             { name: 'Quantity Orders Sent', data: ['', '', '', '', '', '', ''] },
@@ -276,6 +285,7 @@ function ManageTransaction() {
         }
     });
 
+    // Cập nhật thông tin cho Chart
     useEffect(() => {
         // Chỉ chạy khi tất cả data đã sẵn sàng
         if (allDataReady) {
