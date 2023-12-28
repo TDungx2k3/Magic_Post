@@ -32,7 +32,7 @@ class transactionManagerController {
         try {
             const data = req.query.unit
             const allOrdersReceived = await sequelize.query(
-                "SELECT `orders`.order_id, `orders`.weight, `orders`.price, `orders`.date, `orders`.customer_name, `orders`.customer_phone, `orders`.receiver_name, `orders`.receiver_phone FROM `orders` JOIN deliveries ON orders.order_id = deliveries.order_id JOIN transactions ON deliveries.from_id = transactions.trans_id WHERE deliveries.to_id = :unit AND orders.steps > 0 ORDER BY orders.date DESC",
+                "SELECT `orders`.order_id, `orders`.weight, `orders`.price, `orders`.date, `orders`.customer_name, `orders`.customer_phone, `orders`.receiver_name, `orders`.receiver_phone FROM `orders` JOIN deliveries ON orders.order_id = deliveries.order_id JOIN transactions ON deliveries.to_id = transactions.trans_id WHERE deliveries.to_id = :unit AND orders.steps >= 6 ORDER BY orders.date DESC",
                 {
                     replacements: { unit : data}
                 }
