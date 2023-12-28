@@ -4,11 +4,13 @@
     width: 98.9vw;
     --tw-bg-opacity: 1;
     background-color: rgb(235 243 255/var(--tw-bg-opacity));
+    padding-top: 64px;
     padding-bottom: 20px;
 }
 
 .container header {
-    margin-bottom: 2%;
+    --tw-bg-opacity: 1;
+    background-color: rgb(235 243 255/var(--tw-bg-opacity));
 }
 
 .container header h1 {
