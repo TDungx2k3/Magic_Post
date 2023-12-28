@@ -353,18 +353,38 @@ class gatherTellerController {
 
     createOrder = async (req, res) => {
         const orderData = req.body;
+        let cPhone = orderData.customer_phone;
+        let validateCPhoneRs = Joi.string().required().pattern(/^0\d+$/).length(10).validate(cPhone);
+        let rPhone = orderData.receiver_phone;
+        let validateRPhoneRs = Joi.string().required().pattern(/^0\d+$/).length(10).validate(rPhone);
+        let date = orderData.date;
+        let validateDateRs = Joi.date().format('YYYY-MM-DD').validate(date);
+        let weight = orderData.weight;
+        let validateWeightRs = Joi.number().required().validate(weight);
+        let price = orderData.price;
+        let validatePriceRs = Joi.number().required().validate(price);
+        console.log(validateDateRs);
+        if(validateCPhoneRs.error
+        || validateRPhoneRs.error
+        || validateWeightRs.error
+        || validatePriceRs.error) {
+            console.log(validateCPhoneRs.error);
+            console.log(validateRPhoneRs.error);
+            console.log(validateWeightRs.error);
+            console.log(validatePriceRs.error);
+        }
         try {
             await sequelize.authenticate();
             await sequelize.sync();
             await Order.create({
                 customer_name: orderData.customer_name,
-                customer_phone: orderData.customer_phone,
+                customer_phone: cPhone,
                 receiver_name: orderData.receiver_name,
-                receiver_phone: orderData.receiver_phone,
+                receiver_phone: rPhone,
                 receiver_address: orderData.receiver_address,
-                date: orderData.date,
-                weight: orderData.weight,
-                price: orderData.price,
+                date: date,
+                weight: weight,
+                price: price,
                 description: orderData.description,
                 order_status: "1",
                 steps: 0,
