@@ -22,6 +22,7 @@ function OrderList(props) {
     const [pageNum, setPageNum] = useState(1);
     const [pages, setPages] = useState([]);
     
+    // Cập nhật đơn hàng phân trang
     const updatePages = () => {
         let tmpPages = [];
         for(let i = 0; i < numOfPages; i++) {
@@ -30,6 +31,7 @@ function OrderList(props) {
         setPages(tmpPages);
     }
 
+    // Format date
     function Date(date) {
         const year = date.getFullYear();
         const month = String(date.getMonth() + 1).padStart(2, '0');
@@ -38,6 +40,7 @@ function OrderList(props) {
         return `${year}-${month}-${day}`;
     };
 
+    // Lấy tất cả đơn hàng chuyển đến khách hàng hoặc khách hàng đến điểm giao dịch
     const getAllOrders = async() => {
         if(isTo) {
             try {
@@ -78,6 +81,7 @@ function OrderList(props) {
         }
     }
 
+    // Cập nhật thông tin đơn hàng
     const updateOrderList = () => {
         if (isTo) {
             if(status === 0) {
@@ -144,6 +148,7 @@ function OrderList(props) {
         }
     };
 
+    // Tìm kiếm đơn hàng theo ID hoặc theo số điện thoại
     const handleSearch = () => {
         let oIdInp = document.querySelector("." + style.orderId).value;
         let phoneInp = document.querySelector("." + style.searchPhone).value;
@@ -178,16 +183,19 @@ function OrderList(props) {
         // setRe(!re);
     }
 
+    // Gọi hàm khi load trang
     useEffect(() => {
         getAllOrders();
         updateOrderList();
     }, [rerender]);
 
+    // Cập nhật thông tin đơn hàng
     useEffect(() => {
         
         updateOrderList();
     }, [status]);
 
+    // Cập nhật thông tin đơn hàng theo từng trang
     const updateFr = (id) => {
         console.log(id);
         let tmp = allOrdersList;
@@ -204,6 +212,7 @@ function OrderList(props) {
         setRe(!re);
     };
 
+    // Cập nhật thông tin đơn hàng bị mất
     const updateFrLost = (id) => {
         let tmp = allOrdersList;
         const storedUserInfo = JSON.parse(localStorage.getItem('userInfo'));
