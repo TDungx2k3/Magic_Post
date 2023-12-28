@@ -6,6 +6,7 @@ import axios from "axios";
 import { LoginContext } from "../../../../App";
 
 function CreateGather() {
+    // Lấy thông tin đăng nhập
     const navigate = useNavigate();
     let nowTime = new Date();
     const storedOutTime = new Date(JSON.parse(localStorage.getItem('outTime')));
@@ -13,6 +14,7 @@ function CreateGather() {
     const storedUserInfo = JSON.parse(localStorage.getItem('userInfo'));
     // console.log(gatherId);
     
+    // Xử lý lỗi
     const [rerender] = useState(true);
     const [options, setOptions] = useState(1);
     const [gatherNameErr, setGatherNameErr] = useState("");
@@ -20,6 +22,7 @@ function CreateGather() {
     const [managerPhoneErr, setManagerPhoneErr] = useState("");
     const [newPasswordErr, setNewPasswordErr] = useState("");
 
+    // Lưu thông tin liên quan đến điểm tập kết
     const [gatherInfo, setGatherInfo] = useState(
         {
             gather_name: "",
@@ -29,6 +32,7 @@ function CreateGather() {
         }
     );
 
+    // Chuẩn hóa tên điểm tập kết
     const gatherNameNormalize = (name) => {
         
         const tenChuanHoa = name.replace(/\s+/g, " ").trim();
@@ -36,6 +40,7 @@ function CreateGather() {
         return tenChuanHoa.charAt(0).toUpperCase() + tenChuanHoa.slice(1);
     };
 
+    // Check tên điểm tập kết
     const checkGatherName = () => {
         let gName = document.querySelector("." + style.gatherNameContainer + " input").value;
         // console.log(gName);
@@ -47,6 +52,7 @@ function CreateGather() {
         }
     };
 
+    // Chuẩn hóa tên quản lý
     const managerNameNormalize = (name) => {
         // Chia tách tên thành các từ
         name = name.replace(/\s+/g, " ").trim();
@@ -65,6 +71,7 @@ function CreateGather() {
         return rs;
     }
 
+    // Check tên người quản lý
     const checkManagerName = () => {
         let mName = document.querySelector("." + style.nameContainer + " input").value;
         // console.log(gName);
@@ -76,6 +83,7 @@ function CreateGather() {
         }
     };
 
+    // Check số điện thoại
     const checkManagerPhone = () => {
         let mPhone = document.querySelector("." + style.phoneContainer + " input").value;
         // console.log(gName);
@@ -88,6 +96,7 @@ function CreateGather() {
         }
     };
 
+    // Check password
     const checkNewPassword = () => {
         let newPwd = document.querySelector("." + style.newPasswordContainer + " input").value;
         if(!(newPwd === "")) {
@@ -100,6 +109,7 @@ function CreateGather() {
         }
     };
 
+    // Tạo điểm tập kết mới
     const createGather = async(gId, gName, mId) => {
         console.log("cg");
         try {
@@ -115,6 +125,7 @@ function CreateGather() {
         }
     };
 
+    // Tạo tài khoản trưởng điểm tập kết
     const createGatherManager = async(mName, mPhone) => {
         // console.log("cgm");
         try {
@@ -132,6 +143,7 @@ function CreateGather() {
         // console.log("cgme");
     };
 
+    // Cập nhật mật khẩu
     const updateManagerPassword = async(newMId, newPwd) => {
         // console.log(newMId);
         // console.log(newPwd);
@@ -147,6 +159,7 @@ function CreateGather() {
         }
     };
     
+    // Xử lý nhập inputs
     const handleChange = (e) => {
         setGatherInfo((prev) => {
             return {
@@ -156,6 +169,7 @@ function CreateGather() {
         });
     };
 
+    // Đếm số điện thoại xem có trùng không
     const checkCntPhone = async(e) => {
         try {
             const res = await axios.get("http://localhost:8080/leader/getCntPhone",
@@ -171,6 +185,7 @@ function CreateGather() {
         }
     };
 
+    // Lấy ID tài khoản mới nhất
     const getNewestAID = async() => {
         try {
             const res = await axios.get("http://localhost:8080/leader/getNewestAId",);
@@ -180,6 +195,7 @@ function CreateGather() {
         }
     };
 
+    // Lấy ID điểm tập kết mới nhất
     const getNewGatherId = async() => {
         try {
             const res = await axios.get("http://localhost:8080/leader/getMaxGatherId",);
@@ -189,6 +205,7 @@ function CreateGather() {
         }
     };
 
+    // Tạo điểm tập kết mới 
     const handleSubmit = async(e) => {
         
         checkGatherName();
@@ -243,6 +260,7 @@ function CreateGather() {
         
     };
     
+    // Check xem user có phải là leader hay không
     let cnt = 0;
     useEffect(() => {
         if((!storedIsLogin 

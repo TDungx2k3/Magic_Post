@@ -3,7 +3,7 @@ import style from "./Employee.module.scss"
 import { Fragment, useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 
-function Emplyee(props) {
+function Employee(props) {
 
     return (
         <Fragment>
@@ -12,7 +12,7 @@ function Emplyee(props) {
                 <Link className= {clsx(style.employeeInfo)}>
                     <div>
                         <label>Employee Name: </label>
-                        <span className= {clsx(style.emplyeeName)}>{props.data.employeeName}</span>
+                        <span className= {clsx(style.employeeName)}>{props.data.employeeName}</span>
                     </div>
                     <div>
                         <label>Employee Phone: </label>
@@ -28,4 +28,4 @@ function Emplyee(props) {
     );
 }
 
-export default Emplyee;
+export default Employee;

@@ -12,6 +12,8 @@ import logo from '../../assets/icons/logo.png'
 function DeliveryReceiptPage() {
   const navigate = useNavigate();
   const location = useLocation();
+
+  // Lấy thông tin đơn hàng lúc vừa tạo order
   const {customerName, customerPhone, customerAddress, 
     weight, price, receiverName, receiverAddress, 
     receiverPhone, date, adminName, orderId} = location.state || {};
