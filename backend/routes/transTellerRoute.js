@@ -27,4 +27,6 @@ router.get("/getGatherNameById", transactionTellerController.getGatherNameById);
 router.post("/lostOrder", transactionTellerController.lostOrder);
 router.post("/customerDeny", transactionTellerController.customerDeny);
 
+router.get("/getMaxDelivery", transactionTellerController.getMaxDelivery);
+
 module.exports = router;

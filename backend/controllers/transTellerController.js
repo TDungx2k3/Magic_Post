@@ -300,6 +300,7 @@ class transactionTellerController {
             res.json({
                 transactionStart: pathStart.trans_name,
                 gatherStart: pathStart.gathering.gather_name,
+                gatherIdStart: pathStart.gathering.gather_id,
             });
         } catch (error) {
             console.log(error);
@@ -400,12 +401,10 @@ class transactionTellerController {
         let rPhone = orderData.receiver_phone;
         let validateRPhoneRs = Joi.string().required().pattern(/^0\d+$/).length(10).validate(rPhone);
         let date = orderData.date;
-        let validateDateRs = Joi.date().format('YYYY-MM-DD').validate(date);
         let weight = orderData.weight;
         let validateWeightRs = Joi.number().required().validate(weight);
         let price = orderData.price;
         let validatePriceRs = Joi.number().required().validate(price);
-        console.log(validateDateRs);
         if(validateCPhoneRs.error
         || validateRPhoneRs.error
         || validateWeightRs.error
@@ -674,6 +673,19 @@ class transactionTellerController {
             } catch (error) {
                 console.log(error);
             }
+        }
+    };
+
+    getMaxDelivery = async (req, res) => {
+        const data = req.query.order_id;
+        try {
+            const result = await Delivery.max('deliver_id', { where: { order_id: data } });
+            res.json({
+                result: result,
+                //deliver_id: result.deliver_id,
+            })
+        } catch (error) {
+            console.log(error);
         }
     };
 };
