@@ -238,7 +238,7 @@ class GatheringManagerController {
                 FROM orders 
                 JOIN deliveries ON orders.order_id = deliveries.order_id 
                 JOIN gatherings ON gatherings.gather_id = deliveries.to_id
-                WHERE orders.date = :date AND gatherings.gather_id = :unit AND orders.steps >= 4
+                WHERE orders.date = :date AND gatherings.gather_id = :unit
             ) AS subquery`,
         {
           replacements: {
