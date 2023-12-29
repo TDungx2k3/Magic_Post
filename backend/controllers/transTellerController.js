@@ -400,7 +400,6 @@ class transactionTellerController {
         let rPhone = orderData.receiver_phone;
         let validateRPhoneRs = Joi.string().required().pattern(/^0\d+$/).length(10).validate(rPhone);
         let date = orderData.date;
-        let validateDateRs = Joi.date().format('YYYY-MM-DD').validate(date);
         let weight = orderData.weight;
         let validateWeightRs = Joi.number().required().validate(weight);
         let price = orderData.price;
