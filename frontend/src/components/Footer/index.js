@@ -40,11 +40,6 @@ function Footer() {
                     </RouterLink>
 
                 </span>
-                <span>
-                    <RouterLink to="/about-us" onClick={() => scrollToElement('career')}>
-                        Career
-                    </RouterLink>
-                </span>
             </div>
 
             <div className={clsx(style.serviceAndDev)}>

@@ -5,6 +5,7 @@ const { Gathering } = require("../models/gatheringsModel");
 const { Delivery } = require("../models/deliveriesModel");
 const { Order } = require("../models/ordersModel");
 const { raw } = require("mysql2");
+const Joi = require("joi");
 const bcrypt = require('bcrypt');
 
 // Gathering.belongsTo(Account, {
@@ -60,7 +61,7 @@ class GatheringManagerController {
 
   // Xóa tài khoản
   deleteAccountEmployee = async (req, res) => {
-    let aId = req.body.account_id;
+    let aId = String(req.body.account_id);
     let validateAIdRs = Joi.string().required().pattern(/^\d+$/).validate(aId);
     if (validateAIdRs.error) {
       console.log(validateAIdRs.error);
