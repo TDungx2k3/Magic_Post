@@ -3,27 +3,30 @@ import style from "./ManageTransactionNav.module.scss";
 import { useState } from "react";
 
 function ManageTransactionNav({ onClickCreateAccount, onClickStatisticOrdersSent, onClickStatisticOrdersReceived }) {
+    // Handle click nav Create Account
     const handleCreateAccountClick = () => {
         if (onClickCreateAccount) {
             onClickCreateAccount();
         }
     };
 
+    // Handle click nav Statistic Orders Sent
     const handleStatisticOrdersSentClick = () => {
         if (onClickStatisticOrdersSent) {
             onClickStatisticOrdersSent();
         }
     }
 
+    // Handle click nav Statistic Orders Received
     const handleStatisticOrdersReceivedClick = () => {
         if (onClickStatisticOrdersReceived) {
             onClickStatisticOrdersReceived();
         }
     }
 
-    const [isClickCreateAccount, setIsClickCreateAccount] = useState(true);
-    const [isClickStatisticOrdersSent, setIsClickStatisticOrdersSent] = useState(false);
-    const [isClickStatisticOrdersReceived, setIsClickStatisticOrdersReceived] = useState(false);
+    const [isClickCreateAccount, setIsClickCreateAccount] = useState(true); // Check xem có bấm vào nav Create Account không, default là true để khi vào trang default hiển thị ra form create account
+    const [isClickStatisticOrdersSent, setIsClickStatisticOrdersSent] = useState(false); // Check xem có bấm vào nav Statistic Orders Sent không
+    const [isClickStatisticOrdersReceived, setIsClickStatisticOrdersReceived] = useState(false); // Chekc xem có bấm vào nav Statistic Orders Received không
 
     const handleIsClickCreateAccount = () => {
         setIsClickCreateAccount(true);

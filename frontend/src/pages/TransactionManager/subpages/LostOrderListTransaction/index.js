@@ -20,11 +20,11 @@ function LostOrderListTransaction() {
     let numOfPages = Math.ceil(cnt / maxItemsInOnePage);
     const [pageNum, setPageNum] = useState(0);
     const [pages, setPages] = useState([]);
-    
+
     // Lưu các trang vào mảng pages
     const updatePages = () => {
         let tmpPages = [];
-        for(let i = 0; i < numOfPages; i++) {
+        for (let i = 0; i < numOfPages; i++) {
             tmpPages.push(i);
         }
         setPages(tmpPages);
@@ -33,20 +33,23 @@ function LostOrderListTransaction() {
     // Lưu danh sách các order bị mất sẽ được render vào mảng lostOrderRenList
     const updateRenList = () => {
         let tmpList = lostOrderList.slice(maxItemsInOnePage*(pageNum - 1), pageNum*maxItemsInOnePage);
-        // console.log(denyList.slice(pageNum));
+        // cnt = tmpList.length;
         setLostOrderRenList(tmpList);
     }
 
     // Get danh sách tất cả các order bị mất
     const getLostOrderList = async () => {
         try {
-            const lostOrderList = await axios.get("http://localhost:8080/transaction-manager/get-lost-order-list",
-                { params : { unit: userInfo.userInfo.uUnit } }
+            const lostOrderListFromDB = await axios.get("http://localhost:8080/transaction-manager/get-lost-order-list",
+                { params: { unit: userInfo.userInfo.uUnit } }
             )
-            setLostOrderList(lostOrderList.data[0]);
+            setLostOrderList(lostOrderListFromDB.data[0]);
+            setPageNum(1);
+            updatePages();
+            updateRenList();
             setIsFetchedData(true);
         }
-        catch(err) {
+        catch (err) {
             console.log(err);
         }
     }
@@ -64,6 +67,40 @@ function LostOrderListTransaction() {
     const handleBack = () => {
         navigate("/transaction-manager");
     }
+
+    const [isDone, setIsDone] = useState(false);
+    const controlClickDone = async (order_id) => {
+        try {
+            await axios.post("http://localhost:8080/transaction-manager/transaction-manager-control-lost-order-list", {
+                order_id: order_id
+                
+            })
+            
+            .then(() => {updateFrontEndLost(order_id)})
+            console.log(1223);
+        }
+        catch(err) {
+            console.log(err);
+        }
+    }
+
+    const updateFrontEndLost = (order_id) => {
+        let temp = lostOrderList;
+        for (let i = 0; i < temp.length; i++) {
+            if (temp[i].order_id === order_id) {
+                temp.splice(i, 1);
+                break;
+            }
+        }
+        setLostOrderList(temp);
+        cnt = temp.length;
+        setIsDone(!isDone);
+    }
+
+    useEffect(() => {
+        updateRenList();
+        updatePages();
+    }, [isDone])
 
     return (
         <Fragment>
@@ -100,20 +137,29 @@ function LostOrderListTransaction() {
                             </div>
 
                             <div className={clsx(style["order-container"])}>
-                                <div>
-                                    <label htmlFor="Weight">Weight: </label>
-                                    <span>{lostOrderList.weight} kg</span>
+                                <div className={clsx(style["order-info"])}>
+                                    <div>
+                                        <label htmlFor="Weight">Weight: </label>
+                                        <span>{lostOrderList.weight} kg</span>
+                                    </div>
+
+                                    <div>
+                                        <label htmlFor="Price">Price: </label>
+                                        <span>{lostOrderList.price} VND</span>
+                                    </div>
+
+                                    <div>
+                                        <label htmlFor="Date">Date: </label>
+                                        <span>{lostOrderList.date}</span>
+                                    </div>
                                 </div>
 
-                                <div>
-                                    <label htmlFor="Price">Price: </label>
-                                    <span>{lostOrderList.price} VND</span>
-                                </div>
-
-                                <div>
-                                    <label htmlFor="Date">Date: </label>
-                                    <span>{lostOrderList.date}</span>
-                                </div>
+                                <div 
+                                    className={clsx(style["done-button"])}
+                                    onClick={() => { controlClickDone(lostOrderList.order_id) }}
+                                >
+                                     <button>Done</button>
+                                 </div>
                             </div>
                         </div>
                     )
@@ -123,20 +169,22 @@ function LostOrderListTransaction() {
                             There are no valid orders
                         </div>
                     )
+
+
                 }
             </div>
 
             <div className={clsx(style.choosePageContainer)}>
                 {
                     pages.map((page, index) => {
-                        if(index == 0 || index == numOfPages - 1
-                        || (index >= (pageNum - 2) && index <= pageNum )) {
-                            if(index == pageNum -2 && pageNum > 3) {
+                        if (index == 0 || index == numOfPages - 1
+                            || (index >= (pageNum - 2) && index <= pageNum)) {
+                            if (index == pageNum - 2 && pageNum > 3) {
                                 return (
                                     <Fragment key={index}>
                                         <span>. . .</span>
-                                        <button className= {clsx(style.pageBtn, {[style.pageBtnActive] : index == pageNum -1})} onClick={
-                                            ()=>{
+                                        <button className={clsx(style.pageBtn, { [style.pageBtnActive]: index == pageNum - 1 })} onClick={
+                                            () => {
                                                 setPageNum(index + 1)
                                                 updateRenList();
                                             }
@@ -147,8 +195,8 @@ function LostOrderListTransaction() {
                             else if (index == pageNum && pageNum < numOfPages - 2) {
                                 return (
                                     <Fragment key={index}>
-                                        <button className= {clsx(style.pageBtn, {[style.pageBtnActive] : index == pageNum -1})} onClick={
-                                            ()=>{
+                                        <button className={clsx(style.pageBtn, { [style.pageBtnActive]: index == pageNum - 1 })} onClick={
+                                            () => {
                                                 setPageNum(index + 1)
                                                 updateRenList();
                                             }
@@ -157,15 +205,15 @@ function LostOrderListTransaction() {
                                     </Fragment>
                                 );
                             }
-                            else 
-                            return(
-                                <button className= {clsx(style.pageBtn, {[style.pageBtnActive] : index == pageNum -1})} key={index} onClick={
-                                    ()=>{
-                                        setPageNum(index + 1)
-                                        updateRenList();
-                                    }
-                                }>{index + 1}</button>
-                            );
+                            else
+                                return (
+                                    <button className={clsx(style.pageBtn, { [style.pageBtnActive]: index == pageNum - 1 })} key={index} onClick={
+                                        () => {
+                                            setPageNum(index + 1)
+                                            updateRenList();
+                                        }
+                                    }>{index + 1}</button>
+                                );
                         }
                     })
                 }
