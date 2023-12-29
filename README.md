@@ -22,8 +22,12 @@
   ```shell
   npm i
   cd .\frontend
+  npm i
   npm start
+  ```
+  ```shell
   cd .\backend
+  npm i
   npm start
   ```
 
