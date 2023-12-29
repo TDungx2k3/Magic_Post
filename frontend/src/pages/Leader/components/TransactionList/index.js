@@ -43,7 +43,8 @@ function TransactionList(props) {
                         navigate("/createTransaction?gather_id=" + props.data[0].gather_id)
                     }}
                     >
-                        <i className= "ti-plus"> Create Transaction</i>
+                        <i className= "ti-plus"></i>
+                        <p>Create Transaction</p>
                     </div>
 
                     {/* <div className={clsx(style.searchBar)}>
