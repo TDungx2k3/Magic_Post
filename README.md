@@ -73,4 +73,4 @@
   ## Kết luận
   > Trang Web đã được thiết kế và cung cấp đầy đủ chức năng cơ bản, nâng cao mong có thể đem lại lợi ích và trải nghiệm tốt cho khách hàng.
 
-  [Về đầu trang](#magicpost)
+  [Về đầu trang](#magic-post)
