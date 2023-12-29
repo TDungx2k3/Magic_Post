@@ -25,10 +25,11 @@ function TransactionManager() {
         }
     }, [1])
 
-    const [isClickCreateAccount, setIsClickCreateAccount] = useState(true);
-    const [isClickStatisticOrdersSent, setIsClickStatisticOrdersSent] = useState(false);
-    const [isClickStatisticOrdersReceived, setIsClickStatisticOrdersReceived] = useState(false);
+    const [isClickCreateAccount, setIsClickCreateAccount] = useState(true); // Check xem có bấm vào nav Create Account không, default là true để khi vào trang thì sẽ default hiện form create account
+    const [isClickStatisticOrdersSent, setIsClickStatisticOrdersSent] = useState(false); // Check xem có bấm vào nav Statistic Orders Sent không
+    const [isClickStatisticOrdersReceived, setIsClickStatisticOrdersReceived] = useState(false); // Check xem có bấm vào nav Statistic Orders Received không
 
+    // Handle click vào nav Create Account, set 2 cái còn lại thành false
     const handleIsClickCreateAccount = () => {
         setIsClickCreateAccount(true);
         if (isClickStatisticOrdersSent === true) {
@@ -39,6 +40,7 @@ function TransactionManager() {
         }
     };
 
+    // Handle click vào nav Statistic Orders Sent, set 2 cái còn lại thành false
     const handleIsClickStatisticOrdersSent = () => {
         setIsClickStatisticOrdersSent(true);
         if (isClickCreateAccount === true) {
@@ -49,6 +51,7 @@ function TransactionManager() {
         }
     }
 
+    // Handle click vào nav Statistic Orders Received, set 2 cái còn lại thành false
     const handleIsClickStatisticOrdersReceived = () => {
         setIsClickStatisticOrdersReceived(true);
         if (isClickCreateAccount === true) {

@@ -62,20 +62,20 @@ class GatheringManagerController {
   deleteAccountEmployee = async (req, res) => {
     let aId = req.body.account_id;
     let validateAIdRs = Joi.string().required().pattern(/^\d+$/).validate(aId);
-    if(validateAIdRs.error) {
+    if (validateAIdRs.error) {
       console.log(validateAIdRs.error);
     }
     else
-    try {
-      await Account.destroy({
-        where: {
-          account_id: aId,
-        }
-      });
-      res.send();
-    } catch (error) {
-      console.error(error);
-    }
+      try {
+        await Account.destroy({
+          where: {
+            account_id: aId,
+          }
+        });
+        res.send();
+      } catch (error) {
+        console.error(error);
+      }
   }
 
   // cập nhật tài khoản
@@ -85,31 +85,31 @@ class GatheringManagerController {
     let mPass = req.body.account_password;
     let validateAPassRs = Joi.string().required().min(6).max(30).validate(mPass)
     let validateAPhoneRs = Joi.string().required().pattern(/^0\d+$/).length(10).validate(aPhone);
-    if(validateAPhoneRs.error || validateAPassRs.error) {
+    if (validateAPhoneRs.error || validateAPassRs.error) {
       console.log(validateAPhoneRs.error);
       console.log(validateAPassRs.error);
     }
-    else 
-    try {
-      const saltRounds = 10;
-      const plaintextPassword = mPass;
+    else
+      try {
+        const saltRounds = 10;
+        const plaintextPassword = mPass;
 
-      const hash = await bcrypt.hash(plaintextPassword, saltRounds);
+        const hash = await bcrypt.hash(plaintextPassword, saltRounds);
 
-      await Account.update({
-        account_name: data.account_name,
-        account_phone: aPhone,
-        account_password: hash
-      }, {
-        where: {
-          account_id: data.account_id,
-        }
-      });
-      res.status(200).send('Account updated successfully');
-    } catch (err) {
-      console.error(err);
-      res.status(500).send('Internal Server Error');
-    }
+        await Account.update({
+          account_name: data.account_name,
+          account_phone: aPhone,
+          account_password: hash
+        }, {
+          where: {
+            account_id: data.account_id,
+          }
+        });
+        res.status(200).send('Account updated successfully');
+      } catch (err) {
+        console.error(err);
+        res.status(500).send('Internal Server Error');
+      }
   };
 
   // Lấy thông tin tài khoản theo id
@@ -224,12 +224,11 @@ class GatheringManagerController {
     }
   }
 
-  // đếm số đơn nhận theo ngày của đơn vị
+  // Đếm số lượng đơn hàng nhận trong 1 ngày
   countOrderReceivedInADate = async (req, res) => {
     try {
       const date = req.query.date;
       const unit = req.query.unit;
-      console.log("unit  " + unit);
 
       const count = await sequelize.query(
         `SELECT COUNT(*) 
@@ -238,7 +237,7 @@ class GatheringManagerController {
                 FROM orders 
                 JOIN deliveries ON orders.order_id = deliveries.order_id 
                 JOIN gatherings ON gatherings.gather_id = deliveries.to_id
-                WHERE orders.date = :date AND gatherings.gather_id = :unit
+                WHERE orders.date = :date AND gatherings.gather_id = :unit AND orders.steps >= 4
             ) AS subquery`,
         {
           replacements: {
@@ -254,7 +253,7 @@ class GatheringManagerController {
     }
   }
 
-  // lấy danh sách tập khách hàng từ chối nhận
+  // Lấy danh sách khách hàng deny list
   getCustomerDenyList = async (req, res) => {
     try {
       const unit = req.query.unit;
@@ -273,14 +272,17 @@ class GatheringManagerController {
     }
   }
 
-  // lấy tập đơn hàng bị mất
+  // Lấy danh sách các order bị mất
   getLostOrderList = async (req, res) => {
     try {
       const unit = req.query.unit;
 
-      const lostOrderList = await sequelize.query("SELECT `orders`.order_id, `orders`.weight, `orders`.price, `orders`.date, `orders`.customer_name, `orders`.customer_phone, `orders`.receiver_name, `orders`.receiver_phone FROM `orders` JOIN deliveries ON orders.order_id = deliveries.order_id JOIN gatherings ON deliveries.to_id = gatherings.gather_id WHERE deliveries.to_id = :unit AND deliveries.deliver_status = -1 ORDER BY orders.date DESC",
+      const lostOrderList = await sequelize.query("SELECT `orders`.order_id, `orders`.weight, `orders`.price, `orders`.date, `orders`.customer_name, `orders`.customer_phone, `orders`.receiver_name, `orders`.receiver_phone FROM `orders` JOIN deliveries ON orders.order_id = deliveries.order_id JOIN gatherings ON deliveries.to_id = gatherings.gather_id WHERE deliveries.to_id = :unit AND deliveries.deliver_status = -1 AND orders.order_status = :lost ORDER BY orders.date DESC",
         {
-          replacements: { unit: unit }
+          replacements: {
+            unit: unit,
+            lost: "lost"
+          }
         });
       res.json(lostOrderList);
     }
@@ -290,40 +292,47 @@ class GatheringManagerController {
     }
   }
 
-  // tạo tài khoản
-  createAccount = async (req, res) => {
-    let aPhone = req.body.accountPhone;
-    let mPass = req.body.accountPassword;
-    let validateAPassRs = Joi.string().required().min(6).max(30).validate(mPass)
-    let validateAPhoneRs = Joi.string().required().pattern(/^0\d+$/).length(10).validate(aPhone);
-    if(validateAPassRs.error || validateAPhoneRs.error) {
-      console.log(validateAPassRs.error);
-      console.log(validateAPhoneRs.error);
-
-    }
-    else
+  // Update deliveries và order khi xử lý xong mất hàng
+  controlLostOrderList = async (req, res) => {
     try {
-      const saltRounds = 10;
-      const plaintextPassword = data.accountPassword;
-      bcrypt.hash(plaintextPassword, saltRounds, (err, hash) => {
-        if (err) {
-          console.error('Error hashing password:', err);
-        } else {
-          data.accountPassword = hash;
+      const orderId = req.body.order_id;
+      await Delivery.update({ deliver_status: 1 }, {
+        where: {
+          order_id: orderId
         }
-        Account.create({
-          account_name: req.body.accountName,
-          account_phone: aPhone,
-          account_password: hash,
-          role_id: 6,
-          unit: data.unit,
-        });
       });
-      res.send();
-    } catch (error) {
-      console.log(error);
+      await Order.update({ order_status: "done" }, {
+        where: {
+          order_id: orderId
+        }
+      });
+      res.status(200).send('Account updated successfully');
     }
-    
+    catch (err) {
+      res.json(err);
+    }
+  }
+
+  // Tạo tài khoản cho nhân viên
+  createAccount = async (req, res) => {
+    const data = req.body;
+    const saltRounds = 10;
+    const plaintextPassword = data.accountPassword;
+    bcrypt.hash(plaintextPassword, saltRounds, (err, hash) => {
+      if (err) {
+        console.error('Error hashing password:', err);
+      } else {
+        data.accountPassword = hash;
+      }
+      Account.create({
+        account_name: data.accountName,
+        account_phone: data.accountPhone,
+        account_password: data.accountPassword,
+        role_id: 6,
+        unit: data.unit,
+      });
+    });
+    res.send();
   };
 }
 

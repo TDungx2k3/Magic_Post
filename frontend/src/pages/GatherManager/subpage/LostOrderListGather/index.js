@@ -24,7 +24,7 @@ function LostOrderListGather() {
     // Lưu các trang vào mảng pages
     const updatePages = () => {
         let tmpPages = [];
-        for(let i = 0; i < numOfPages; i++) {
+        for (let i = 0; i < numOfPages; i++) {
             tmpPages.push(i);
         }
         setPages(tmpPages);
@@ -67,6 +67,38 @@ function LostOrderListGather() {
     const handleBack = () => {
         navigate("/gather-manager");
     }
+    
+    const [isDone, setIsDone] = useState(false);
+    const controlClickDone = async (order_id) => {
+        try {
+            await axios.post("http://localhost:8080/gathering-manager/control-lost-order-gather-manager", {
+                order_id: order_id
+            })
+            
+            .then(() => {updateFrontEndLost(order_id)})
+        }
+        catch(err) {
+            console.log(err);
+        }
+    }
+
+    const updateFrontEndLost = (order_id) => {
+        let temp = lostOrderList;
+        for (let i = 0; i < temp.length; i++) {
+            if (temp[i].order_id === order_id) {
+                temp.splice(i, 1);
+                break;
+            }
+        }
+        setLostOrderList(temp);
+        cnt = temp.length;
+        setIsDone(!isDone);
+    }
+
+    useEffect(() => {
+        updateRenList();
+        updatePages();
+    }, [isDone])
 
     return (
         <Fragment>
@@ -103,20 +135,29 @@ function LostOrderListGather() {
                             </div>
 
                             <div className={clsx(style["order-container"])}>
-                                <div>
-                                    <label htmlFor="Weight">Weight: </label>
-                                    <span>{lostOrderList.weight} kg</span>
+                                <div className={clsx(style["order-info"])}>
+                                    <div>
+                                        <label htmlFor="Weight">Weight: </label>
+                                        <span>{lostOrderList.weight} kg</span>
+                                    </div>
+
+                                    <div>
+                                        <label htmlFor="Price">Price: </label>
+                                        <span>{lostOrderList.price} VND</span>
+                                    </div>
+
+                                    <div>
+                                        <label htmlFor="Date">Date: </label>
+                                        <span>{lostOrderList.date}</span>
+                                    </div>
                                 </div>
 
-                                <div>
-                                    <label htmlFor="Price">Price: </label>
-                                    <span>{lostOrderList.price} VND</span>
-                                </div>
-
-                                <div>
-                                    <label htmlFor="Date">Date: </label>
-                                    <span>{lostOrderList.date}</span>
-                                </div>
+                                <div 
+                                    className={clsx(style["done-button"])}
+                                    onClick={() => { controlClickDone(lostOrderList.order_id) }}
+                                >
+                                     <button>Done</button>
+                                 </div>
                             </div>
                         </div>
                     )

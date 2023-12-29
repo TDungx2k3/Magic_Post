@@ -50,7 +50,7 @@ class transactionManagerController {
         try {
             const data = req.query.unit
             const allOrdersReceived = await sequelize.query(
-                "SELECT `orders`.order_id, `orders`.weight, `orders`.price, `orders`.date, `orders`.customer_name, `orders`.customer_phone, `orders`.receiver_name, `orders`.receiver_phone FROM `orders` JOIN deliveries ON orders.order_id = deliveries.order_id JOIN transactions ON deliveries.to_id = transactions.trans_id WHERE deliveries.to_id = :unit AND orders.steps >= 6 ORDER BY orders.date DESC",
+                "SELECT `orders`.order_id, `orders`.weight, `orders`.price, `orders`.date, `orders`.customer_name, `orders`.customer_phone, `orders`.receiver_name, `orders`.receiver_phone FROM `orders` JOIN deliveries ON orders.order_id = deliveries.order_id JOIN transactions ON deliveries.to_id = transactions.trans_id WHERE deliveries.to_id = :unit ORDER BY orders.date DESC",
                 {
                     replacements: { unit : data}
                 }
@@ -68,7 +68,7 @@ class transactionManagerController {
         try {
             const data = req.query.unit
             const allOrdersSent = await sequelize.query(
-                "SELECT `orders`.order_id, `orders`.weight, `orders`.price, `orders`.date, `orders`.customer_name, `orders`.customer_phone, `orders`.receiver_name, `orders`.receiver_phone FROM `orders` JOIN deliveries ON orders.order_id = deliveries.order_id JOIN transactions ON deliveries.from_id = transactions.trans_id WHERE deliveries.from_id = :unit AND orders.steps > 0 ORDER BY orders.date DESC",
+                "SELECT `orders`.order_id, `orders`.weight, `orders`.price, `orders`.date, `orders`.customer_name, `orders`.customer_phone, `orders`.receiver_name, `orders`.receiver_phone FROM `orders` JOIN deliveries ON orders.order_id = deliveries.order_id JOIN transactions ON deliveries.from_id = transactions.trans_id WHERE deliveries.from_id = :unit ORDER BY orders.date DESC",
                 {
                     replacements: { unit : data}
                 }
@@ -127,7 +127,7 @@ class transactionManagerController {
                     FROM orders 
                     JOIN deliveries ON orders.order_id = deliveries.order_id 
                     JOIN transactions ON transactions.trans_id = deliveries.from_id
-                    WHERE orders.date = :date AND transactions.trans_id = :unit AND orders.steps > 0
+                    WHERE orders.date = :date AND transactions.trans_id = :unit
                 ) AS subquery`, 
                 {
                     replacements: { 
@@ -155,7 +155,7 @@ class transactionManagerController {
                     FROM orders 
                     JOIN deliveries ON orders.order_id = deliveries.order_id 
                     JOIN transactions ON transactions.trans_id = deliveries.to_id
-                    WHERE orders.date = :date AND transactions.trans_id = :unit AND orders.steps >= 6
+                    WHERE orders.date = :date AND transactions.trans_id = :unit
                 ) AS subquery`, 
                 {
                     replacements: { 
@@ -196,7 +196,7 @@ class transactionManagerController {
         try {
             const unit = req.query.unit;
 
-            const lostOrderList = await sequelize.query("SELECT `orders`.order_id, `orders`.weight, `orders`.price, `orders`.date, `orders`.customer_name, `orders`.customer_phone, `orders`.receiver_name, `orders`.receiver_phone FROM `orders` JOIN deliveries ON orders.order_id = deliveries.order_id JOIN transactions ON deliveries.to_id = transactions.trans_id WHERE deliveries.from_id = :unit AND deliveries.deliver_status = -1 AND orders.order_status = :lost ORDER BY orders.date DESC", 
+            const lostOrderList = await sequelize.query("SELECT `orders`.order_id, `orders`.weight, `orders`.price, `orders`.date, `orders`.customer_name, `orders`.customer_phone, `orders`.receiver_name, `orders`.receiver_phone FROM `orders` JOIN deliveries ON orders.order_id = deliveries.order_id JOIN transactions ON deliveries.to_id = transactions.trans_id WHERE deliveries.to_id = :unit AND deliveries.deliver_status = -1 AND orders.order_status = :lost ORDER BY orders.date DESC", 
                 { replacements: { unit: unit, lost: "lost" } 
             });
             res.json(lostOrderList);
@@ -206,6 +206,30 @@ class transactionManagerController {
             res.json(err);
         }
     };
+
+    // Xử lý khi transaction manager bấm done để xử lý đơn hàng bị mất
+    controlLostOrderList = async (req, res) => {
+        try {
+            const orderId = req.body.order_id;
+            console.log("loajsj");
+            console.log(req.body);
+            await Delivery.update({ deliver_status: 1 }, {
+                where: {
+                    order_id: orderId
+                }
+            });
+            console.log("iuasf ");
+            await Order.update({ order_status: "done" }, {
+                where: {
+                    order_id: orderId
+                }
+            });
+            res.status(200).send('Account updated successfully');
+        }
+        catch(err) {
+            res.json(err);
+        }
+    }
 };
 
 module.exports = new transactionManagerController();

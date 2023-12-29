@@ -16,6 +16,7 @@ router.get("/get-quantity-orders-sent-in-a-date", gatheringManagerController.cou
 router.get("/get-quantity-orders-received-in-a-date", gatheringManagerController.countOrderReceivedInADate);
 router.get("/get-customer-deny-list", gatheringManagerController.getCustomerDenyList);
 router.get("/get-lost-order-list", gatheringManagerController.getLostOrderList);
+router.post("/control-lost-order-gather-manager", gatheringManagerController.controlLostOrderList)
 router.post("/create-account-for-employee", gatheringManagerController.createAccount);
 
 module.exports = router;

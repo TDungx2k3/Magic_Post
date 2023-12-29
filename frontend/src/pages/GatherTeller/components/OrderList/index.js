@@ -212,7 +212,6 @@ function OrderList(props) {
     // Update frontend biến mất order khi bấm vào lost order
     const updateFrLost = (id) => {
         let tmp = allOrdersList;
-        const storedUserInfo = JSON.parse(localStorage.getItem('userInfo'));
         for(let i = 0; i < tmp.length; i++) {
             if(tmp[i].order_id === id) {
                 tmp.splice(i,1);

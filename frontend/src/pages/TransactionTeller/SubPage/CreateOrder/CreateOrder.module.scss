@@ -106,3 +106,24 @@
 #finalPrice {
     font-size: 20px;
 }
+
+@media screen and (max-width: 550px) {
+    .content {
+        margin-left: 0%;
+        margin-right: 0%;
+    }
+}
+
+@media screen and (min-width: 551px) and (max-width: 950px) {
+    .content {
+        margin-left: 5%;
+        margin-right: 5%;
+    }
+}
+
+@media screen and (min-width: 951px) and (max-width: 1170px) {
+    .content {
+        margin-left: 12%;
+        margin-right: 12%;
+    }
+}
