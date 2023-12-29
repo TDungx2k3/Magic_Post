@@ -100,7 +100,7 @@ function OrderList(props) {
             else if(status === 1) {
                 let tmpOrderList = [];
                 for(let i = 0; i < allOrdersList.length; i++) {
-                    if(allOrdersList[i].steps === 6) {
+                    if(allOrdersList[i].steps === 6 && allOrdersList[i].order_status === unit) {
                         tmpOrderList.push(allOrdersList[i]);
                     }
                 }
@@ -129,7 +129,7 @@ function OrderList(props) {
             if(status === 1) {
                 let tmpOrderList = [];
                 for(let i = 0; i < allOrdersList.length; i++) {
-                    if(allOrdersList[i].steps === 0) {
+                    if(allOrdersList[i].steps === 0 && allOrdersList[i].order_status === unit) {
                         tmpOrderList.push(allOrdersList[i]);
                     }
                 }
@@ -141,7 +141,7 @@ function OrderList(props) {
             else if(status === 2) {
                 let tmpOrderList = [];
                 for(let i = 0; i < allOrdersList.length; i++) {
-                    if(allOrdersList[i].steps === 1) {
+                    if(allOrdersList[i].steps === 1 && allOrdersList[i].order_status === unit) {
                         tmpOrderList.push(allOrdersList[i]);
                     }
                 }
