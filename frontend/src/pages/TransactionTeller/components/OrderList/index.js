@@ -83,6 +83,7 @@ function OrderList(props) {
 
     // Cập nhật thông tin đơn hàng
     const updateOrderList = () => {
+        console.log(allOrdersList);
         if (isTo) {
             if(status === 0) {
                 let tmpOrderList = [];
@@ -111,7 +112,11 @@ function OrderList(props) {
             else if(status === 2) {
                 let tmpOrderList = [];
                 for(let i = 0; i < allOrdersList.length; i++) {
-                    if(allOrdersList[i].steps === 7) {
+                    // if(allOrdersList[i].steps === 7 && allOrdersList[i].deliveries[allOrdersList[i].deliveries.length - 1].from_id === unit 
+                    //     && allOrdersList[i].deliveries[allOrdersList[i].deliveries.length - 1].to_id === 'r') {
+                    //     tmpOrderList.push(allOrdersList[i]);
+                    // }
+                    if(allOrdersList[i].steps === 7 && allOrdersList[i].order_status === unit) {
                         tmpOrderList.push(allOrdersList[i]);
                     }
                 }

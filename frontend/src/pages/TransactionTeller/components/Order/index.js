@@ -99,10 +99,14 @@ function Order(props) {
 
     // Xử lý đơn hàng bị từ chối bởi khách hàng
     const cusDeny = async() => {
+        const deliverIdResult = await axios.get("http://localhost:8080/transTeller/getMaxDelivery", { params : {
+            order_id: props.data.order_id,
+        }});
+        console.log(deliverIdResult);
         await axios
         .post("http://localhost:8080/gatherTeller/customerDeny",
             {
-                deliver_id: props.data.max_delivery,
+                deliver_id: deliverIdResult.data.result,
                 order_id: props.data.order_id,
             }
         )

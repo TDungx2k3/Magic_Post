@@ -110,6 +110,7 @@ function CreateOrderPage() {
         .then((response) => {
           paths.transaction_start = response.data.transactionStart;
           paths.gathering_start = response.data.gatherStart;
+          paths.gather_id_start = response.data.gatherIdStart;
         }).catch((error) => {
           console.log(error);
         });
@@ -196,17 +197,12 @@ function CreateOrderPage() {
   const [finalPrice, setFinalPrice] = useState(0);
   useEffect(() => {
     const checkGatherPath = () => {
-      if(selectedGather === '') {
-        setFinalPrice(inputs.weight * 2000);
-      } else if(selectedGather === paths.gathering_start && selectedGather !== "") {
-        setFinalPrice(inputs.weight * 2000 + 20000);
-      } else if(selectedGather !== 'g3' && paths.gathering_start !== 'g3' && selectedGather !== "") {
-        setFinalPrice(inputs.weight * 2000 + 30000);
-      } else if(selectedGather !== 'g2' && paths.gathering_start !== 'g2' && selectedGather !== "") {
-        setFinalPrice(inputs.weight * 2000 + 60000);
-      } else if(selectedGather !== 'g1' && paths.gathering_start !== 'g1' && selectedGather !== "") {
-        setFinalPrice(inputs.weight * 2000 + 40000);
-      }
+      const selectedGatherSplit = selectedGather.substring(1,selectedGather.length);
+      const pathStartSplit = paths.gather_id_start.substring(1,paths.gather_id_start.length);
+      // console.log(parseInt(selectedGatherSplit));
+      // console.log(parseInt(pathStartSplit));
+      // console.log(Math.abs(parseInt(selectedGatherSplit) - parseInt(pathStartSplit)));
+      setFinalPrice(30000 + inputs.weight * 2000 + Math.abs(parseInt(selectedGatherSplit) - parseInt(pathStartSplit)) * 10000);
     };
     checkGatherPath();
   }, [selectedGather, inputs.weight]);
@@ -217,6 +213,7 @@ function CreateOrderPage() {
     gathering_start: "",
     gathering_end: "",
     transaction_end: "",
+    gather_id_start: "",
   });
 
   // Lưu giá trị nhập vào

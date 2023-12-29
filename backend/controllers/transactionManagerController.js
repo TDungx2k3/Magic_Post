@@ -211,14 +211,11 @@ class transactionManagerController {
     controlLostOrderList = async (req, res) => {
         try {
             const orderId = req.body.order_id;
-            console.log("loajsj");
-            console.log(req.body);
             await Delivery.update({ deliver_status: 1 }, {
                 where: {
                     order_id: orderId
                 }
             });
-            console.log("iuasf ");
             await Order.update({ order_status: "done" }, {
                 where: {
                     order_id: orderId
