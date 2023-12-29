@@ -42,7 +42,7 @@ function NavBar() {
                         onClick={() => {
                             setTimeout(() => {
                                 console.log(2);
-                                scroll.scrollTo(document.getElementById('topService').offsetTop, {
+                                scroll.scrollTo(document.getElementById("topService").offsetTop, {
                                     spy: true,
                                     smooth: true,
                                     duration: 500,
@@ -56,15 +56,37 @@ function NavBar() {
                 }} >
                     <Link to="">Company <i style={{ marginTop: "4px" }} className="ti-angle-down"></i></Link>
                     <ul data-aos="fade-up">
-                        <li><Link to="/about-us">About Us</Link></li>
-                        <li><Link to="">Investors</Link></li>
+                        <li><Link to="/about-us"
+                        onClick={() => {
+                            setTimeout(() => {
+                                // console.log(2);
+                                window.scrollTo({
+                                    top: 0,
+                                    behavior: 'smooth'
+                                });
+                            }, 10);
+                        }}
+                        >About Us</Link></li>
+                        <li><Link to="/about-us">Investors</Link></li>
                     </ul>
                 </div>
                 <div>
                     <Link to="#">Career</Link>
                 </div>
                 <div>
-                    <Link to="#">Contact Us</Link>
+                    <Link to="#"
+                    onClick={() => {
+                        navigate("/about-us");
+                        setTimeout(() => {
+                            // console.log(2);
+                            scroll.scrollTo(document.getElementById('footer').offsetTop, {
+                                spy: true,
+                                smooth: true,
+                                duration: 500,
+                            });
+                        }, 10);
+                    }}
+                    >Contact Us</Link>
                 </div>
             </div>
 
@@ -100,6 +122,14 @@ function NavBar() {
                             else if (userInfo.uRole === 6) {
                                 navigate("/gatherTeller")
                             }
+
+                            setTimeout(() => {
+                                // console.log(2);
+                                window.scrollTo({
+                                    top: 0,
+                                    behavior: 'smooth'
+                                });
+                            }, 10);
                         }
                     }
                 >
@@ -171,15 +201,57 @@ function NavBar() {
                                 e.stopPropagation();
                             }}
                         >
-                            <li><Link to="/about-us">About Us</Link></li>
-                            <li><Link to="">Investors</Link></li>
+                            <li><Link to="/about-us"
+                            onClick={() => {
+                                setTimeout(() => {
+                                    // console.log(2);
+                                    window.scrollTo({
+                                        top: 0,
+                                        behavior: 'smooth'
+                                    });
+                                }, 10);
+                            }}
+                            >About Us</Link></li>
+                            <li><Link to="/about-us"
+                            onClick={() => {
+                                setTimeout(() => {
+                                    // console.log(2);
+                                    window.scrollTo({
+                                        top: 0,
+                                        behavior: 'smooth'
+                                    });
+                                }, 10);
+                            }}
+                            >Investors</Link></li>
                         </ul>
                     </div>
                     <div>
-                        <Link to="#">Career</Link>
+                        <Link to="/about-us"
+                        onClick={() => {
+                            setTimeout(() => {
+                                // console.log(2);
+                                window.scrollTo({
+                                    top: 0,
+                                    behavior: 'smooth'
+                                });
+                            }, 10);
+                        }}
+                        >Career</Link>
                     </div>
                     <div>
-                        <Link to="#">Contact Us</Link>
+                        <Link to="#"
+                        onClick={() => {
+                            navigate("/");
+                            setTimeout(() => {
+                                // console.log(2);
+                                scroll.scrollTo(document.getElementById('footer').offsetTop, {
+                                    spy: true,
+                                    smooth: true,
+                                    duration: 500,
+                                });
+                            }, 10);
+                        }}
+                        >Contact Us</Link>
                     </div>
                 </div>
 

@@ -18,7 +18,7 @@ function Footer() {
     };
 
     return (
-        <div className={clsx(style.footerContainer)}>
+        <div id="footer" className={clsx(style.footerContainer)}>
             <div className={clsx(style.aboutUs)}>
                 About Us
                 <span>

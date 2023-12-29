@@ -20,11 +20,19 @@
     padding: 12px;
     color: white;
     border-radius: 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
 .addBtn:hover {
     background-color: #00d423;
     cursor: pointer;
+}
+
+.addBtn p {
+    color: white;
+    margin-left: 12px;
 }
 
 .searchBar {
